@@ -11,6 +11,7 @@ const [screenName, setScreenName] = useState()
   const [currentItemsRow, setCurrentItemsRow] = useState([])
   const [updatedList, setUpdatedList] = useState(false)
   const [modal, setModal] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(false)
 
   async function callLists() {
     const allLists = await getLists();
@@ -41,6 +42,8 @@ const [screenName, setScreenName] = useState()
         setScreenName,
         modal,
         setModal,
+        isPurchased,
+        setIsPurchased,
       }}
     >
       {children}

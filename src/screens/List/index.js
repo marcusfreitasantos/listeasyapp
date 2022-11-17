@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  FlatList
-} from "react-native";
+import { FlatList } from "react-native";
 import * as S from "./styles";
 import Item from "../../components/Item";
 import { upDateList } from "../../services/ListQueries";
@@ -18,7 +16,7 @@ import { AdMobInterstitial } from "expo-ads-admob";
 export default () => {
   async function interstitial() {
     await AdMobInterstitial.setAdUnitID(
-      "ca-app-pub-8430347978354434~3537975748"
+      "ca-app-pub-8430347978354434/3994109034"
     );
     try {
       await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
@@ -39,6 +37,7 @@ export default () => {
     updatedList,
     setUpdatedList,
     setScreenName,
+    isPurchased,
   } = useContext(GlobalContext);
 
   const isFocused = useIsFocused();
@@ -88,9 +87,9 @@ export default () => {
 
     setTotalPriceList(totalPrice);
 
-    if (searchTerm === ""){
+    if (searchTerm === "") {
       setCurrentItemsRow(allItems || false);
-    } 
+    }
     setItemsRow(allItems);
   }
 
@@ -118,7 +117,9 @@ export default () => {
   useEffect(() => {
     if (isFocused) {
       setScreenName("List");
-      interstitial();
+      if (!isPurchased) {
+        interstitial();
+      }
     }
   }, [isFocused]);
 

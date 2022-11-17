@@ -2,7 +2,7 @@
   "expo": {
     "name": "List Easy",
     "slug": "listeasy",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -20,21 +20,21 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-8430347978354434~3537975748"
+        "googleMobileAdsAppId": "ca-app-pub-8430347978354434/3994109034"
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#228056"
       },
-      "package": "com.penpackdigital.listeasy",
-      "versionCode": 2
+      "package": "com.penpack.listeasy",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "cb719260-9c8c-41a0-8b13-c20c8e4d0e99"
+        "projectId": "021d95ea-9341-4a16-bed5-85eeacc48547"
       }
     }
   }

@@ -15,7 +15,7 @@ export const Container = styled.View`
 export const UserMessage = styled.Text`
  ${({theme}) => css`
   color: ${theme.colors.secondaryColor}
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
 `}
 `
