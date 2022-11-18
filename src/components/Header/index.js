@@ -24,6 +24,14 @@ export default () => {
 
   return (
     <>
+      {!isPurchased && (
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-8430347978354434/3994109034"
+          servePersonalizedAds
+          onDidFailToReceiveAdWithError={this.bannerError}
+        />
+      )}
       <S.Header__wrapper>
         <S.Header__container>
           {screenName === "MainScreen" ? (
@@ -59,15 +67,6 @@ export default () => {
           )}
         </S.Header__container>
       </S.Header__wrapper>
-
-      {!isPurchased && (
-        <AdMobBanner
-          bannerSize="fullBanner"
-          adUnitID="ca-app-pub-8430347978354434/3994109034"
-          servePersonalizedAds
-          onDidFailToReceiveAdWithError={this.bannerError}
-        />
-      )}
     </>
   );
 };

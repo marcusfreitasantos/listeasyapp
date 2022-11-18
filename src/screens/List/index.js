@@ -16,7 +16,7 @@ import { AdMobInterstitial } from "expo-ads-admob";
 export default () => {
   async function interstitial() {
     await AdMobInterstitial.setAdUnitID(
-      "ca-app-pub-8430347978354434/3994109034"
+      "ca-app-pub-8430347978354434/6035864738"
     );
     try {
       await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
