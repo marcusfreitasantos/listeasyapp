@@ -10,13 +10,6 @@ import { ThemeProvider } from "styled-components";
 import theme from "./src/global/theme";
 import darkTheme from "./src/global/darkTheme";
 import { useColorScheme } from "react-native";
-import * as Sentry from "sentry-expo";
-
-Sentry.init({
-  dsn: "https://cf6ea3755ccf418abe084bd4ad398885@o4504204723093504.ingest.sentry.io/4504204726829056",
-  enableInExpoDevelopment: true,
-  debug: true,
-});
 
 export default function App() {
   const colorScheme = useColorScheme();

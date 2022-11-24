@@ -20,14 +20,14 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-8430347978354434/6035864738"
+        "googleMobileAdsAppId": "ca-app-pub-8430347978354434~3537975748"
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fff"
       },
       "package": "com.penpack.listeasy",
-      "versionCode": 4
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,21 +36,6 @@
       "eas": {
         "projectId": "021d95ea-9341-4a16-bed5-85eeacc48547"
       }
-    },
-    "plugins": [
-      "sentry-expo"
-    ]
-  },
-  "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "penpack",
-            "project": "list-easy",
-            "authToken": "8018c93e6aa611eda538fecce8f56bf1"
-          }
-        }
-      ]
     }
+  }
 }
