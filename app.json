@@ -2,14 +2,14 @@
   "expo": {
     "name": "List Easy",
     "slug": "listeasy",
-    "version": "1.0.1",
+    "version": "1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#228056"
+      "backgroundColor": "#fff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,10 +24,10 @@
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#228056"
+        "backgroundColor": "#fff"
       },
       "package": "com.penpack.listeasy",
-      "versionCode": 2
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,6 +36,21 @@
       "eas": {
         "projectId": "021d95ea-9341-4a16-bed5-85eeacc48547"
       }
+    },
+    "plugins": [
+      "sentry-expo"
+    ]
+  },
+  "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "penpack",
+            "project": "list-easy",
+            "authToken": "8018c93e6aa611eda538fecce8f56bf1"
+          }
+        }
+      ]
     }
-  }
 }
