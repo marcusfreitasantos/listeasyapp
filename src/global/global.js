@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import { css } from "styled-components";
-import { Dimensions } from "react-native";
 
 export const Container = styled.View`
   ${({ theme }) => css`
@@ -11,11 +10,3 @@ export const Container = styled.View`
     margin-top: ${theme.safeArea.safeAreaAndroid};
   `}
 `;
-
-export const UserMessage = styled.Text`
- ${({theme}) => css`
-  color: ${theme.colors.secondaryColor}
-  font-size: 16px;
-  text-align: center;
-`}
-`

@@ -10,11 +10,11 @@ export default {
     primaryColorDark: "#228056",
     secondaryColor: "#737373",
     secondaryColorDark: "#333",
-    secondaryColorLight:"#fff",
+    secondaryColorLight: "#fff",
     atentionColor: "#CF5037",
     atentionColorDark: "#9C3C29",
     lightColor: "#eee",
-    darkColor:"#222",
+    darkColor: "#222",
   },
   font: {
     family: {

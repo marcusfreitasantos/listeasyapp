@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text, FlatList } from "react-native";
+import { useEffect } from "react";
+import { FlatList } from "react-native";
 import ListBox from "../../components/ListBox";
 import * as S from "./styles";
 import CreateListModal from "../../components/CreateListModal";
@@ -8,14 +8,21 @@ import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useIsFocused } from "@react-navigation/native";
 import PlusButton from "../../components/PlusButton";
-import { UserMessage } from '../../global/global';
+import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 
 export default () => {
-  const isFocused  = useIsFocused()
+  const isFocused = useIsFocused();
 
-  const { totalLists, setTotalLists, userLists, setUserLists, updatedList, setScreenName, modal, setModal } =
-    useContext(GlobalContext);
-
+  const {
+    totalLists,
+    setTotalLists,
+    userLists,
+    setUserLists,
+    updatedList,
+    setScreenName,
+    modal,
+    setModal,
+  } = useContext(GlobalContext);
 
   async function showLists() {
     const allLists = await getLists();
@@ -28,33 +35,31 @@ export default () => {
   }, [updatedList]);
 
   useEffect(() => {
-    if(isFocused){
-      setScreenName("MainScreen")    
+    if (isFocused) {
+      setScreenName("MainScreen");
     }
-    
-  },[isFocused])
+  }, [isFocused]);
 
   return (
     <S.Container>
       <S.ItemsGroup>
-        {totalLists > 0 ?
-          <FlatList
+        <FlatList
           data={userLists}
-          renderItem={(list) =>  <ListBox key={list.listID} data={list} />}
-          keyExtractor={(list) => list.listID}        
-          /> 
-          : 
-        <UserMessage>Olá, você ainda não tem nenhuma lista. Adicione novas listas clicando no botão abaixo:</UserMessage>
-        }
+          renderItem={(list) => <ListBox key={list.listID} data={list} />}
+          keyExtractor={(list) => list.listID}
+          ListEmptyComponent={
+            <EmptyFlatListItem
+              text="Olá, você ainda não tem nenhuma lista. Adicione novas listas
+            clicando no botão abaixo:"
+            />
+          }
+        />
       </S.ItemsGroup>
 
-
       <S.Footer>
-        {modal && <CreateListModal />}            
-        <PlusButton onPress={() => setModal(!modal)}/>
+        {modal && <CreateListModal />}
+        <PlusButton onPress={() => setModal(!modal)} />
       </S.Footer>
-
-      
     </S.Container>
   );
 };

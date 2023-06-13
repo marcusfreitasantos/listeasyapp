@@ -8,24 +8,25 @@ import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { createNewItem, getItems } from "../../services/ItemQueries";
 import PlusButton from "../../components/PlusButton";
-import { UserMessage } from "../../global/global";
 import { Search } from "react-native-feather";
 import theme from "../../global/theme";
-import { AdMobInterstitial } from "expo-ads-admob";
+import EmptyFlatListItem from "../../components/EmptyFlatListItem";
+//import { AdMobInterstitial } from "expo-ads-admob";
 
 export default () => {
   async function interstitial() {
-    await AdMobInterstitial.setAdUnitID(
-      "ca-app-pub-8430347978354434/6035864738"
-    );
-    try {
-      await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-      await AdMobInterstitial.showAdAsync();
-    } catch (err) {
-      console.log("erro no admob", err);
-    } finally {
-      AdMobInterstitial.dismissAdAsync();
-    }
+    console.log("ads");
+    // await AdMobInterstitial.setAdUnitID(
+    //   "ca-app-pub-8430347978354434/6035864738"
+    // );
+    // try {
+    //   await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+    //   await AdMobInterstitial.showAdAsync();
+    // } catch (err) {
+    //   console.log("erro no admob", err);
+    // } finally {
+    //   AdMobInterstitial.dismissAdAsync();
+    // }
   }
 
   const flatlistRef = useRef();
@@ -59,6 +60,14 @@ export default () => {
     setUpdatedList(!updatedList);
   }
 
+  function scrollToLastItem() {
+    if (currentItemsRow.length > 0) {
+      flatlistRef?.current?.scrollToEnd({
+        animated: true,
+      });
+    }
+  }
+
   async function addNewItem() {
     setLoading(true);
     try {
@@ -69,8 +78,12 @@ export default () => {
         itemTotal: "",
         listID: currentList.listID,
       };
-      await createNewItem(newItem);
-      getListItems();
+
+      const newItemAdded = await createNewItem(newItem);
+
+      if (newItemAdded) {
+        getListItems();
+      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -86,10 +99,7 @@ export default () => {
     });
 
     setTotalPriceList(totalPrice);
-
-    if (searchTerm === "") {
-      setCurrentItemsRow(allItems || false);
-    }
+    setCurrentItemsRow(allItems);
     setItemsRow(allItems);
   }
 
@@ -135,17 +145,9 @@ export default () => {
     editList();
   }, [totalPriceList]);
 
-  function scrollToLastItem() {
-    if (currentItemsRow.length > 0) {
-      flatlistRef?.current?.scrollToEnd({
-        animated: true,
-      });
-    }
-  }
-
   useEffect(() => {
     scrollToLastItem();
-  }, [itemsRow.length]);
+  }, [currentItemsRow.length]);
 
   return (
     <>
@@ -167,29 +169,30 @@ export default () => {
           </S.SearchItemWrapper>
         </S.List__header>
 
-        {currentItemsRow.length > 0 ? (
-          <FlatList
-            ref={flatlistRef}
-            onScrollToIndexFailed={() => {}}
-            removeClippedSubviews={false}
-            data={currentItemsRow}
-            renderItem={(item) => <Item data={item} />}
-            keyExtractor={(item) => item.itemID}
-          />
-        ) : (
-          <UserMessage>
-            {searchTerm !== ""
-              ? "Item não encontrado."
-              : "Adicione itens à sua lista."}
-          </UserMessage>
-        )}
+        <FlatList
+          ref={flatlistRef}
+          onScrollToIndexFailed={() => {}}
+          removeClippedSubviews={false}
+          data={currentItemsRow}
+          renderItem={(item) => <Item data={item} />}
+          keyExtractor={(item) => item.itemID}
+          ListEmptyComponent={
+            <EmptyFlatListItem
+              text={
+                searchTerm !== ""
+                  ? "Item não encontrado."
+                  : "Adicione itens à sua lista."
+              }
+            />
+          }
+        />
       </S.Container>
 
       <S.ListFooter>
         <S.ListTotal__wrapper>
           <S.ListTotal__text>Total:</S.ListTotal__text>
           <S.ListTotal__number>
-            R${parseFloat(totalPriceList).toFixed(2)}
+            R$ {parseFloat(totalPriceList).toFixed(2)}
           </S.ListTotal__number>
         </S.ListTotal__wrapper>
 

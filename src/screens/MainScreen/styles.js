@@ -20,22 +20,14 @@ export const ItemsGroup = styled.View`
   width: 100%;
 `;
 
-export const UserMessage = styled.Text`
- ${({theme}) => css`
-  color: ${theme.colors.secondaryColor}
-  font-size: 14px;
-  text-align: center;
-`}
-`
-
 export const Footer = styled.View`
-${({theme}) => css`
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-  position: absolute;
-  bottom: 0;
-  right: 20px;
-`}
-`
+  ${({ theme }) => css`
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+  `}
+`;

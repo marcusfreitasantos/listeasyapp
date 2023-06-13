@@ -81,48 +81,57 @@ export default (item) => {
 
   return (
     <S.Item__wrapper>
-      <S.Item__name>
-        <S.Item__nameInput
-          value={itemName}
-          placeholder="Nome do produto"
-          placeholderTextColor={theme.colors.secondaryColor}
-          onChangeText={(t) => setItemName(t)}
-        />
-      </S.Item__name>
+      <S.Item__group>
+        <S.Item__name>
+          <S.Item__nameInput
+            value={itemName}
+            placeholder="Nome do produto"
+            placeholderTextColor={theme.colors.secondaryColor}
+            onChangeText={(t) => setItemName(t)}
+          />
+        </S.Item__name>
 
-      <S.Item__price>
-        <S.DolarSign>$</S.DolarSign>
-        <S.Item__priceInput
-          keyboardType="decimal-pad"
-          value={itemPrice}
-          placeholder="Unit."
-          placeholderTextColor={theme.colors.secondaryColor}
-          onChangeText={(t) => handleChangePrice(t)}
-        />
-      </S.Item__price>
+        <S.Item__price>
+          <S.DolarSign>R$</S.DolarSign>
+          <S.Item__priceInput
+            keyboardType="decimal-pad"
+            value={itemPrice}
+            placeholder="0,00"
+            placeholderTextColor={theme.colors.secondaryColor}
+            onChangeText={(t) => handleChangePrice(t)}
+          />
+        </S.Item__price>
+      </S.Item__group>
 
-      <S.Item__quant>
-        <S.Item__quantBtn onPress={increaseItemQuant}>
-          <Plus color={theme.colors.lightColor} width={20} height={20} />
-        </S.Item__quantBtn>
+      <S.Item__group>
+        <S.Item__delete onPress={deleteWarning}>
+          <Trash2 color={`${theme.colors.lightColor}`} width={16} height={16} />
+          <S.Item__deleteText>Remover item</S.Item__deleteText>
+        </S.Item__delete>
 
-        <S.Item__quantNumber>{itemQuantity}</S.Item__quantNumber>
+        <S.Item__quant>
+          <S.Item__quantBtn
+            onPress={decreaseItemQuant}
+            disabled={itemQuantity <= 1 ? true : false}
+          >
+            <Minus
+              color={theme.colors.secondaryColorDark}
+              width={20}
+              height={20}
+            />
+          </S.Item__quantBtn>
 
-        <S.Item__quantBtn
-          onPress={decreaseItemQuant}
-          disabled={itemQuantity <= 1 ? true : false}
-        >
-          <Minus color={theme.colors.lightColor} width={20} height={20} />
-        </S.Item__quantBtn>
-      </S.Item__quant>
+          <S.Item__quantNumber>{itemQuantity}</S.Item__quantNumber>
 
-      <S.Item__delete onPress={deleteWarning}>
-        <Trash2
-          color={`${theme.colors.atentionColorDark}`}
-          width={30}
-          height={30}
-        />
-      </S.Item__delete>
+          <S.Item__quantBtn onPress={increaseItemQuant}>
+            <Plus
+              color={theme.colors.secondaryColorDark}
+              width={20}
+              height={20}
+            />
+          </S.Item__quantBtn>
+        </S.Item__quant>
+      </S.Item__group>
     </S.Item__wrapper>
   );
 };
