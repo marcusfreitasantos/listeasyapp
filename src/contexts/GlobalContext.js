@@ -3,7 +3,6 @@ import { getLists } from "../services/ListQueries";
 export const GlobalContext = createContext({});
 
 export function InfoProvider({ children }) {
-  const [screenName, setScreenName] = useState();
   const [totalLists, setTotalLists] = useState();
   const [userLists, setUserLists] = useState([]);
   const [currentList, setCurrentList] = useState([]);
@@ -11,7 +10,7 @@ export function InfoProvider({ children }) {
   const [currentItemsRow, setCurrentItemsRow] = useState([]);
   const [updatedList, setUpdatedList] = useState(false);
   const [modal, setModal] = useState(false);
-  const [isPurchased, setIsPurchased] = useState(true);
+  const [isPurchased, setIsPurchased] = useState(false);
 
   async function callLists() {
     const allLists = await getLists();
@@ -38,8 +37,6 @@ export function InfoProvider({ children }) {
         setCurrentItemsRow,
         updatedList,
         setUpdatedList,
-        screenName,
-        setScreenName,
         modal,
         setModal,
         isPurchased,

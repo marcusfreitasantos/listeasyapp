@@ -1,6 +1,4 @@
-import styled from "styled-components/native";
-import { css } from "styled-components";
-import { Dimensions } from "react-native";
+import styled, { css } from "styled-components/native";
 
 export const Container = styled.View`
   ${({ theme }) => css`
@@ -11,23 +9,16 @@ export const Container = styled.View`
   `}
 `;
 
-export const Text = styled.Text`
-  color: darkColor;
-  font-size: 20px;
-`;
-
 export const ItemsGroup = styled.View`
   width: 100%;
 `;
 
 export const Footer = styled.View`
-  ${({ theme }) => css`
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    position: absolute;
-    bottom: 0;
-    right: 20px;
-  `}
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  position: absolute;
+  bottom: 0;
+  right: 20px;
 `;

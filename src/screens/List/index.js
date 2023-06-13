@@ -3,7 +3,6 @@ import { FlatList } from "react-native";
 import * as S from "./styles";
 import Item from "../../components/Item";
 import { upDateList } from "../../services/ListQueries";
-import { useIsFocused } from "@react-navigation/native";
 import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { createNewItem, getItems } from "../../services/ItemQueries";
@@ -12,8 +11,9 @@ import { Search } from "react-native-feather";
 import theme from "../../global/theme";
 import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 //import { AdMobInterstitial } from "expo-ads-admob";
+import Header from "../../components/Header";
 
-export default () => {
+export default ({ route }) => {
   async function interstitial() {
     console.log("ads");
     // await AdMobInterstitial.setAdUnitID(
@@ -37,11 +37,9 @@ export default () => {
     setCurrentItemsRow,
     updatedList,
     setUpdatedList,
-    setScreenName,
     isPurchased,
   } = useContext(GlobalContext);
 
-  const isFocused = useIsFocused();
   const [firstRender, setFirstRender] = useState(true);
   const [totalPriceList, setTotalPriceList] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -125,15 +123,6 @@ export default () => {
   }, [currentListName]);
 
   useEffect(() => {
-    if (isFocused) {
-      setScreenName("List");
-      if (!isPurchased) {
-        interstitial();
-      }
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
     searchItems();
   }, [searchTerm]);
 
@@ -151,6 +140,7 @@ export default () => {
 
   return (
     <>
+      <Header routeName={route.name} />
       <S.Container>
         <S.List__header>
           <S.SearchItemWrapper>
