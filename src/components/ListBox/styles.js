@@ -22,7 +22,7 @@ export const ListBox__groupHorizontal = styled.View`
 export const ListBox__title = styled.Text`
   ${({ theme }) => css`
     font-size: ${theme.font.size.title};
-    font-weight: bold;
+    font-family: ${theme.font.family.bold};
     color: ${theme.colors.darkColor};
   `}
 `;
@@ -31,6 +31,7 @@ export const ListBox__total = styled.Text`
   ${({ theme }) => css`
     font-size: ${theme.font.size.subtitle};
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 

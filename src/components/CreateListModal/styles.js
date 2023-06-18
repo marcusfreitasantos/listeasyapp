@@ -19,6 +19,7 @@ export const ListName = styled.TextInput`
     padding: 10px;
     border-radius: 5px;
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -33,5 +34,6 @@ export const CreateList__group = styled.View`
 export const CreateList__cancel = styled.Text`
   ${({ theme }) => css`
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;

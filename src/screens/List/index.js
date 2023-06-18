@@ -12,6 +12,7 @@ import theme from "../../global/theme";
 import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 //import { AdMobInterstitial } from "expo-ads-admob";
 import Header from "../../components/Header";
+import Container from "../../components/Container";
 
 export default ({ route }) => {
   async function interstitial() {
@@ -138,10 +139,14 @@ export default ({ route }) => {
     scrollToLastItem();
   }, [currentItemsRow.length]);
 
+  useEffect(() => {
+    interstitial();
+  }, []);
+
   return (
     <>
       <Header routeName={route.name} />
-      <S.Container>
+      <Container>
         <S.List__header>
           <S.SearchItemWrapper>
             <S.SearchItemInput
@@ -176,7 +181,7 @@ export default ({ route }) => {
             />
           }
         />
-      </S.Container>
+      </Container>
 
       <S.ListFooter>
         <S.ListTotal__wrapper>

@@ -7,12 +7,13 @@ export const Header__wrapper = styled.View`
     justify-content: center;
     align-items: center;
     padding: 10px 0;
+    height: 50px;
 `}
 `;
 
 export const Header__logo = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 
 export const Header__container = styled.View`
@@ -24,8 +25,8 @@ export const Header__container = styled.View`
 
 export const Header__title = styled.Text`
   ${({ theme }) => css`
-font-size: 16px;
-font-weight: bold;
+font-size: ${theme.font.size.subtitle};
+font-family: ${theme.font.family.bold};
 color: ${theme.colors.primaryColor}
 display: flex;
 align-items: center;
@@ -49,5 +50,6 @@ export const ListNameInput = styled.TextInput`
     font-size: ${theme.font.size.subtitle};
     color: ${theme.colors.secondaryColor}
     margin-right: 10px;
+    font-family: ${theme.font.family.normal};
   `}
 `;

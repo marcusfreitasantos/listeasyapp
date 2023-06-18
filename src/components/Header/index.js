@@ -26,6 +26,17 @@ export default ({ routeName }) => {
         </S.Header__container>
       </S.Header__wrapper>
     );
+  } else if (routeName === "PurchaseScreen") {
+    return (
+      <S.Header__wrapper>
+        <S.Header__container>
+          <S.Header__backBtn onPress={backToPreviousScreen}>
+            <ArrowLeft color={`${theme.colors.primaryColor}`} size={20} />
+            <S.Header__title>Voltar </S.Header__title>
+          </S.Header__backBtn>
+        </S.Header__container>
+      </S.Header__wrapper>
+    );
   } else if (routeName === "List") {
     return (
       <S.Header__wrapper>

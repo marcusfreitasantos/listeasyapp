@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import PlusButton from "../../components/PlusButton";
 import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 import Header from "../../components/Header";
+import Container from "../../components/Container";
 
 export default ({ route }) => {
   const navigation = useNavigation();
@@ -46,7 +47,7 @@ export default ({ route }) => {
   return (
     <>
       <Header routeName={route.name} />
-      <S.Container>
+      <Container>
         <S.ItemsGroup>
           <FlatList
             data={userLists}
@@ -65,7 +66,7 @@ export default ({ route }) => {
           {modal && <CreateListModal />}
           <PlusButton onPress={handleListCreation} />
         </S.Footer>
-      </S.Container>
+      </Container>
     </>
   );
 };

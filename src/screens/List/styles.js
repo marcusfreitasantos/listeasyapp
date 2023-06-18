@@ -1,14 +1,4 @@
-import styled from "styled-components/native";
-import { css } from "styled-components";
-
-export const Container = styled.View`
-  ${({ theme }) => css`
-    align-items: center;
-    background-color: ${theme.colors.lightColor};
-    padding: 20px 20px 100px 20px;
-    flex: 1;
-  `}
-`;
+import styled, { css } from "styled-components/native";
 
 export const SearchItemWrapper = styled.View`
   ${({ theme }) => css`
@@ -27,6 +17,7 @@ export const SearchItemInput = styled.TextInput`
     font-size: ${theme.font.size.subtitle};
     width: 90%;
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -48,6 +39,7 @@ export const ListTotal__text = styled.Text`
   ${({ theme }) => css`
     color: ${theme.colors.secondaryColor};
     font-size: ${theme.font.size.title};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -55,7 +47,7 @@ export const ListTotal__number = styled.Text`
   ${({ theme }) => css`
     color: ${theme.colors.primaryColor};
     font-size: ${theme.font.size.title};
-    font-weight: bold;
+    font-family: ${theme.font.family.bold};
     margin-left: 10px;
   `}
 `;

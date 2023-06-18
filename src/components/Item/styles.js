@@ -40,6 +40,7 @@ export const Item__nameInput = styled.TextInput`
     text-align: center;
     color: ${theme.colors.secondaryColor};
     height: 100%;
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -68,6 +69,7 @@ export const Item__priceInput = styled.TextInput`
     text-align: right;
     color: ${theme.colors.secondaryColor};
     height: 100%;
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -77,6 +79,7 @@ export const DolarSign = styled.Text`
     text-align: center;
     padding-right: 5px;
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -103,6 +106,7 @@ export const Item__deleteText = styled.Text`
     padding: 10px;
     font-size: ${theme.font.size.subtitle};
     color: ${theme.colors.lightColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 
@@ -111,6 +115,7 @@ export const Item__quantNumber = styled.Text`
     padding: 10px;
     font-size: ${theme.font.size.subtitle};
     color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
   `}
 `;
 

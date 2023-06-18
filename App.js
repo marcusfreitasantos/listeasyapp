@@ -9,9 +9,22 @@ import { ThemeProvider } from "styled-components";
 import theme from "./src/global/theme";
 import darkTheme from "./src/global/darkTheme";
 import { useColorScheme } from "react-native";
+import { ActivityIndicator } from "react-native";
+
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_700Bold,
+} from "@expo-google-fonts/open-sans";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_700Bold,
+  });
+
   const colorScheme = useColorScheme();
+
   useEffect(() => {
     createListsTable();
     createItemsTable();
@@ -22,7 +35,7 @@ export default function App() {
       <InfoProvider>
         <StatusBar />
         <ThemeProvider theme={colorScheme === "light" ? theme : darkTheme}>
-          <MainStack />
+          {fontsLoaded ? <MainStack /> : <ActivityIndicator />}
         </ThemeProvider>
       </InfoProvider>
     </NavigationContainer>

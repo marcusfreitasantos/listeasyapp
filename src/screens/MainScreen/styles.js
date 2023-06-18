@@ -1,13 +1,4 @@
-import styled, { css } from "styled-components/native";
-
-export const Container = styled.View`
-  ${({ theme }) => css`
-    align-items: center;
-    background-color: ${theme.colors.lightColor};
-    padding: 20px 20px 80px 20px;
-    flex: 1;
-  `}
-`;
+import styled from "styled-components/native";
 
 export const ItemsGroup = styled.View`
   width: 100%;

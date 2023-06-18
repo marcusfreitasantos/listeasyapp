@@ -18,9 +18,7 @@ export default {
   },
   font: {
     family: {
-      light: "OpenSans_300Light",
       normal: "OpenSans_400Regular",
-      semibold: "OpenSans_600SemiBold",
       bold: "OpenSans_700Bold",
     },
     size: {
