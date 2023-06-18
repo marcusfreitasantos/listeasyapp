@@ -10,6 +10,7 @@ import theme from "./src/global/theme";
 import darkTheme from "./src/global/darkTheme";
 import { useColorScheme } from "react-native";
 import { ActivityIndicator } from "react-native";
+import "expo-dev-client";
 
 import {
   useFonts,
@@ -35,7 +36,11 @@ export default function App() {
       <InfoProvider>
         <StatusBar />
         <ThemeProvider theme={colorScheme === "light" ? theme : darkTheme}>
-          {fontsLoaded ? <MainStack /> : <ActivityIndicator />}
+          {fontsLoaded ? (
+            <MainStack />
+          ) : (
+            <ActivityIndicator style={{ flex: 1 }} />
+          )}
         </ThemeProvider>
       </InfoProvider>
     </NavigationContainer>

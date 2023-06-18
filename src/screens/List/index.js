@@ -10,27 +10,16 @@ import PlusButton from "../../components/PlusButton";
 import { Search } from "react-native-feather";
 import theme from "../../global/theme";
 import EmptyFlatListItem from "../../components/EmptyFlatListItem";
-//import { AdMobInterstitial } from "expo-ads-admob";
+import {
+  InterstitialAd,
+  AdEventType,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 import Header from "../../components/Header";
 import Container from "../../components/Container";
 
 export default ({ route }) => {
-  async function interstitial() {
-    console.log("ads");
-    // await AdMobInterstitial.setAdUnitID(
-    //   "ca-app-pub-8430347978354434/6035864738"
-    // );
-    // try {
-    //   await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-    //   await AdMobInterstitial.showAdAsync();
-    // } catch (err) {
-    //   console.log("erro no admob", err);
-    // } finally {
-    //   AdMobInterstitial.dismissAdAsync();
-    // }
-  }
-
-  const flatlistRef = useRef();
   const {
     currentList,
     currentListName,
@@ -40,6 +29,16 @@ export default ({ route }) => {
     setUpdatedList,
     isPurchased,
   } = useContext(GlobalContext);
+
+  const adUnitId = __DEV__
+    ? TestIds.APP_OPEN
+    : "ca-app-pub-8430347978354434~3537975748";
+
+  const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+  });
+
+  const flatlistRef = useRef();
 
   const [firstRender, setFirstRender] = useState(true);
   const [totalPriceList, setTotalPriceList] = useState(0);
@@ -140,7 +139,18 @@ export default ({ route }) => {
   }, [currentItemsRow.length]);
 
   useEffect(() => {
-    interstitial();
+    if (!isPurchased) {
+      const unsubscribe = interstitial.addAdEventListener(
+        AdEventType.LOADED,
+        () => {
+          interstitial.show();
+        }
+      );
+
+      interstitial.load();
+
+      return unsubscribe;
+    }
   }, []);
 
   return (

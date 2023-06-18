@@ -1,4 +1,4 @@
-import { Alert, Text, TextInput, TouchableOpacity, View, Share, Button } from "react-native";
+import { Alert, Share } from "react-native";
 import { deleteLists } from "../../services/ListQueries";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
@@ -8,13 +8,12 @@ import { Trash2, Edit, Share2 } from "react-native-feather";
 import theme from "../../global/theme";
 import { getItems } from "../../services/ItemQueries";
 
-
 export default (item) => {
   const navigation = useNavigation();
   const { setCurrentList, setCurrentListName, setUpdatedList, updatedList } =
     useContext(GlobalContext);
   const total = parseFloat(item.data.item.listTotal);
-  const [itemsRow, setItemsRow] = useState([])
+  const [itemsRow, setItemsRow] = useState([]);
 
   function editListScreen() {
     navigation.navigate("List");
@@ -28,8 +27,8 @@ export default (item) => {
   }
 
   useEffect(() => {
-    getListItems()    
-  }, [updatedList])
+    getListItems();
+  }, [updatedList]);
 
   async function removeList() {
     try {
@@ -53,15 +52,23 @@ export default (item) => {
     );
   }
 
-
   const onShare = async () => {
     try {
-      const result = await Share.share({
-        message: `${itemsRow.map((item) => '\n' + '- ' + item.itemName + (item.itemPrice && ' ---------- R$ ' + item.itemPrice.toFixed(2)))}`,
-        title: item.data.item.listName,
-      }, {
-        dialogTitle: item.data.item.listName
-      });
+      const result = await Share.share(
+        {
+          message: `${itemsRow.map(
+            (item) =>
+              "\n" +
+              "- " +
+              item.itemName +
+              (item.itemPrice && " ---------- R$ " + item.itemPrice.toFixed(2))
+          )}`,
+          title: item.data.item.listName,
+        },
+        {
+          dialogTitle: item.data.item.listName,
+        }
+      );
     } catch (error) {
       alert(error.message);
     }

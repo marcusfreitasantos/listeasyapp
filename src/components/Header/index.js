@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useNavigation } from "@react-navigation/native";
-import { ArrowLeft, Edit } from "react-native-feather";
+import { ArrowLeft, Edit, DollarSign } from "react-native-feather";
 import theme from "../../global/theme";
 import * as S from "./styles";
 
 export default ({ routeName }) => {
-  const { totalLists, currentListName, setCurrentListName } =
+  const { totalLists, currentListName, setCurrentListName, isPurchased } =
     useContext(GlobalContext);
 
   const navigation = useNavigation();
@@ -15,14 +15,28 @@ export default ({ routeName }) => {
     navigation.goBack();
   }
 
+  function goToPurchaseScreen() {
+    navigation.navigate("PurchaseScreen");
+  }
+
   if (routeName === "MainScreen") {
     return (
       <S.Header__wrapper>
         <S.Header__container>
           <S.Header__logo source={require("../../assets/listeasy-icon.png")} />
+
           <S.Header__title>
             Minhas Listas {totalLists > 0 && `(${totalLists})`}
           </S.Header__title>
+
+          {!isPurchased && (
+            <S.Header__purchaseBtn onPress={goToPurchaseScreen}>
+              <DollarSign
+                color={`${theme.colors.primaryColorDark}`}
+                size={20}
+              />
+            </S.Header__purchaseBtn>
+          )}
         </S.Header__container>
       </S.Header__wrapper>
     );
@@ -58,6 +72,15 @@ export default ({ routeName }) => {
               color={`${theme.colors.secondaryColor}`}
             />
           </S.ListName>
+
+          {!isPurchased && (
+            <S.Header__purchaseBtn onPress={goToPurchaseScreen}>
+              <DollarSign
+                color={`${theme.colors.primaryColorDark}`}
+                size={20}
+              />
+            </S.Header__purchaseBtn>
+          )}
         </S.Header__container>
       </S.Header__wrapper>
     );

@@ -19,9 +19,6 @@
     ],
     "android": {
       "userInterfaceStyle": "automatic",
-      "config": {
-        "googleMobileAdsAppId": "ca-app-pub-8430347978354434~3537975748"
-      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fff"
@@ -37,5 +34,8 @@
         "projectId": "021d95ea-9341-4a16-bed5-85eeacc48547"
       }
     }
+  },
+    "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8430347978354434~3537975748"
   }
 }

@@ -1,5 +1,4 @@
-import styled from "styled-components/native";
-import { css } from "styled-components";
+import styled, { css } from "styled-components/native";
 
 export const Header__wrapper = styled.View`
   ${({ theme }) => css`
@@ -8,6 +7,8 @@ export const Header__wrapper = styled.View`
     align-items: center;
     padding: 10px 0;
     height: 50px;
+    elevation: 50;
+    
 `}
 `;
 
@@ -25,14 +26,24 @@ export const Header__container = styled.View`
 
 export const Header__title = styled.Text`
   ${({ theme }) => css`
-font-size: ${theme.font.size.subtitle};
-font-family: ${theme.font.family.bold};
-color: ${theme.colors.primaryColor}
-display: flex;
-align-items: center;
-justify-content: space-between;
+    font-size: ${theme.font.size.subtitle};
+    font-family: ${theme.font.family.bold};
+    color: ${theme.colors.primaryColor}
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `}
 `;
+export const Header__purchaseBtn = styled.TouchableOpacity`
+  ${({ theme }) => css`
+    flex-direction: row;
+    align-items: center;
+    background-color: ${theme.colors.lightColor};
+    padding: 5px;
+    border-radius: 50px;
+  `}
+`;
+
 export const Header__backBtn = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
