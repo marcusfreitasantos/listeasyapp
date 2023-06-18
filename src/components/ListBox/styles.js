@@ -1,5 +1,4 @@
-import styled from "styled-components/native";
-import { css } from "styled-components";
+import styled, { css } from "styled-components/native";
 
 export const ListBox__wrapper = styled.TouchableOpacity`
   ${({ theme }) => css`

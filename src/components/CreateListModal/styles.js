@@ -1,5 +1,4 @@
-import styled from "styled-components/native";
-import { css } from "styled-components";
+import styled, { css } from "styled-components/native";
 
 export const CreateList__wrapper = styled.View`
   ${({ theme }) => css`
