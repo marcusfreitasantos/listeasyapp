@@ -10,8 +10,9 @@ This application is a mobile app that I made using React Native and Expo. The go
 - Add items with values and quantities;
 - Calculate total price of the list items;
 - Share lists in other apps and email;
+- Print and share lists in PDF;
 
-## Built with
+## Technologies
 
 React Native | Expo | SQLite | Styled Components
 
