@@ -40,7 +40,6 @@ export default ({ route }) => {
 
   const flatlistRef = useRef();
 
-  const [firstRender, setFirstRender] = useState(true);
   const [totalPriceList, setTotalPriceList] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsRow, setItemsRow] = useState([]);
@@ -115,12 +114,8 @@ export default ({ route }) => {
   }
 
   useEffect(() => {
-    if (firstRender) {
-      setFirstRender(!firstRender);
-    } else {
-      editList();
-    }
-  }, [currentListName]);
+    editList();
+  }, [currentListName, totalPriceList]);
 
   useEffect(() => {
     searchItems();
@@ -131,27 +126,23 @@ export default ({ route }) => {
   }, [updatedList]);
 
   useEffect(() => {
-    editList();
-  }, [totalPriceList]);
-
-  useEffect(() => {
     scrollToLastItem();
   }, [currentItemsRow.length]);
 
-  useEffect(() => {
-    if (!isPurchased) {
-      const unsubscribe = interstitial.addAdEventListener(
-        AdEventType.LOADED,
-        () => {
-          interstitial.show();
-        }
-      );
+  // useEffect(() => {
+  //   if (!isPurchased) {
+  //     const unsubscribe = interstitial.addAdEventListener(
+  //       AdEventType.LOADED,
+  //       () => {
+  //         interstitial.show();
+  //       }
+  //     );
 
-      interstitial.load();
+  //     interstitial.load();
 
-      return unsubscribe;
-    }
-  }, []);
+  //     return unsubscribe;
+  //   }
+  // }, []);
 
   return (
     <>

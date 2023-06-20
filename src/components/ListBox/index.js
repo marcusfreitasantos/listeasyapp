@@ -4,9 +4,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import * as S from "./styles";
-import { Trash2, Edit, Share2 } from "react-native-feather";
+import { Trash2, Share2 } from "react-native-feather";
 import theme from "../../global/theme";
 import { getItems } from "../../services/ItemQueries";
+import PDFTemplateList from "../PDFTemplateList";
 
 export default (item) => {
   const navigation = useNavigation();
@@ -82,12 +83,13 @@ export default (item) => {
       </S.ListBox__group>
 
       <S.ListBox__groupHorizontal>
+        <PDFTemplateList
+          listName={item.data.item.listName}
+          itemsList={itemsRow}
+        />
+
         <S.ListBox__btn onPress={onShare}>
           <Share2 width={30} color={`${theme.colors.primaryColor}`} />
-        </S.ListBox__btn>
-
-        <S.ListBox__btn onPress={editListScreen}>
-          <Edit width={30} color={`${theme.colors.primaryColor}`} />
         </S.ListBox__btn>
 
         <S.ListBox__btn onPress={deleteWarning}>

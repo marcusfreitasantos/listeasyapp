@@ -36,7 +36,7 @@ export default ({ route }) => {
           />
 
           <S.Benefits__text>
-            Salve e compartilhe suas listas em PDF.
+            Imprima ou compartilhe suas listas em PDF.
           </S.Benefits__text>
         </S.Benefits__wrapper>
 
