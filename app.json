@@ -2,7 +2,7 @@
   "expo": {
     "name": "List Easy",
     "slug": "listeasy",
-    "version": "2.2",
+    "version": "2.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -17,15 +17,15 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "android": {
-      "permissions": ["com.android.vending.BILLING"],
+    "android": {      
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#fff"
       },
       "package": "com.penpack.listeasy",
-      "versionCode": 8
+      "versionCode": 10,
+      "permissions": ["com.android.vending.BILLING"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
