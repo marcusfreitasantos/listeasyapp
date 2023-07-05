@@ -66,7 +66,9 @@ export default function PDFTemplateList({ listName, itemsList }) {
                 color: ${theme.colors.lightColor};
                 background-color: ${theme.colors.secondaryColorDark};
                 font-weight: bold;
-                padding: 15px;  
+                padding: 15px;
+                width: 20%;
+                text-align: right;  
             }
             footer{
                 background-color: ${theme.colors.primaryColorDark};
@@ -93,15 +95,11 @@ export default function PDFTemplateList({ listName, itemsList }) {
                   <h2>Lista de itens</h2>
 
                   ${itemsList
-                    .map(
+                    ?.map(
                       (item) =>
                         `<div class="pdf__item_wrapper">
-                          <span class="pdf__item_title">${
-                            item.itemName
-                          }</span>                        
-                          <span class="pdf__item_price">R$ ${item.itemPrice.toFixed(
-                            2
-                          )}</span>
+                          <span class="pdf__item_title">${item?.itemName}</span>                        
+                          <span class="pdf__item_price">R$ ${item?.itemPrice}</span>
                       </div>`
                     )
                     .join("")}        

@@ -7,7 +7,6 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import ButtonPrimary from "../ButtonPrimary";
 import theme from "../../global/theme";
 
-
 export default () => {
   const [listName, setListName] = useState("");
   const { modal, setModal, setTotalLists } = useContext(GlobalContext);
@@ -34,6 +33,8 @@ export default () => {
         onChangeText={(t) => setListName(t)}
         placeholder="Digite o nome da lista"
         placeholderTextColor={theme.colors.secondaryColor}
+        onSubmitEditing={createList}
+        returnKeyType="done"
       />
 
       <S.CreateList__group>

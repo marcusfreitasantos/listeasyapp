@@ -2,7 +2,7 @@
   "expo": {
     "name": "List Easy",
     "slug": "listeasy",
-    "version": "2.3",
+    "version": "2.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -24,7 +24,7 @@
         "backgroundColor": "#fff"
       },
       "package": "com.penpack.listeasy",
-      "versionCode": 10,
+      "versionCode": 13,
       "permissions": ["com.android.vending.BILLING"]
     },
     "web": {

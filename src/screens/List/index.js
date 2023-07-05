@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FlatList } from "react-native";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { ActivityIndicator, FlatList } from "react-native";
 import * as S from "./styles";
 import Item from "../../components/Item";
 import { upDateList } from "../../services/ListQueries";
-import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { createNewItem, getItems } from "../../services/ItemQueries";
 import PlusButton from "../../components/PlusButton";
@@ -18,6 +17,7 @@ import {
 
 import Header from "../../components/Header";
 import Container from "../../components/Container";
+import { GOOGLE_ADMOB_KEY } from "@env";
 
 export default ({ route }) => {
   const {
@@ -30,9 +30,7 @@ export default ({ route }) => {
     isPurchased,
   } = useContext(GlobalContext);
 
-  const adUnitId = __DEV__
-    ? TestIds.APP_OPEN
-    : "ca-app-pub-8430347978354434~3537975748";
+  const adUnitId = __DEV__ ? TestIds.APP_OPEN : GOOGLE_ADMOB_KEY;
 
   const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
@@ -43,7 +41,7 @@ export default ({ route }) => {
   const [totalPriceList, setTotalPriceList] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsRow, setItemsRow] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   let totalPrice = 0;
 
@@ -66,7 +64,6 @@ export default ({ route }) => {
   }
 
   async function addNewItem() {
-    setLoading(true);
     try {
       const newItem = {
         itemName: "",
@@ -83,21 +80,26 @@ export default ({ route }) => {
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      setLoading(false);
     }
   }
 
   async function getListItems() {
-    const allItems = await getItems(currentList.listID);
+    try {
+      setLoading(true);
+      const allItems = await getItems(currentList.listID);
 
-    allItems.map((item) => {
-      totalPrice += item.itemTotal;
-    });
+      allItems.map((item) => {
+        totalPrice += item.itemTotal;
+      });
 
-    setTotalPriceList(totalPrice);
-    setCurrentItemsRow(allItems);
-    setItemsRow(allItems);
+      setTotalPriceList(totalPrice);
+      setCurrentItemsRow(allItems);
+      setItemsRow(allItems);
+    } catch (error) {
+      console.log("erro na exibição dos itens:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function searchItems() {
@@ -165,23 +167,30 @@ export default ({ route }) => {
           </S.SearchItemWrapper>
         </S.List__header>
 
-        <FlatList
-          ref={flatlistRef}
-          onScrollToIndexFailed={() => {}}
-          removeClippedSubviews={false}
-          data={currentItemsRow}
-          renderItem={(item) => <Item data={item} />}
-          keyExtractor={(item) => item.itemID}
-          ListEmptyComponent={
-            <EmptyFlatListItem
-              text={
-                searchTerm !== ""
-                  ? "Item não encontrado."
-                  : "Adicione itens à sua lista."
-              }
-            />
-          }
-        />
+        {loading ? (
+          <ActivityIndicator
+            color={theme.colors.primaryColor}
+            style={{ flex: 1 }}
+          />
+        ) : (
+          <FlatList
+            ref={flatlistRef}
+            onScrollToIndexFailed={() => {}}
+            removeClippedSubviews={false}
+            data={currentItemsRow}
+            renderItem={(item) => <Item data={item} />}
+            keyExtractor={(item) => item.itemID}
+            ListEmptyComponent={
+              <EmptyFlatListItem
+                text={
+                  searchTerm !== ""
+                    ? "Item não encontrado."
+                    : "Adicione itens à sua lista."
+                }
+              />
+            }
+          />
+        )}
       </Container>
 
       <S.ListFooter>

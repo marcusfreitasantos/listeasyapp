@@ -8,7 +8,7 @@ export default function PlanBox({ currentPlan, planName, planPrice, onPress }) {
         <S.Plan__name>
           <S.Plan__button current={currentPlan} />
           <S.Plan__name_text current={currentPlan}>
-            {planName}
+            {planName} - {planPrice}
           </S.Plan__name_text>
         </S.Plan__name>
       </S.Plan__boxActive>

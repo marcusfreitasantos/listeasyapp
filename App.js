@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import MainStack from "./src/stacks/MainStack";
 import { createListsTable } from "./src/services/ListQueries";
@@ -8,9 +9,10 @@ import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components";
 import theme from "./src/global/theme";
 import darkTheme from "./src/global/darkTheme";
-import { useColorScheme } from "react-native";
 import { ActivityIndicator } from "react-native";
 import "expo-dev-client";
+import { REVENUECAT_KEY_ANDROID } from "@env";
+import Purchases from "react-native-purchases";
 
 import {
   useFonts,
@@ -29,6 +31,8 @@ export default function App() {
   useEffect(() => {
     createListsTable();
     createItemsTable();
+
+    Purchases.configure({ apiKey: REVENUECAT_KEY_ANDROID });
   }, []);
 
   return (

@@ -11,6 +11,7 @@ import PlusButton from "../../components/PlusButton";
 import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 import Header from "../../components/Header";
 import Container from "../../components/Container";
+import { checkUserSubscriptionStatus } from "../../services/purchases";
 
 export default ({ route }) => {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ export default ({ route }) => {
     modal,
     setModal,
     isPurchased,
+    setIsPurchased,
   } = useContext(GlobalContext);
 
   async function showLists() {
@@ -32,17 +34,27 @@ export default ({ route }) => {
     setUserLists(allLists);
   }
 
-  useEffect(() => {
-    showLists();
-  }, [updatedList]);
+  const checkUserStatus = async () => {
+    try {
+      const userStatus = await checkUserSubscriptionStatus();
+      setIsPurchased(userStatus);
+    } catch (error) {
+      console.log("error do carai", error);
+    }
+  };
 
-  function handleListCreation() {
+  const handleListCreation = () => {
     if (!isPurchased && totalLists >= 1) {
       navigation.navigate("PurchaseScreen");
     } else {
       setModal(!modal);
     }
-  }
+  };
+
+  useEffect(() => {
+    showLists();
+    checkUserStatus();
+  }, [updatedList]);
 
   return (
     <>
