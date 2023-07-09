@@ -62,5 +62,7 @@ export const ListNameInput = styled.TextInput`
     color: ${theme.colors.secondaryColor}
     margin-right: 10px;
     font-family: ${theme.font.family.normal};
+    flex: 1;
+    text-align: right;
   `}
 `;

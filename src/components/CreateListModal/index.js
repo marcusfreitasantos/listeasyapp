@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { TouchableOpacity } from "react-native";
 import { createNewList, getLists } from "../../services/ListQueries";
 import * as S from "./styles";
-import { useContext } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import ButtonPrimary from "../ButtonPrimary";
 import theme from "../../global/theme";
@@ -32,10 +31,15 @@ export default () => {
         value={listName}
         onChangeText={(t) => setListName(t)}
         placeholder="Digite o nome da lista"
+        maxLength={15}
         placeholderTextColor={theme.colors.secondaryColor}
         onSubmitEditing={createList}
         returnKeyType="done"
       />
+
+      <S.CharactersLimitWarning>
+        Limite: 15 caracteres.
+      </S.CharactersLimitWarning>
 
       <S.CreateList__group>
         <ButtonPrimary btnText="Criar Lista" onPress={createList} />

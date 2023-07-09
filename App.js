@@ -30,7 +30,7 @@ export default function App() {
   Sentry.init({
     dsn: SENTRY_DSN,
     enableInExpoDevelopment: true,
-    debug: true,
+    debug: false,
   });
 
   useEffect(() => {

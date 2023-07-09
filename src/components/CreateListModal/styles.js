@@ -36,3 +36,12 @@ export const CreateList__cancel = styled.Text`
     font-family: ${theme.font.family.normal};
   `}
 `;
+
+export const CharactersLimitWarning = styled.Text`
+  ${({ theme }) => css`
+    color: ${theme.colors.secondaryColor};
+    font-family: ${theme.font.family.normal};
+    font-size: ${theme.font.size.details};
+    margin-top: 5px;
+  `}
+`;

@@ -17,7 +17,6 @@ import {
 
 import Header from "../../components/Header";
 import Container from "../../components/Container";
-import { GOOGLE_ADMOB_KEY } from "@env";
 
 export default ({ route }) => {
   const {
@@ -30,7 +29,9 @@ export default ({ route }) => {
     isPurchased,
   } = useContext(GlobalContext);
 
-  const adUnitId = __DEV__ ? TestIds.APP_OPEN : GOOGLE_ADMOB_KEY;
+  const adUnitId = __DEV__
+    ? TestIds.APP_OPEN
+    : "ca-app-pub-8430347978354434/6035864738";
 
   const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
@@ -85,7 +86,6 @@ export default ({ route }) => {
 
   async function getListItems() {
     try {
-      setLoading(true);
       const allItems = await getItems(currentList.listID);
 
       allItems.map((item) => {
