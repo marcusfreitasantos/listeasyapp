@@ -31,14 +31,14 @@ export default () => {
         value={listName}
         onChangeText={(t) => setListName(t)}
         placeholder="Digite o nome da lista"
-        maxLength={15}
+        maxLength={20}
         placeholderTextColor={theme.colors.secondaryColor}
         onSubmitEditing={createList}
         returnKeyType="done"
       />
 
       <S.CharactersLimitWarning>
-        Limite: 15 caracteres.
+        Limite: 20 caracteres.
       </S.CharactersLimitWarning>
 
       <S.CreateList__group>

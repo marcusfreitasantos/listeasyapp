@@ -2,7 +2,7 @@
   "expo": {
     "name": "List Easy",
     "slug": "listeasy",
-    "version": "3.0",
+    "version": "3.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -24,7 +24,7 @@
         "backgroundColor": "#fff"
       },
       "package": "com.penpack.listeasy",
-      "versionCode": 17,
+      "versionCode": 20,
       "permissions": [
         "com.android.vending.BILLING"
       ]
@@ -38,7 +38,17 @@
       }
     },
     "plugins": [
-      "sentry-expo"
+      "sentry-expo",
+      ["react-native-fbsdk-next",
+        {
+          "appID": "3387831338148065",
+          "clientToken": "0b7d5fa12d9e71aaf35ecf28b1c8773e",
+          "displayName": "List Easy",
+          "scheme": "fb3387831338148065",
+          "advertiserIDCollectionEnabled": true,
+          "autoLogAppEventsEnabled": true,
+          "isAutoInitEnabled": true
+        }]      
     ]
   },
   "react-native-google-mobile-ads": {

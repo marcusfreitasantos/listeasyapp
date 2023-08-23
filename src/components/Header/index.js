@@ -62,7 +62,7 @@ export default ({ routeName }) => {
 
           <S.ListName>
             <S.ListNameInput
-              maxLength={15}
+              maxLength={20}
               value={currentListName}
               onChangeText={(t) => setCurrentListName(t)}
             />

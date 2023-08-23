@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { ActivityIndicator } from "react-native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
@@ -9,6 +10,7 @@ import { GlobalContext } from "../../contexts/GlobalContext";
 import { useNavigation } from "@react-navigation/native";
 
 export default function PDFTemplateList({ listName, itemsList }) {
+  const [isLoading, setIsLoading] = useState(false);
   const { isPurchased } = useContext(GlobalContext);
   const navigation = useNavigation();
 
@@ -116,22 +118,29 @@ export default function PDFTemplateList({ listName, itemsList }) {
     `;
 
   const generatePdf = async () => {
-    const file = await printToFileAsync({
-      html,
-      base64: false,
-    });
+    try {
+      setIsLoading(true);
+      const file = await printToFileAsync({
+        html,
+        base64: false,
+      });
 
-    const pdfName = `${file.uri.slice(
-      0,
-      file.uri.lastIndexOf("/") + 1
-    )}lista_${listName.toLowerCase().replaceAll(" ", "_")}.pdf`;
+      const pdfName = `${file.uri.slice(
+        0,
+        file.uri.lastIndexOf("/") + 1
+      )}lista_${listName.toLowerCase().replaceAll(" ", "_")}.pdf`;
 
-    await FileSystem.moveAsync({
-      from: file.uri,
-      to: pdfName,
-    });
+      await FileSystem.moveAsync({
+        from: file.uri,
+        to: pdfName,
+      });
 
-    await shareAsync(pdfName);
+      await shareAsync(pdfName);
+    } catch (error) {
+      console.log("Erro ao gerar pdf", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const verifyPurchase = () => {
@@ -142,9 +151,13 @@ export default function PDFTemplateList({ listName, itemsList }) {
     }
   };
 
-  return (
-    <S.ListBox__btn onPress={verifyPurchase}>
-      <Printer width={30} color={`${theme.colors.primaryColor}`} />
-    </S.ListBox__btn>
-  );
+  if (!isLoading) {
+    return (
+      <S.ListBox__btn onPress={verifyPurchase}>
+        <Printer width={30} color={`${theme.colors.primaryColor}`} />
+      </S.ListBox__btn>
+    );
+  } else {
+    return <ActivityIndicator color={`${theme.colors.primaryColor}`} />;
+  }
 }

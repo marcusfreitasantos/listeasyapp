@@ -22,7 +22,7 @@ export default {
       bold: "OpenSans_700Bold",
     },
     size: {
-      title: "20px",
+      title: "18px",
       subtitle: "16px",
       text: "14px",
       details: "12px",
