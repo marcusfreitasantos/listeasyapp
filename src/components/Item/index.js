@@ -8,7 +8,7 @@ import { Trash2, Plus, Minus } from "react-native-feather";
 import theme from "../../global/theme";
 
 export default (item) => {
-  const [currentItem, setCurrentItem] = useState(item?.data.item);
+  const currentItem = item.data.item;
   const [itemName, setItemName] = useState(currentItem.itemName);
   const [itemPrice, setItemPrice] = useState(
     currentItem?.itemPrice?.toString()

@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ActivityIndicator, FlatList } from "react-native";
 import * as S from "./styles";
 import Item from "../../components/Item";
+import ItemBox from "../../components/ItemBox";
 import { upDateList } from "../../services/ListQueries";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { createNewItem, getItems } from "../../services/ItemQueries";
@@ -37,8 +38,6 @@ export default ({ route }) => {
     requestNonPersonalizedAdsOnly: true,
   });
 
-  const flatlistRef = useRef();
-
   const [totalPriceList, setTotalPriceList] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsRow, setItemsRow] = useState([]);
@@ -54,14 +53,6 @@ export default ({ route }) => {
     };
     await upDateList(newList);
     setUpdatedList(!updatedList);
-  }
-
-  function scrollToLastItem() {
-    if (currentItemsRow.length > 0) {
-      flatlistRef?.current?.scrollToEnd({
-        animated: true,
-      });
-    }
   }
 
   async function addNewItem() {
@@ -128,10 +119,6 @@ export default ({ route }) => {
   }, [updatedList]);
 
   useEffect(() => {
-    scrollToLastItem();
-  }, [currentItemsRow.length]);
-
-  useEffect(() => {
     if (!isPurchased) {
       const unsubscribe = interstitial.addAdEventListener(
         AdEventType.LOADED,
@@ -174,11 +161,10 @@ export default ({ route }) => {
           />
         ) : (
           <FlatList
-            ref={flatlistRef}
             onScrollToIndexFailed={() => {}}
             removeClippedSubviews={false}
             data={currentItemsRow}
-            renderItem={(item) => <Item data={item} />}
+            renderItem={(item) => <ItemBox data={item} />}
             keyExtractor={(item) => item.itemID}
             ListEmptyComponent={
               <EmptyFlatListItem
