@@ -1,11 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useMemo,
-  useLayoutEffect,
-} from "react";
-import { ActivityIndicator, FlatList } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import * as S from "./styles";
 import CreateItemModal from "../../components/CreateItemModal";
 import ItemBox from "../../components/ItemBox";
@@ -64,7 +58,7 @@ export default ({ route }) => {
       const allItems = await getItems(currentList.listID);
 
       allItems.map((item) => {
-        totalPrice += item.itemTotal;
+        totalPrice += Number(item.itemTotal);
       });
 
       setTotalPriceList(totalPrice);
@@ -85,9 +79,9 @@ export default ({ route }) => {
       const newItems = currentItemsRow.filter((item) =>
         item.itemName.toLocaleLowerCase().includes(term.toLocaleLowerCase())
       );
-      setCurrentItemsRow(newItems);
+      setItemsRow(newItems);
     } else {
-      setCurrentItemsRow(itemsRow);
+      setItemsRow(currentItemsRow);
     }
   }
 
@@ -140,9 +134,10 @@ export default ({ route }) => {
           <FlatList
             onScrollToIndexFailed={() => {}}
             removeClippedSubviews={false}
-            data={currentItemsRow}
+            data={itemsRow}
             renderItem={(item) => <ItemBox data={item} />}
             keyExtractor={(item) => item.itemID}
+            ListFooterComponent={<View style={{ height: 200 }} />}
             ListEmptyComponent={
               <EmptyFlatListItem
                 text={

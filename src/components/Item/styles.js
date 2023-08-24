@@ -10,6 +10,7 @@ export const Item__wrapper = styled.View`
     margin-bottom: 20px;
     background-color: ${theme.colors.secondaryColorLight};
     border-radius: 5px;
+    gap: 8px;
   `}
 `;
 
@@ -28,7 +29,6 @@ export const Item__name = styled.View`
     text-align: center;
     width: 60%;
     height: 56px;
-    margin-bottom: 15px;
     font-size: ${theme.font.size.subtitle};
     align-items: center;
   `}
@@ -87,6 +87,7 @@ export const Item__quant = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex: 1;
 `;
 
 export const Item__delete = styled.TouchableOpacity`
@@ -101,7 +102,19 @@ export const Item__delete = styled.TouchableOpacity`
   `}
 `;
 
-export const Item__deleteText = styled.Text`
+export const Item__confirm = styled.TouchableOpacity`
+  ${({ theme }) => css`
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: ${theme.colors.primaryColor};
+    border-radius: 5px;
+    height: 40px;
+  `}
+`;
+
+export const Item__btnText = styled.Text`
   ${({ theme }) => css`
     padding: 10px;
     font-size: ${theme.font.size.subtitle};

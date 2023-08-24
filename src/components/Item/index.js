@@ -9,17 +9,13 @@ import theme from "../../global/theme";
 
 export default (item) => {
   const currentItem = item.data.item;
-  const [itemName, setItemName] = useState(currentItem?.itemName || "");
+  const [itemName, setItemName] = useState(currentItem.itemName || "");
   const [itemPrice, setItemPrice] = useState(
-    currentItem?.itemPrice?.toString()
+    currentItem.itemPrice.toString() || 0
   );
-  const [itemQuantity, setItemQuantity] = useState(currentItem?.itemQnt);
-
+  const [itemQuantity, setItemQuantity] = useState(currentItem.itemQnt);
   const itemTotal = itemPrice * itemQuantity;
-
   const { updatedList, setUpdatedList } = useContext(GlobalContext);
-
-  const [firstRender, setFirstRender] = useState(true);
 
   async function deleteItemById() {
     setUpdatedList(!updatedList);
@@ -62,22 +58,12 @@ export default (item) => {
   }
 
   function handleChangePrice(price) {
-    const formatedPrice = price.replace(",", ".").split(".");
+    const formatedPrice = price
+      .replace(/[- #*+;<>\{\}\[\]\\\/]/gi, "")
+      .replace(",", ".");
 
-    const output =
-      formatedPrice.shift() +
-      (formatedPrice.length ? "." + formatedPrice.join("") : "");
-
-    setItemPrice(output.replace(/[- #*+;<>\{\}\[\]\\\/]/gi, ""));
+    setItemPrice(formatedPrice);
   }
-
-  useEffect(() => {
-    if (firstRender) {
-      setFirstRender(!firstRender);
-    } else {
-      updateItemById();
-    }
-  }, [itemName, itemPrice, itemQuantity]);
 
   return (
     <S.Item__wrapper>
@@ -96,7 +82,7 @@ export default (item) => {
           <S.Item__priceInput
             keyboardType="decimal-pad"
             value={itemPrice}
-            placeholder="0,00"
+            placeholder="0.00"
             placeholderTextColor={theme.colors.secondaryColor}
             onChangeText={(t) => handleChangePrice(t)}
           />
@@ -106,7 +92,7 @@ export default (item) => {
       <S.Item__group>
         <S.Item__delete onPress={deleteWarning}>
           <Trash2 color={`${theme.colors.lightColor}`} width={16} height={16} />
-          <S.Item__deleteText>Remover item</S.Item__deleteText>
+          <S.Item__btnText>Remover item</S.Item__btnText>
         </S.Item__delete>
 
         <S.Item__quant>
@@ -132,6 +118,10 @@ export default (item) => {
           </S.Item__quantBtn>
         </S.Item__quant>
       </S.Item__group>
+
+      <S.Item__confirm onPress={updateItemById}>
+        <S.Item__btnText>Atualizar</S.Item__btnText>
+      </S.Item__confirm>
     </S.Item__wrapper>
   );
 };

@@ -15,7 +15,13 @@ export async function createNewItem(item) {
     db.transaction((transaction) => {
       transaction.executeSql(
         "INSERT INTO Items (itemName, itemPrice, itemQnt, itemTotal, listID) VALUES (?,?,?,?,?);",
-        [item.itemName, item.itemPrice, item.itemQnt, item.itemTotal, item.listID],
+        [
+          item.itemName,
+          item.itemPrice,
+          item.itemQnt,
+          item.itemTotal,
+          item.listID,
+        ],
         () => {
           resolve("Item criado com sucesso!");
         }
@@ -43,7 +49,13 @@ export async function upDateItem(item) {
     db.transaction((transaction) => {
       transaction.executeSql(
         "UPDATE Items SET itemName = ?, itemPrice = ?, itemQnt = ?, itemTotal = ? WHERE itemID = ?;",
-        [item.itemName, item.itemPrice, item.itemQnt, item.itemTotal, item.itemID],
+        [
+          item.itemName,
+          item.itemPrice,
+          item.itemQnt,
+          item.itemTotal,
+          item.itemID,
+        ],
         () => {
           resolve("Item atualizado com sucesso!");
         }
