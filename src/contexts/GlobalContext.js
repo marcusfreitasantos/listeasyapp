@@ -7,7 +7,6 @@ export function InfoProvider({ children }) {
   const [totalLists, setTotalLists] = useState();
   const [userLists, setUserLists] = useState([]);
   const [currentList, setCurrentList] = useState([]);
-  const [currentListName, setCurrentListName] = useState("");
   const [currentItemsRow, setCurrentItemsRow] = useState([]);
   const [updatedList, setUpdatedList] = useState(false);
   const [modal, setModal] = useState(false);
@@ -32,8 +31,6 @@ export function InfoProvider({ children }) {
         setUserLists,
         currentList,
         setCurrentList,
-        currentListName,
-        setCurrentListName,
         currentItemsRow,
         setCurrentItemsRow,
         updatedList,

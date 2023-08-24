@@ -11,7 +11,7 @@ import PDFTemplateList from "../PDFTemplateList";
 
 export default (item) => {
   const navigation = useNavigation();
-  const { setCurrentList, setCurrentListName, setUpdatedList, updatedList } =
+  const { setCurrentList, setUpdatedList, updatedList } =
     useContext(GlobalContext);
   const total = parseFloat(item.data.item.listTotal);
   const [itemsRow, setItemsRow] = useState([]);
@@ -19,7 +19,6 @@ export default (item) => {
   function editListScreen() {
     navigation.navigate("List");
     setCurrentList(item.data.item);
-    setCurrentListName(item.data.item.listName);
   }
 
   async function getListItems() {

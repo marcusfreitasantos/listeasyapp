@@ -28,11 +28,9 @@ import Container from "../../components/Container";
 export default ({ route }) => {
   const {
     currentList,
-    currentListName,
     currentItemsRow,
     setCurrentItemsRow,
     updatedList,
-    setUpdatedList,
     isPurchased,
     modal,
     setModal,
@@ -47,9 +45,9 @@ export default ({ route }) => {
   });
 
   const [totalPriceList, setTotalPriceList] = useState(currentList.listTotal);
-  const [searchTerm, setSearchTerm] = useState("");
   const [itemsRow, setItemsRow] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchterm] = useState("");
 
   let totalPrice = 0;
 
@@ -80,12 +78,12 @@ export default ({ route }) => {
     }
   }
 
-  function searchItems() {
-    if (searchTerm !== "") {
+  function searchItems(term) {
+    setSearchterm(term);
+
+    if (term !== "") {
       const newItems = currentItemsRow.filter((item) =>
-        item.itemName
-          .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase())
+        item.itemName.toLocaleLowerCase().includes(term.toLocaleLowerCase())
       );
       setCurrentItemsRow(newItems);
     } else {
@@ -96,15 +94,6 @@ export default ({ route }) => {
   useEffect(() => {
     getListItems();
   }, [modal, updatedList]);
-
-  // useLayoutEffect(() => {
-  //   editList();
-  // }, [currentListName, totalPriceList]);
-
-  // useEffect(() => {
-  //   console.log("searchItems");
-  //   searchItems();
-  // }, [searchTerm]);
 
   // useEffect(() => {
   //   if (!isPurchased) {
@@ -129,7 +118,7 @@ export default ({ route }) => {
           <S.SearchItemWrapper>
             <S.SearchItemInput
               value={searchTerm}
-              onChangeText={(t) => setSearchTerm(t)}
+              onChangeText={(t) => searchItems(t)}
               placeholder="Pesquisar itens"
               placeholderTextColor={theme.colors.secondaryColor}
             />
@@ -157,7 +146,7 @@ export default ({ route }) => {
             ListEmptyComponent={
               <EmptyFlatListItem
                 text={
-                  searchTerm !== ""
+                  itemsRow.length
                     ? "Item não encontrado."
                     : "Adicione itens à sua lista."
                 }

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../contexts/GlobalContext";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft, Edit, DollarSign } from "react-native-feather";
@@ -7,17 +7,15 @@ import * as S from "./styles";
 import { upDateListName } from "../../services/ListQueries";
 
 export default ({ routeName }) => {
-  const {
-    totalLists,
-    currentListName,
-    setCurrentListName,
-    currentList,
-    isPurchased,
-  } = useContext(GlobalContext);
+  const { totalLists, currentList, isPurchased, setModal } =
+    useContext(GlobalContext);
+
+  const [currentListName, setCurrentListName] = useState(currentList.listName);
 
   const navigation = useNavigation();
 
   function backToPreviousScreen() {
+    setModal(false);
     navigation.goBack();
   }
 

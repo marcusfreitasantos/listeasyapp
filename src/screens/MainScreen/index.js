@@ -27,6 +27,7 @@ export default ({ route }) => {
     setModal,
     isPurchased,
     setIsPurchased,
+    updatedList,
   } = useContext(GlobalContext);
 
   async function showLists() {
@@ -55,7 +56,7 @@ export default ({ route }) => {
   useEffect(() => {
     showLists();
     checkUserStatus();
-  }, [isFocused]);
+  }, [isFocused, updatedList]);
 
   return (
     <>
