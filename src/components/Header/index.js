@@ -4,10 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import { ArrowLeft, Edit, DollarSign } from "react-native-feather";
 import theme from "../../global/theme";
 import * as S from "./styles";
+import { upDateListName } from "../../services/ListQueries";
 
 export default ({ routeName }) => {
-  const { totalLists, currentListName, setCurrentListName, isPurchased } =
-    useContext(GlobalContext);
+  const {
+    totalLists,
+    currentListName,
+    setCurrentListName,
+    currentList,
+    isPurchased,
+  } = useContext(GlobalContext);
 
   const navigation = useNavigation();
 
@@ -17,6 +23,15 @@ export default ({ routeName }) => {
 
   function goToPurchaseScreen() {
     navigation.navigate("PurchaseScreen");
+  }
+
+  async function changeListName(listName) {
+    const newList = {
+      listName: listName,
+      listID: currentList.listID,
+    };
+    setCurrentListName(listName);
+    await upDateListName(newList);
   }
 
   if (routeName === "MainScreen") {
@@ -64,7 +79,7 @@ export default ({ routeName }) => {
             <S.ListNameInput
               maxLength={20}
               value={currentListName}
-              onChangeText={(t) => setCurrentListName(t)}
+              onChangeText={(t) => changeListName(t)}
             />
 
             <Edit

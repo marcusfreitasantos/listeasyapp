@@ -38,14 +38,28 @@ export async function getLists() {
   });
 }
 
-export async function upDateList(list) {
+export async function upDateListTotal(list) {
   return new Promise((resolve) => {
     db.transaction((transaction) => {
       transaction.executeSql(
-        "UPDATE Lists SET listName = ?, listTotal = ? WHERE listID = ?;",
-        [list.listName, list.listTotal, list.listID],
+        "UPDATE Lists SET listTotal = ? WHERE listID = ?;",
+        [list.listTotal, list.listID],
         () => {
-          resolve("Lista atualizada com sucesso!");
+          resolve("Total da lista atualizado com sucesso!");
+        }
+      );
+    });
+  });
+}
+
+export async function upDateListName(list) {
+  return new Promise((resolve) => {
+    db.transaction((transaction) => {
+      transaction.executeSql(
+        "UPDATE Lists SET listName = ? WHERE listID = ?;",
+        [list.listName, list.listID],
+        () => {
+          resolve("Nome da lista atualizado com sucesso!");
         }
       );
     });

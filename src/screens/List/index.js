@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import { ActivityIndicator, FlatList } from "react-native";
 import * as S from "./styles";
-import Item from "../../components/Item";
+import CreateItemModal from "../../components/CreateItemModal";
 import ItemBox from "../../components/ItemBox";
-import { upDateList } from "../../services/ListQueries";
+import { upDateListTotal } from "../../services/ListQueries";
 import { GlobalContext } from "../../contexts/GlobalContext";
-import { createNewItem, getItems } from "../../services/ItemQueries";
+import { getItems } from "../../services/ItemQueries";
 import PlusButton from "../../components/PlusButton";
 import { Search } from "react-native-feather";
 import theme from "../../global/theme";
@@ -28,6 +34,8 @@ export default ({ route }) => {
     updatedList,
     setUpdatedList,
     isPurchased,
+    modal,
+    setModal,
   } = useContext(GlobalContext);
 
   const adUnitId = __DEV__
@@ -38,41 +46,19 @@ export default ({ route }) => {
     requestNonPersonalizedAdsOnly: true,
   });
 
-  const [totalPriceList, setTotalPriceList] = useState(0);
+  const [totalPriceList, setTotalPriceList] = useState(currentList.listTotal);
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsRow, setItemsRow] = useState([]);
   const [loading, setLoading] = useState(true);
 
   let totalPrice = 0;
 
-  async function editList() {
+  async function updateTotalPriceList() {
     const newList = {
-      listName: currentListName,
-      listTotal: totalPriceList,
+      listTotal: totalPrice,
       listID: currentList.listID,
     };
-    await upDateList(newList);
-    setUpdatedList(!updatedList);
-  }
-
-  async function addNewItem() {
-    try {
-      const newItem = {
-        itemName: "",
-        itemPrice: "",
-        itemQnt: 1,
-        itemTotal: "",
-        listID: currentList.listID,
-      };
-
-      const newItemAdded = await createNewItem(newItem);
-
-      if (newItemAdded) {
-        getListItems();
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    await upDateListTotal(newList);
   }
 
   async function getListItems() {
@@ -86,6 +72,7 @@ export default ({ route }) => {
       setTotalPriceList(totalPrice);
       setCurrentItemsRow(allItems);
       setItemsRow(allItems);
+      updateTotalPriceList();
     } catch (error) {
       console.log("erro na exibição dos itens:", error);
     } finally {
@@ -107,31 +94,32 @@ export default ({ route }) => {
   }
 
   useEffect(() => {
-    editList();
-  }, [currentListName, totalPriceList]);
-
-  useEffect(() => {
-    searchItems();
-  }, [searchTerm]);
-
-  useEffect(() => {
     getListItems();
-  }, [updatedList]);
+  }, [modal, updatedList]);
 
-  useEffect(() => {
-    if (!isPurchased) {
-      const unsubscribe = interstitial.addAdEventListener(
-        AdEventType.LOADED,
-        () => {
-          interstitial.show();
-        }
-      );
+  // useLayoutEffect(() => {
+  //   editList();
+  // }, [currentListName, totalPriceList]);
 
-      interstitial.load();
+  // useEffect(() => {
+  //   console.log("searchItems");
+  //   searchItems();
+  // }, [searchTerm]);
 
-      return unsubscribe;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isPurchased) {
+  //     const unsubscribe = interstitial.addAdEventListener(
+  //       AdEventType.LOADED,
+  //       () => {
+  //         interstitial.show();
+  //       }
+  //     );
+
+  //     interstitial.load();
+
+  //     return unsubscribe;
+  //   }
+  // }, []);
 
   return (
     <>
@@ -177,6 +165,8 @@ export default ({ route }) => {
             }
           />
         )}
+
+        {modal && <CreateItemModal />}
       </Container>
 
       <S.ListFooter>
@@ -187,7 +177,7 @@ export default ({ route }) => {
           </S.ListTotal__number>
         </S.ListTotal__wrapper>
 
-        <PlusButton onPress={addNewItem} Loading={loading} />
+        <PlusButton onPress={() => setModal(!modal)} Loading={loading} />
       </S.ListFooter>
     </>
   );

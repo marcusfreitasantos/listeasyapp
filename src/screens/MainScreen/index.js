@@ -12,16 +12,17 @@ import EmptyFlatListItem from "../../components/EmptyFlatListItem";
 import Header from "../../components/Header";
 import Container from "../../components/Container";
 import { checkUserSubscriptionStatus } from "../../services/purchases";
+import { useIsFocused } from "@react-navigation/native";
 
 export default ({ route }) => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const {
     totalLists,
     setTotalLists,
     userLists,
     setUserLists,
-    updatedList,
     modal,
     setModal,
     isPurchased,
@@ -39,7 +40,7 @@ export default ({ route }) => {
       const userStatus = await checkUserSubscriptionStatus();
       setIsPurchased(userStatus);
     } catch (error) {
-      console.log("error do carai", error);
+      console.log("erro ao verificar status do usuário", error);
     }
   };
 
@@ -54,7 +55,7 @@ export default ({ route }) => {
   useEffect(() => {
     showLists();
     checkUserStatus();
-  }, [updatedList]);
+  }, [isFocused]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { getLists } from "../services/ListQueries";
+
 export const GlobalContext = createContext({});
 
 export function InfoProvider({ children }) {
