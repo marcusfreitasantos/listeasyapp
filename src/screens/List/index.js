@@ -89,20 +89,20 @@ export default ({ route }) => {
     getListItems();
   }, [modal, updatedList]);
 
-  // useEffect(() => {
-  //   if (!isPurchased) {
-  //     const unsubscribe = interstitial.addAdEventListener(
-  //       AdEventType.LOADED,
-  //       () => {
-  //         interstitial.show();
-  //       }
-  //     );
+  useEffect(() => {
+    if (!isPurchased) {
+      const unsubscribe = interstitial.addAdEventListener(
+        AdEventType.LOADED,
+        () => {
+          interstitial.show();
+        }
+      );
 
-  //     interstitial.load();
+      interstitial.load();
 
-  //     return unsubscribe;
-  //   }
-  // }, []);
+      return unsubscribe;
+    }
+  }, []);
 
   return (
     <>
