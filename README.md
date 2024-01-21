@@ -20,4 +20,36 @@ React Native | Expo | SQLite | Styled Components
 
 The app is available on PlayStore: https://play.google.com/store/apps/details?id=com.penpack.listeasy
 
+## Screeshots
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_1.jpg"
+  alt="List Easy App - Image 01"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_2.jpg"
+  alt="List Easy App - Image 02"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_3.jpg"
+  alt="List Easy App - Image 03"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_4.jpg"
+  alt="List Easy App - Image 04"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_5.jpg"
+  alt="List Easy App - Image 05"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="https://mafreitas.com.br/wp-content/uploads/2024/01/app_details_page_img_6.jpg"
+  alt="List Easy App - Image 06"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
 ## Thanks for watching!!
