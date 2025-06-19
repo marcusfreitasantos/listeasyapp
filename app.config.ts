@@ -1,0 +1,74 @@
+import { ExpoConfig } from "@expo/config";
+const runtimeVersion = "3.7";
+
+const config: ExpoConfig = {
+  name: "List Easy",
+  slug: "listeasy",
+  version: runtimeVersion,
+  orientation: "portrait",
+  icon: "./assets/icon.png",
+  scheme: "listeasy",
+  userInterfaceStyle: "automatic",
+  splash: {
+    image: "./assets/splash.png",
+    resizeMode: "contain",
+    backgroundColor: "#ffffff",
+  },
+  ios: {
+    supportsTablet: true,
+  },
+  android: {
+    userInterfaceStyle: "automatic",
+    package: "com.penpack.listeasy",
+    adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#fff",
+    },
+    icon: "./assets/images/icon.png",
+    permissions: ["com.android.vending.BILLING"],
+    googleServicesFile: process.env.GOOGLE_SERVICES_FILE,
+  },
+  web: {
+    bundler: "metro",
+    output: "static",
+    favicon: "./assets/favicon.png",
+  },
+  plugins: [
+    [
+      "react-native-google-mobile-ads",
+      {
+        android_app_id: "ca-app-pub-8430347978354434~3537975748",
+      },
+    ],
+    "@react-native-firebase/app",
+    "@react-native-firebase/crashlytics",
+    "@react-native-firebase/perf",
+    [
+      "expo-build-properties",
+      {
+        android: {
+          enableProguardInReleaseBuilds: true,
+        },
+      },
+    ],
+    "expo-router",
+  ],
+  experiments: {
+    typedRoutes: true,
+  },
+  extra: {
+    router: {
+      origin: false,
+    },
+    eas: {
+      projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
+    },
+  },
+
+  owner: "penpack",
+  runtimeVersion: {
+    policy: "appVersion",
+  },
+};
+
+export default config;
