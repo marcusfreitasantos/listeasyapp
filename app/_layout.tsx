@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useColorScheme, ActivityIndicator, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import MainStack from "./src/stacks/MainStack";
-import { createListsTable } from "./src/services/ListQueries";
-import { createItemsTable } from "./src/services/ItemQueries";
-import { InfoProvider } from "./src/contexts/GlobalContext";
+import MainStack from "@/src/stacks/MainStack";
+import { createListsTable } from "@/src/services/ListQueries";
+import { createItemsTable } from "@/src/services/ItemQueries";
+import { InfoProvider } from "@/src/contexts/GlobalContext";
 import { ThemeProvider } from "styled-components/native";
-import theme from "./src/global/theme";
-import darkTheme from "./src/global/darkTheme";
+import theme from "@/src/global/theme";
+import darkTheme from "@/src/global/darkTheme";
 
 import {
   useFonts,
@@ -15,7 +15,7 @@ import {
   OpenSans_700Bold,
 } from "@expo-google-fonts/open-sans";
 
-export default function App() {
+export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     OpenSans_400Regular,
     OpenSans_700Bold,
