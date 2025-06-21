@@ -12,27 +12,16 @@ const defaultSizes = {
 const defaultBorderRadius = "50px";
 
 const darkTheme = {
-  primaryColor: "#1A61AA",
-  primaryColorHover: "#1E4E88",
-  primaryColorDark: "#0B1D33",
-  secondaryColor: "#55BAAA",
-  secondaryColorHover: "#248581",
-  thirdColor: "#F0903A",
-  textColor: "#333",
-  lightGray: "#EEEEEE",
+  primaryColor: "#FFCC30",
+  secondaryColor: "#222222",
+  lightGray: "#f1f1f1",
   defaultSizes,
   defaultBorderRadius,
 };
 const lightTheme = {
-  primaryColor: "#1A61AA",
-  primaryColorHover: "#1E4E88",
-  primaryColorDark: "#0B1D33",
-  secondaryColor: "#55BAAA",
-  secondaryColorHover: "#248581",
-  secondaryColorLight: "#A4E5DB",
-  thirdColor: "#F0903A",
-  textColor: "#333",
-  lightGray: "#EEEEEE",
+  primaryColor: "#FFCC30",
+  secondaryColor: "#222222",
+  lightGray: "#f1f1f1",
   defaultSizes,
   defaultBorderRadius,
 };
