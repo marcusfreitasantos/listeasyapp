@@ -1,31 +1,40 @@
-import Constants from "expo-constants";
-const statusBarHeight = Constants.statusBarHeight;
+import { RFValue } from "react-native-responsive-fontsize";
 
-export default {
-  safeArea: {
-    safeAreaAndroid: `${statusBarHeight}px`,
-  },
-  colors: {
-    primaryColor: "#37CF8B",
-    primaryColorDark: "#228056",
-    secondaryColor: "#737373",
-    secondaryColorDark: "#333",
-    secondaryColorLight: "#fff",
-    atentionColor: "#CF5037",
-    atentionColorDark: "#9C3C29",
-    lightColor: "#eee",
-    darkColor: "#222",
-  },
-  font: {
-    family: {
-      normal: "OpenSans_400Regular",
-      bold: "OpenSans_700Bold",
-    },
-    size: {
-      title: "18px",
-      subtitle: "16px",
-      text: "14px",
-      details: "12px",
-    },
-  },
+const defaultSizes = {
+  xLarge: `${RFValue(36)}px`,
+  large: `${RFValue(24)}px`,
+  medium: `${RFValue(16)}px`,
+  small: `${RFValue(12)}px`,
+  xSmall: `${RFValue(10)}px`,
+  xxSmall: `${RFValue(8)}px`,
 };
+
+const defaultBorderRadius = "50px";
+
+const darkTheme = {
+  primaryColor: "#1A61AA",
+  primaryColorHover: "#1E4E88",
+  primaryColorDark: "#0B1D33",
+  secondaryColor: "#55BAAA",
+  secondaryColorHover: "#248581",
+  thirdColor: "#F0903A",
+  textColor: "#333",
+  lightGray: "#EEEEEE",
+  defaultSizes,
+  defaultBorderRadius,
+};
+const lightTheme = {
+  primaryColor: "#1A61AA",
+  primaryColorHover: "#1E4E88",
+  primaryColorDark: "#0B1D33",
+  secondaryColor: "#55BAAA",
+  secondaryColorHover: "#248581",
+  secondaryColorLight: "#A4E5DB",
+  thirdColor: "#F0903A",
+  textColor: "#333",
+  lightGray: "#EEEEEE",
+  defaultSizes,
+  defaultBorderRadius,
+};
+
+export { lightTheme, darkTheme };

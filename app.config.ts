@@ -19,12 +19,13 @@ const config: ExpoConfig = {
   },
   android: {
     userInterfaceStyle: "automatic",
+    edgeToEdgeEnabled: true,
     package: "com.penpack.listeasy",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#fff",
     },
-    icon: "./assets/images/icon.png",
+    icon: "./assets/icon.png",
     permissions: ["com.android.vending.BILLING"],
     googleServicesFile: process.env.GOOGLE_SERVICES_FILE,
   },
@@ -38,6 +39,7 @@ const config: ExpoConfig = {
       "react-native-google-mobile-ads",
       {
         androidAppId: "ca-app-pub-8430347978354434~3537975748",
+        iosAppId: "ca-app-pub-8430347978354434~3537975748",
       },
     ],
     "@react-native-firebase/app",
@@ -65,7 +67,7 @@ const config: ExpoConfig = {
     },
   },
 
-  owner: "penpack",
+  owner: "marcusfreitas",
   runtimeVersion: {
     policy: "appVersion",
   },
