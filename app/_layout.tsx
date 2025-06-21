@@ -6,7 +6,7 @@ import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-export default function RootLayout() {
+export default function Layout() {
   const [loaded] = useFonts({
     OpenSansLight: require("@/assets/fonts/OpenSans-Light.ttf"),
     OpenSansRegular: require("@/assets/fonts/OpenSans-Regular.ttf"),
@@ -30,9 +30,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider theme={colorScheme === "dark" ? darkTheme : lightTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <Stack screenOptions={{ headerShown: false }} />
     </ThemeProvider>
   );
 }

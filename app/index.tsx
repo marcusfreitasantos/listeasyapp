@@ -1,7 +1,15 @@
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
-const App = () => {
-  return <Text>Home</Text>;
+const Home = () => {
+  return (
+    <TouchableOpacity
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      onPress={() => router.push("/details" as any)}
+    >
+      <Text>Home</Text>
+    </TouchableOpacity>
+  );
 };
 
-export default App;
+export default Home;

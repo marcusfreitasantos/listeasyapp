@@ -13,7 +13,6 @@ module.exports = (() => {
     ...resolver,
     assetExts: resolver.assetExts.filter((ext: string) => ext !== "svg"),
     sourceExts: [...resolver.sourceExts, "svg"],
-    unstable_enablePackageExports: false,
   };
 
   return config;

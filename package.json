@@ -31,6 +31,7 @@
     "expo-print": "~14.1.4",
     "expo-router": "~5.1.0",
     "expo-sharing": "~13.1.5",
+    "expo-splash-screen": "~0.30.9",
     "expo-sqlite": "~15.2.12",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.9",
@@ -51,8 +52,7 @@
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
-    "styled-components": "^5.3.5",
-    "expo-splash-screen": "~0.30.9"
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
