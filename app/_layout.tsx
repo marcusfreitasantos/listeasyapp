@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import { useColorScheme, StatusBar, ActivityIndicator } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createListsTable } from "@/src/services/ListQueries";
-import { createItemsTable } from "@/src/services/ItemQueries";
-import { InfoProvider } from "@/src/contexts/GlobalContext";
+import { useColorScheme, ActivityIndicator } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "@/src/global/theme";
 import { Stack } from "expo-router";
@@ -22,11 +18,6 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    createListsTable();
-    createItemsTable();
-  }, []);
-
-  useEffect(() => {
     if (loaded) {
       setTimeout(() => {
         setAppIsReady(true);
@@ -38,15 +29,10 @@ export default function RootLayout() {
   if (!appIsReady) return <ActivityIndicator size="large" color="#0000ff" />;
 
   return (
-    <NavigationContainer>
-      <InfoProvider>
-        <StatusBar />
-        <ThemeProvider theme={colorScheme === "dark" ? darkTheme : lightTheme}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </InfoProvider>
-    </NavigationContainer>
+    <ThemeProvider theme={colorScheme === "dark" ? darkTheme : lightTheme}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </ThemeProvider>
   );
 }
