@@ -1,20 +1,8 @@
 import "styled-components/native";
+import { darkTheme } from "./src/global/theme";
+
+type ThemeType = typeof darkTheme;
 
 declare module "styled-components/native" {
-  export interface DefaultTheme {
-    primaryColor: string;
-    secondaryColor: string;
-    lightGray: string;
-    defaultSizes: {
-      xLarge: string;
-      large: string;
-      medium: string;
-      small: string;
-      xSmall: string;
-      xxSmall: string;
-    };
-    defaultBorderRadius: string;
-    deafaultFontFamily: string;
-    defaultBorder: string;
-  }
+  export interface DefaultTheme extends ThemeType {}
 }
