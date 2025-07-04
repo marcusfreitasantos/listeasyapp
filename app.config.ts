@@ -10,9 +10,7 @@ const config: ExpoConfig = {
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
   splash: {
-    image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#222222",
   },
   ios: {
     supportsTablet: true,
@@ -23,7 +21,7 @@ const config: ExpoConfig = {
     package: "com.penpack.listeasy",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#fff",
+      backgroundColor: "#222222",
     },
     icon: "./assets/icon.png",
     permissions: ["com.android.vending.BILLING"],
@@ -54,6 +52,17 @@ const config: ExpoConfig = {
       },
     ],
     "expo-router",
+    [
+      "expo-font",
+      {
+        android: {
+          fonts: ["./assets/fonts/NunitoSans.ttf"],
+        },
+        ios: {
+          fonts: ["./assets/fonts/NunitoSans.ttf"],
+        },
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,

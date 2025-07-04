@@ -7,7 +7,7 @@ const Home = () => {
       style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       onPress={() => router.push("/details" as any)}
     >
-      <Text>Home</Text>
+      <Text>Homeeee</Text>
     </TouchableOpacity>
   );
 };

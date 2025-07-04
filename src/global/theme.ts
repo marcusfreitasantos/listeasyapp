@@ -9,21 +9,31 @@ const defaultSizes = {
   xxSmall: `${RFValue(8)}px`,
 };
 
+const deafaultFontFamily = "NunitoSans";
+
+const defaultBorder = "1px solid #ddd";
+
 const defaultBorderRadius = "50px";
 
 const darkTheme = {
   primaryColor: "#FFCC30",
   secondaryColor: "#222222",
   lightGray: "#f1f1f1",
+  textColor: "#555555",
   defaultSizes,
   defaultBorderRadius,
+  defaultBorder,
+  deafaultFontFamily,
 };
 const lightTheme = {
-  primaryColor: "#FFCC30",
-  secondaryColor: "#222222",
+  primaryColor: "#222222",
+  secondaryColor: "#FFCC30",
+  textColor: "#555555",
   lightGray: "#f1f1f1",
   defaultSizes,
   defaultBorderRadius,
+  defaultBorder,
+  deafaultFontFamily,
 };
 
 export { lightTheme, darkTheme };
