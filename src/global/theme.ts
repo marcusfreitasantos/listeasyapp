@@ -16,8 +16,8 @@ const defaultBorder = "1px solid #ddd";
 const defaultBorderRadius = "50px";
 
 const darkTheme = {
-  primaryColor: "#FFCC30",
-  secondaryColor: "#222222",
+  primaryColor: "#222222",
+  secondaryColor: "#FFCC30",
   lightGray: "#f1f1f1",
   textColor: "#555555",
   defaultSizes,
@@ -26,8 +26,8 @@ const darkTheme = {
   deafaultFontFamily,
 };
 const lightTheme = {
-  primaryColor: "#222222",
-  secondaryColor: "#FFCC30",
+  primaryColor: "#FFCC30",
+  secondaryColor: "#222222",
   textColor: "#555555",
   lightGray: "#f1f1f1",
   defaultSizes,

@@ -14,5 +14,7 @@ declare module "styled-components/native" {
       xxSmall: string;
     };
     defaultBorderRadius: string;
+    deafaultFontFamily: string;
+    defaultBorder: string;
   }
 }

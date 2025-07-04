@@ -1,15 +1,9 @@
 import { Text, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import { SignUpScreen } from "@/src/features/auth/view/SignUpScreen";
 
 const Home = () => {
-  return (
-    <TouchableOpacity
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-      onPress={() => router.push("/details" as any)}
-    >
-      <Text>Homeeee</Text>
-    </TouchableOpacity>
-  );
+  return <SignUpScreen />;
 };
 
 export default Home;
