@@ -12,12 +12,12 @@ export const MainContentRow = styled.View`
   gap: 12px;
 `;
 
-export const MainContentText = styled.Text`
+export const FormTitle = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
-  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  font-size: ${({ theme }) => theme.defaultSizes.large};
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
-  font-weight: 500;
+  font-weight: 700;
 `;
 
 export const FormErrorText = styled.Text`

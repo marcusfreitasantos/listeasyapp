@@ -15,7 +15,7 @@ import { ComponentProps } from "react";
 
 type FeatherIconName = ComponentProps<typeof Feather>["name"];
 
-export const SignUpScreen = () => {
+export const SignUpView = () => {
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const { loading, handleSignUp } = useSignUpViewModel();
@@ -77,7 +77,7 @@ export const SignUpScreen = () => {
             <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
           ) : (
             <DynamicForm
-              formTitle="Cadastre-se gratuitamente"
+              formTitle="Cadastre-se gratuitamente."
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
             />
@@ -85,13 +85,13 @@ export const SignUpScreen = () => {
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/+not-found" asChild>
+          <Link href="/">
             <S.SecondaryContentText>
               Já tem conta? Faça login.
             </S.SecondaryContentText>
           </Link>
 
-          <Link href="/+not-found" asChild>
+          <Link href="/+not-found">
             <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
           </Link>
         </S.SecondaryContentRow>

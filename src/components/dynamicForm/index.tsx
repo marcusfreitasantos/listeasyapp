@@ -61,7 +61,7 @@ export const DynamicForm = ({
   };
   return (
     <S.FormWrapper>
-      {formTitle && <S.MainContentText>{formTitle}</S.MainContentText>}
+      {formTitle && <S.FormTitle>{formTitle}</S.FormTitle>}
 
       {formFields &&
         formFields.map((item) => {

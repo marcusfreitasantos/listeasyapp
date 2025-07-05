@@ -1,7 +1,7 @@
-import { SignUpScreen } from "@/src/features/auth/view/SignUpScreen";
+import { SignUpView } from "@/src/features/auth/view/SignUpView";
 
 const SignUp = () => {
-  return <SignUpScreen />;
+  return <SignUpView />;
 };
 
 export default SignUp;
