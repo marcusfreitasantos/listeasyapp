@@ -10,6 +10,8 @@ const config: ExpoConfig = {
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
   splash: {
+    image: "./assets/splash.png",
+    resizeMode: "cover",
     backgroundColor: "#222222",
   },
   ios: {

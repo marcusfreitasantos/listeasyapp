@@ -18,6 +18,7 @@ export const MainContentRow = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  gap: 12px;
 `;
 
 export const MainContentText = styled.Text`
