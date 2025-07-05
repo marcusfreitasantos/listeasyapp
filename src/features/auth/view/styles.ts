@@ -37,3 +37,11 @@ export const SecondaryContentText = styled.Text`
 `;
 
 export const formWrapper = styled.View``;
+
+export const FormErrorText = styled.Text`
+  color: red;
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.xSmall};
+  font-weight: 700;
+  margin-bottom: ${({ theme }) => theme.defaultSizes.small};
+`;
