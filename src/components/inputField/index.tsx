@@ -4,10 +4,10 @@ import { useTheme } from "styled-components/native";
 import { ComponentProps } from "react";
 import { TextInputProps } from "react-native";
 
-type FontAwesomeIconName = ComponentProps<typeof Feather>["name"];
+type FeatherIconName = ComponentProps<typeof Feather>["name"];
 
 type InputFieldProps = {
-  iconName: FontAwesomeIconName;
+  iconName: FeatherIconName;
 } & TextInputProps;
 
 export const InputField = ({ iconName, ...rest }: InputFieldProps) => {
