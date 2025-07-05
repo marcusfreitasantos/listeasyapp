@@ -1,7 +1,7 @@
 import { SignUpScreen } from "@/src/features/auth/view/SignUpScreen";
 
-const Home = () => {
+const SignUp = () => {
   return <SignUpScreen />;
 };
 
-export default Home;
+export default SignUp;

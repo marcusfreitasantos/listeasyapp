@@ -35,3 +35,5 @@ export const SecondaryContentText = styled.Text`
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
 `;
+
+export const formWrapper = styled.View``;
