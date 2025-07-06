@@ -1,10 +1,11 @@
 import { useState, useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { authUser } from "@/src/services/firebase/auth";
 
 export const useSignInViewModel = () => {
+  const router = useRouter();
   const { setUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
 
@@ -15,6 +16,8 @@ export const useSignInViewModel = () => {
       const response = await authUser(email, password);
       console.log(response);
       setUser(response);
+
+      router.push("/lists");
     } catch (error: any) {
       Alert.alert("Oops! Algo deu errado:", `${error}`);
     } finally {
