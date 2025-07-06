@@ -6,7 +6,7 @@ import { authUser } from "@/src/services/firebase/auth";
 
 export const useSignInViewModel = () => {
   const router = useRouter();
-  const { setUser } = useContext(GlobalUserContext);
+  const { setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async (email: string, password: string) => {
@@ -15,7 +15,7 @@ export const useSignInViewModel = () => {
     try {
       const response = await authUser(email, password);
       console.log(response);
-      setUser(response);
+      setCurrentUser(response);
 
       router.push("/lists");
     } catch (error: any) {
