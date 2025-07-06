@@ -5,7 +5,6 @@ export const ButtonWrapper = styled.TouchableOpacity`
     ${({ theme }) => theme.defaultSizes.medium};
   background-color: ${({ theme }) => theme.primaryColor};
   border-radius: 50px;
-  flex: 1;
   justify-content: center;
   align-items: center;
 `;

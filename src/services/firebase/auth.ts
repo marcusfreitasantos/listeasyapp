@@ -60,7 +60,8 @@ export const authUser = async (userEmail: string, userPass: string) => {
 
 export const userLogout = async () => {
   try {
-    signOut(getAuth()).then(() => console.log("User signed out!"));
+    const response = await signOut(getAuth());
+    return response;
   } catch (error) {
     throw new Error(`Não foi possível fazer logout. ${error}`);
   }
