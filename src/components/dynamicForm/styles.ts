@@ -15,9 +15,9 @@ export const MainContentRow = styled.View`
 export const FormTitle = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
-  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  font-size: ${({ theme }) => theme.defaultSizes.large};
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
-  font-weight: 700;
+  font-weight: 300;
 `;
 
 export const FormErrorText = styled.Text`

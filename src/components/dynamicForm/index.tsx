@@ -9,6 +9,7 @@ type FeatherIconName = ComponentProps<typeof Feather>["name"];
 
 type DynamicFormProps = {
   formTitle: string;
+  submitBtnText: string;
   formFields: {
     fieldName: string;
     iconName: FeatherIconName;
@@ -24,6 +25,7 @@ type DynamicFormProps = {
 
 export const DynamicForm = ({
   formTitle,
+  submitBtnText,
   formFields,
   handleFormData,
 }: DynamicFormProps) => {
@@ -94,7 +96,7 @@ export const DynamicForm = ({
         })}
 
       <S.MainContentRow>
-        <Button onPress={handleSubmit(onSubmit)} />
+        <Button onPress={handleSubmit(onSubmit)} btnText={submitBtnText} />
       </S.MainContentRow>
     </S.FormWrapper>
   );

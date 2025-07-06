@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
@@ -57,22 +58,33 @@ export const SignInView = () => {
             <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
           ) : (
             <DynamicForm
-              formTitle="Faça login e acesse todas as suas listas."
+              formTitle="Fazer login"
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
+              submitBtnText="Entrar"
             />
           )}
+
+          <Link href="/+not-found" asChild style={{ marginTop: 20 }}>
+            <Pressable>
+              <S.SecondaryContentText>Recuperar senha</S.SecondaryContentText>
+            </Pressable>
+          </Link>
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/signUp">
-            <S.SecondaryContentText>
-              Não tem uma conta? Cadastre-se.
-            </S.SecondaryContentText>
+          <Link href="/signUp" asChild dismissTo>
+            <Pressable>
+              <S.SecondaryContentText>
+                Não tem uma conta? Crie aqui.
+              </S.SecondaryContentText>
+            </Pressable>
           </Link>
 
-          <Link href="/+not-found">
-            <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+          <Link href="/+not-found" asChild>
+            <Pressable>
+              <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+            </Pressable>
           </Link>
         </S.SecondaryContentRow>
       </S.Container>

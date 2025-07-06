@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
@@ -80,19 +81,24 @@ export const SignUpView = () => {
               formTitle="Cadastre-se gratuitamente."
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
+              submitBtnText="Cadastrar"
             />
           )}
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/">
-            <S.SecondaryContentText>
-              Já tem conta? Faça login.
-            </S.SecondaryContentText>
+          <Link href="/" asChild dismissTo>
+            <Pressable>
+              <S.SecondaryContentText>
+                Já tem conta? Faça login.
+              </S.SecondaryContentText>
+            </Pressable>
           </Link>
 
           <Link href="/+not-found">
-            <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+            <Pressable>
+              <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+            </Pressable>
           </Link>
         </S.SecondaryContentRow>
       </S.Container>
