@@ -7,7 +7,7 @@ import {
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
-import { useSignUpViewModel } from "../viewModel/useSignUpViewModel";
+import { useSignInViewModel } from "../viewModel/useSingInViewModel";
 import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import Feather from "@expo/vector-icons/Feather";
@@ -18,10 +18,10 @@ type FeatherIconName = ComponentProps<typeof Feather>["name"];
 export const SignInView = () => {
   const colorScheme = useColorScheme();
   const theme = useTheme();
-  const { loading } = useSignUpViewModel();
+  const { loading, handleSignIn } = useSignInViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
-    console.log(data);
+    handleSignIn(data.email, data.password);
   };
 
   const formFields = [

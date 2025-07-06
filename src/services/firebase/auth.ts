@@ -1,8 +1,10 @@
 import {
   getAuth,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   FirebaseAuthTypes,
   updateProfile,
+  signOut,
 } from "@react-native-firebase/auth";
 
 export const registerUser = async (
@@ -37,5 +39,29 @@ export const registerUser = async (
     }
 
     throw new Error("Erro desconhecido.");
+  }
+};
+
+export const authUser = async (userEmail: string, userPass: string) => {
+  try {
+    const response = await signInWithEmailAndPassword(
+      getAuth(),
+      userEmail,
+      userPass
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(
+      `Não foi possível fazer login. E-mail ou senha incorretos.`
+    );
+  }
+};
+
+export const userLogout = async () => {
+  try {
+    signOut(getAuth()).then(() => console.log("User signed out!"));
+  } catch (error) {
+    throw new Error(`Não foi possível fazer logout. ${error}`);
   }
 };
