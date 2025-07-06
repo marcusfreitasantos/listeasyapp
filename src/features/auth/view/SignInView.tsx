@@ -8,7 +8,7 @@ import {
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
-import { useSignInViewModel } from "../viewModel/useSingInViewModel";
+import { useSignInViewModel } from "../viewModel/useSignInViewModel";
 import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import Feather from "@expo/vector-icons/Feather";

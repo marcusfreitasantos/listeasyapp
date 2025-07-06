@@ -1,5 +1,7 @@
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+
 type UserEntity = {
-  additionalUserInfo: { isNewUser: boolean };
+  additionalUserInfo?: { isNewUser: boolean };
   user: {
     displayName: null;
     email: string;
@@ -16,4 +18,9 @@ type UserEntity = {
   };
 };
 
-export { UserEntity };
+type UserContextType = {
+  user: FirebaseAuthTypes.UserCredential | null;
+  setUser: (user: FirebaseAuthTypes.UserCredential) => void;
+};
+
+export { UserEntity, UserContextType };
