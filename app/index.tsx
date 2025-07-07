@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { SignInView } from "@/src/features/auth/view/SignInView";
-import { View, Text } from "react-native";
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useRouter } from "expo-router";
 
