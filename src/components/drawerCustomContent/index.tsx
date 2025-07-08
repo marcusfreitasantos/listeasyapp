@@ -19,9 +19,15 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
         <S.DrawerItemGroup>
           <S.DrawerUserInfo>
             <S.DrawerUserInfoAvatarWrapper>
-              <S.DrawerUserInfoAvatarDefaultContent>
-                {currentUser?.user.displayName?.split("")[0]}
-              </S.DrawerUserInfoAvatarDefaultContent>
+              {!currentUser?.user.photoURL ? (
+                <S.DrawerUserInfoAvatarDefaultContent>
+                  {currentUser?.user.displayName?.split("")[0]}
+                </S.DrawerUserInfoAvatarDefaultContent>
+              ) : (
+                <S.DrawerUserInfoAvatarImage
+                  source={{ uri: currentUser.user.photoURL }}
+                />
+              )}
             </S.DrawerUserInfoAvatarWrapper>
 
             <S.DrawerUserInfoTitle numberOfLines={1}>

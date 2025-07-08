@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+const imageSize = "80px";
 
 export const DrawerWrapper = styled.View`
   padding-top: ${({ theme }) => theme.defaultSizes.xLarge};
@@ -22,16 +23,22 @@ export const DrawerUserInfo = styled.TouchableOpacity`
 
 export const DrawerUserInfoAvatarWrapper = styled.View`
   background-color: ${({ theme }) => theme.primaryColor};
-  width: 60px;
-  height: 60px;
+  width: ${imageSize};
+  height: ${imageSize};
   align-items: center;
   justify-content: center;
   border-radius: 50px;
+  overflow: hidden;
+`;
+
+export const DrawerUserInfoAvatarImage = styled.Image`
+  width: ${imageSize};
+  height: ${imageSize};
 `;
 
 export const DrawerUserInfoAvatarDefaultContent = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
-  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  font-size: ${({ theme }) => theme.defaultSizes.large};
   font-weight: 700;
   color: ${({ theme }) => theme.secondaryColor};
 `;
