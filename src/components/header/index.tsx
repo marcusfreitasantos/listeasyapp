@@ -2,19 +2,26 @@ import Logo from "../logo";
 import * as S from "./styles";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
+import { useNavigation } from "expo-router";
+import { DrawerActions } from "@react-navigation/native";
 
 import { useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 
 export const Header = () => {
+  const navigation = useNavigation();
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
 
+  const openDrawerMenu = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
+
   return (
     <S.HeaderWrapper>
       <S.HeaderContainer>
-        <S.HeaderUserInfo>
+        <S.HeaderUserInfo onPress={openDrawerMenu}>
           <S.HeaderUserInfoAvatarWrapper>
             <S.HeaderUserInfoAvatarDefaultContent>
               {currentUser?.user.displayName?.split("")[0]}

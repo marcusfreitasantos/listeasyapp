@@ -73,7 +73,7 @@ export const SignInView = () => {
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/signUp" asChild dismissTo>
+          <Link href="/signup" asChild dismissTo>
             <Pressable>
               <S.SecondaryContentText>
                 Não tem uma conta? Crie aqui.

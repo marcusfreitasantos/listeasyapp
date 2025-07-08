@@ -13,8 +13,7 @@ export const HeaderContainer = styled.View`
   gap: 12px;
 `;
 
-export const HeaderUserInfo = styled.View`
-  padding: ${({ theme }) => theme.defaultSizes.small};
+export const HeaderUserInfo = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   gap: 6px;

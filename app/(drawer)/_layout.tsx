@@ -8,14 +8,18 @@ export default function Layout() {
   const windowWidth = Dimensions.get("window").width;
   const drawerWidth = (windowWidth * 80) / 100;
 
-  const drawerMenuOptions = [
+  const drawerItems = [
     {
-      name: "/company",
-      title: "Início",
+      route: "/lists",
+      title: "Minhas listas",
     },
     {
-      name: "/company/vacancies",
-      title: "Vagas",
+      route: "/profile",
+      title: "Perfil",
+    },
+    {
+      route: "/subscriptions",
+      title: "Assinatura",
     },
   ];
 
@@ -23,12 +27,12 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
         screenOptions={{
-          drawerStyle: { width: drawerWidth },
+          drawerStyle: { width: drawerWidth, borderTopEndRadius: 0 },
           header: () => {
             return <Header />;
           },
         }}
-        drawerContent={() => <DrawerCustomContent />}
+        drawerContent={() => <DrawerCustomContent items={drawerItems} />}
       />
     </GestureHandlerRootView>
   );
