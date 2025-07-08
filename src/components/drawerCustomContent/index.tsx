@@ -1,5 +1,7 @@
 import { Link } from "expo-router";
 import * as S from "./styles";
+import { useContext } from "react";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 type DrawerCustomContentProps = {
   items: {
@@ -9,10 +11,30 @@ type DrawerCustomContentProps = {
 };
 
 export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
+  const { currentUser } = useContext(GlobalUserContext);
+
   return (
     <S.DrawerWrapper>
       <S.DrawerContainer>
         <S.DrawerItemGroup>
+          <S.DrawerUserInfo>
+            <S.DrawerUserInfoAvatarWrapper>
+              <S.DrawerUserInfoAvatarDefaultContent>
+                {currentUser?.user.displayName?.split("")[0]}
+              </S.DrawerUserInfoAvatarDefaultContent>
+            </S.DrawerUserInfoAvatarWrapper>
+
+            <S.DrawerUserInfoTitle numberOfLines={1}>
+              {currentUser?.user.displayName ?? currentUser?.user.email}
+            </S.DrawerUserInfoTitle>
+
+            <S.DrawerUserInfoText numberOfLines={1}>
+              {currentUser?.user.email}
+            </S.DrawerUserInfoText>
+          </S.DrawerUserInfo>
+
+          <S.DrawerDivisor />
+
           {items &&
             items.map((item) => {
               return (
@@ -29,6 +51,9 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
               );
             })}
         </S.DrawerItemGroup>
+
+        <S.DrawerDivisor />
+
         <S.DrawerItem>
           <S.DrawerItemText>Sair</S.DrawerItemText>
         </S.DrawerItem>
