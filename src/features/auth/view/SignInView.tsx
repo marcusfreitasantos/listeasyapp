@@ -58,7 +58,7 @@ export const SignInView = () => {
             <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
           ) : (
             <DynamicForm
-              formTitle="Fazer login"
+              formTitle="Entre na sua conta"
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
               submitBtnText="Entrar"

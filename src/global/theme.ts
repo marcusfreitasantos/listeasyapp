@@ -11,7 +11,7 @@ const defaultSizes = {
 const defaultFontFamily = "NunitoSans";
 const defaultContainerSpacing = `${RFValue(10)}px`;
 const defaultBorder = "1px solid #ddd";
-const defaultBorderRadius = `${RFValue(10)}px`;
+const defaultBorderRadius = `${RFValue(6)}px`;
 const darkTheme = {
   primaryColor: "#FFCC30",
   secondaryColor: "#222222",

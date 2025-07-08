@@ -4,7 +4,7 @@ export const ButtonWrapper = styled.TouchableOpacity`
   padding: ${({ theme }) => theme.defaultSizes.xxSmall}
     ${({ theme }) => theme.defaultSizes.medium};
   background-color: ${({ theme }) => theme.primaryColor};
-  border-radius: 50px;
+  border-radius: ${({ theme }) => theme.defaultBorderRadius};
   justify-content: center;
   align-items: center;
 `;
