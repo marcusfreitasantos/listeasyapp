@@ -13,18 +13,6 @@ const ListsView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
-  const logoutUser = async () => {
-    setIsLoading(true);
-    try {
-      await userLogout();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setCurrentUser(null);
-      router.replace("/");
-    }
-  };
-
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       {isLoading ? (
@@ -35,7 +23,6 @@ const ListsView = () => {
             Lists of user: {currentUser?.user?.displayName} |{" "}
             {currentUser?.user?.email}{" "}
           </Text>
-          <Button btnText="Sair" onPress={() => logoutUser()} />
         </View>
       )}
     </View>
