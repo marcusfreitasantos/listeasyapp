@@ -3,12 +3,12 @@ const imageSize = "80px";
 
 export const DrawerWrapper = styled.View`
   padding-top: ${({ theme }) => theme.defaultSizes.xLarge};
+  background-color: ${({ theme }) => theme.secondaryColor};
 `;
 
 export const DrawerContainer = styled.View`
   padding: ${({ theme }) => theme.defaultSizes.medium};
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.secondaryColor};
   height: 100%;
 `;
 
