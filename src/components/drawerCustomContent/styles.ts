@@ -65,7 +65,3 @@ export const DrawerDivisor = styled.View`
   background-color: ${({ theme }) => theme.textColor};
   width: 100%;
 `;
-
-export const DrawerItem = styled.Pressable``;
-
-export const DrawerItemText = styled.Text``;

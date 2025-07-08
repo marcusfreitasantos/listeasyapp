@@ -1,22 +1,25 @@
 import * as S from "./styles";
+import { Link } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
-import { TextInputProps } from "react-native";
 import { FeatherIconName } from "@/@types/icons";
 
-type InputFieldProps = {
+type DrawerItemProps = {
+  route: string;
+  title: string;
   iconName: FeatherIconName;
-} & TextInputProps;
+};
 
-export const InputField = ({ iconName, ...rest }: InputFieldProps) => {
+export const DrawerItem = ({ route, title, iconName }: DrawerItemProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+
   return (
-    <S.InputFieldWrapper>
-      {iconName && (
+    <Link href={route as any} asChild dismissTo>
+      <S.DrawerItem>
         <Feather name={iconName} size={iconSize} color={theme.primaryColor} />
-      )}
-      <S.InputField {...rest} />
-    </S.InputFieldWrapper>
+        <S.DrawerItemText>{title}</S.DrawerItemText>
+      </S.DrawerItem>
+    </Link>
   );
 };

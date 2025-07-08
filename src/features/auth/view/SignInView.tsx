@@ -11,10 +11,7 @@ import { Link } from "expo-router";
 import { useSignInViewModel } from "../viewModel/useSignInViewModel";
 import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
-import Feather from "@expo/vector-icons/Feather";
-import { ComponentProps } from "react";
-
-type FeatherIconName = ComponentProps<typeof Feather>["name"];
+import { FeatherIconName } from "@/@types/icons";
 
 export const SignInView = () => {
   const colorScheme = useColorScheme();

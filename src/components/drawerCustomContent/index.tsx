@@ -1,12 +1,14 @@
-import { Link } from "expo-router";
 import * as S from "./styles";
 import { useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { DrawerItem } from "../drawerItem";
+import { FeatherIconName } from "@/@types/icons";
 
 type DrawerCustomContentProps = {
   items: {
     route: string;
     title: string;
+    iconName: FeatherIconName;
   }[];
 };
 
@@ -44,25 +46,17 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
           {items &&
             items.map((item) => {
               return (
-                <Link
+                <DrawerItem
                   key={item.route}
-                  href={item.route as any}
-                  asChild
-                  dismissTo
-                >
-                  <S.DrawerItem>
-                    <S.DrawerItemText>{item.title}</S.DrawerItemText>
-                  </S.DrawerItem>
-                </Link>
+                  route={item.route}
+                  title={item.title}
+                  iconName={item.iconName}
+                />
               );
             })}
         </S.DrawerItemGroup>
 
         <S.DrawerDivisor />
-
-        <S.DrawerItem>
-          <S.DrawerItemText>Sair</S.DrawerItemText>
-        </S.DrawerItem>
       </S.DrawerContainer>
     </S.DrawerWrapper>
   );

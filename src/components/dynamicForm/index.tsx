@@ -2,10 +2,7 @@ import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { useForm, Controller } from "react-hook-form";
 import { InputField } from "../inputField";
-import Feather from "@expo/vector-icons/Feather";
-import { ComponentProps } from "react";
-
-type FeatherIconName = ComponentProps<typeof Feather>["name"];
+import { FeatherIconName } from "@/@types/icons";
 
 type DynamicFormProps = {
   formTitle: string;
