@@ -65,7 +65,7 @@ export const SignUpView = () => {
             <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
           ) : (
             <DynamicForm
-              formTitle="Cadastre-se gratuitamente."
+              formTitle="Cadastre-se gratuitamente"
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
               submitBtnText="Cadastrar"

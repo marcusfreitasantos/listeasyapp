@@ -7,7 +7,7 @@ export const DrawerWrapper = styled.View`
 `;
 
 export const DrawerContainer = styled.View`
-  padding: ${({ theme }) => theme.defaultSizes.medium};
+  padding: ${({ theme }) => theme.defaultContainerSpacing};
   justify-content: space-between;
   height: 100%;
 `;

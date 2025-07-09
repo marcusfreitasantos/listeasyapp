@@ -6,7 +6,7 @@ export const Container = styled.View`
   align-items: center;
   justify-content: space-between;
   padding: ${({ theme }) => theme.defaultSizes.xLarge}
-    ${({ theme }) => theme.defaultSizes.medium};
+    ${({ theme }) => theme.defaultContainerSpacing};
 `;
 
 export const MainContent = styled.View`

@@ -9,7 +9,7 @@ const defaultSizes = {
   xxSmall: `${RFValue(8)}px`,
 };
 const defaultFontFamily = "NunitoSans";
-const defaultContainerSpacing = `${RFValue(10)}px`;
+const defaultContainerSpacing = `${RFValue(16)}px`;
 const defaultBorder = "1px solid #ddd";
 const defaultBorderRadius = `${RFValue(6)}px`;
 const darkTheme = {

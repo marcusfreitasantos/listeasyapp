@@ -13,8 +13,7 @@ export const ButtonText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 700;
-  color: ${({ theme }) => theme.textColor};
-  text-transform: uppercase;
+  color: ${({ theme }) => theme.secondaryColor};
   width: 100%;
   text-align: center;
 `;

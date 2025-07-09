@@ -6,7 +6,7 @@ export const HeaderWrapper = styled.View`
 `;
 
 export const HeaderContainer = styled.View`
-  padding: ${({ theme }) => theme.defaultSizes.xSmall};
+  padding: ${({ theme }) => theme.defaultContainerSpacing};
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
