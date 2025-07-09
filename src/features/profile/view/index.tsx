@@ -1,9 +1,94 @@
+import { useContext } from "react";
+import { GlobalUserContext } from "@/src/context/userContext";
 import * as S from "./styles";
+import {
+  KeyboardAvoidingView,
+  ActivityIndicator,
+  Platform,
+  Pressable,
+} from "react-native";
+import { DynamicForm } from "@/src/components/dynamicForm";
+import { useTheme } from "styled-components/native";
+import { FeatherIconName } from "@/@types/icons";
+import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 
 export const ProfileView = () => {
+  const { currentUser } = useContext(GlobalUserContext);
+  const theme = useTheme();
+  const { loading, handlePasswordReset } = useResetPasswordViewModel();
+
+  const formFields = [
+    {
+      fieldName: "displayName",
+      iconName: "user" as FeatherIconName,
+      placeholder: currentUser?.user.displayName ?? "Seu nome",
+      validationRules: {
+        required: false,
+      },
+    },
+    {
+      fieldName: "email",
+      iconName: "mail" as FeatherIconName,
+      placeholder: currentUser?.user.email ?? "Seu e-mail",
+      validationRules: {
+        required: false,
+      },
+    },
+  ];
+
+  const onSubmit = (data: Record<string, string>) => {
+    const newName = data.displayName ?? currentUser?.user.displayName;
+    const newEmail = data.email ?? currentUser?.user.email;
+    console.log(newName, newEmail);
+  };
+
+  const handleImageUpload = async () => {
+    console.log("uploading...");
+  };
+
   return (
-    <S.Container>
-      <S.Title>Profile</S.Title>
-    </S.Container>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <S.Container>
+        <S.ContentTitle>Atualizar perfil</S.ContentTitle>
+        {loading ? (
+          <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
+        ) : (
+          <>
+            <S.UserInfoAvatarWrapper>
+              <S.UserInfoAvatarImgWrapper>
+                {!currentUser?.user.photoURL ? (
+                  <S.UserInfoAvatarDefaultContent>
+                    {currentUser?.user.displayName?.split("")[0]}
+                  </S.UserInfoAvatarDefaultContent>
+                ) : (
+                  <S.UserInfoAvatarImage
+                    source={{ uri: currentUser.user.photoURL }}
+                  />
+                )}
+              </S.UserInfoAvatarImgWrapper>
+
+              <Pressable onPress={handleImageUpload}>
+                <S.ContentText>Alterar imagem</S.ContentText>
+              </Pressable>
+            </S.UserInfoAvatarWrapper>
+
+            <DynamicForm
+              formFields={formFields}
+              handleFormData={(formData: any) => onSubmit(formData)}
+              submitBtnText="Enviar"
+            />
+          </>
+        )}
+
+        <Pressable
+          onPress={() => handlePasswordReset(currentUser?.user.email ?? "")}
+        >
+          <S.ContentText>Redefinir senha?</S.ContentText>
+        </Pressable>
+      </S.Container>
+    </KeyboardAvoidingView>
   );
 };

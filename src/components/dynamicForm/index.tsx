@@ -5,7 +5,7 @@ import { InputField } from "../inputField";
 import { FeatherIconName } from "@/@types/icons";
 
 type DynamicFormProps = {
-  formTitle: string;
+  formTitle?: string;
   submitBtnText: string;
   formFields: {
     fieldName: string;
