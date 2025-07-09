@@ -10,7 +10,6 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo-google-fonts/open-sans": "^0.2.3",
     "@react-native-firebase/analytics": "^22.2.1",
     "@react-native-firebase/app": "^22.2.1",
     "@react-native-firebase/auth": "^22.2.1",
@@ -44,7 +43,6 @@
     "react-hook-form": "^7.58.1",
     "react-native": "0.79.4",
     "react-native-blob-util": "^0.18.3",
-    "react-native-dotenv": "^3.4.9",
     "react-native-fbsdk-next": "^12.1.0",
     "react-native-feather": "^1.1.2",
     "react-native-gesture-handler": "~2.24.0",
