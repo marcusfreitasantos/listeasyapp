@@ -3,11 +3,27 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { updateUserData } from "@/src/services/firebase/auth";
+import * as ImagePicker from "expo-image-picker";
 
 export const useUpdateProfileViewModel = () => {
-  const router = useRouter();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const handleUpdate = async (
     displayName: string,
@@ -42,5 +58,6 @@ export const useUpdateProfileViewModel = () => {
   return {
     loading,
     handleUpdate,
+    pickImage,
   };
 };

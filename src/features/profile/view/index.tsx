@@ -17,7 +17,7 @@ export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
   const { handlePasswordReset } = useResetPasswordViewModel();
-  const { loading, handleUpdate } = useUpdateProfileViewModel();
+  const { loading, handleUpdate, pickImage } = useUpdateProfileViewModel();
   const [newPhotoURL, setNewPhotoURL] = useState(
     "https://mafreitas.com.br/wp-content/themes/mafreitas/assets/img/img-inicio.png"
   );
@@ -47,10 +47,6 @@ export const ProfileView = () => {
     handleUpdate(newName, newEmail, newPhotoURL);
   };
 
-  const handleImageUpload = async () => {
-    console.log("uploading...");
-  };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -75,7 +71,7 @@ export const ProfileView = () => {
                 )}
               </S.UserInfoAvatarImgWrapper>
 
-              <Pressable onPress={handleImageUpload}>
+              <Pressable onPress={pickImage}>
                 <S.ContentText>Alterar imagem</S.ContentText>
               </Pressable>
             </S.UserInfoAvatarWrapper>

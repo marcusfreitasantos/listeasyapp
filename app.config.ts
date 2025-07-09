@@ -65,6 +65,15 @@ const config: ExpoConfig = {
         },
       },
     ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission:
+          "O List Easy precisa acessar sua galeria para armazenar sua foto de perfil",
+        cameraPermission:
+          "O List Easy precisa acessar sua câmera para armazenar sua foto de perfil",
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
