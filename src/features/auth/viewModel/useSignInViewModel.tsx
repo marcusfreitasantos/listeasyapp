@@ -14,7 +14,6 @@ export const useSignInViewModel = () => {
 
     try {
       const response = await authUser(email, password);
-      console.log(response);
       setCurrentUser(response);
 
       router.push("/lists");

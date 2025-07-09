@@ -5,6 +5,7 @@ import {
   FirebaseAuthTypes,
   updateProfile,
   signOut,
+  sendPasswordResetEmail,
 } from "@react-native-firebase/auth";
 
 export const registerUser = async (
@@ -18,7 +19,7 @@ export const registerUser = async (
 
     if (displayName) {
       await updateProfile(response.user, {
-        displayName: displayName || undefined,
+        displayName: displayName || "",
       });
     }
 
@@ -55,6 +56,35 @@ export const authUser = async (userEmail: string, userPass: string) => {
     throw new Error(
       `Não foi possível fazer login. E-mail ou senha incorretos.`
     );
+  }
+};
+
+export const updateUserData = async (
+  userObj: FirebaseAuthTypes.UserCredential,
+  displayName: string,
+  photoURL: string
+) => {
+  try {
+    await updateProfile(userObj.user, {
+      displayName: displayName || "",
+      photoURL: photoURL || "",
+    });
+  } catch (error: any) {
+    throw new Error("Não foi possível atualizar seus dados.");
+  }
+};
+
+export const resetPassword = async (userEmail: string) => {
+  try {
+    await sendPasswordResetEmail(getAuth(), userEmail);
+  } catch (error: any) {
+    if (error.code === "auth/user-not-found") {
+      throw new Error("Usuário não encontrado com este e-mail.");
+    }
+    if (error.code === "auth/invalid-email") {
+      throw new Error("Endereço de e-mail inválido.");
+    }
+    throw new Error("Não foi possível enviar o e-mail de recuperação.");
   }
 };
 

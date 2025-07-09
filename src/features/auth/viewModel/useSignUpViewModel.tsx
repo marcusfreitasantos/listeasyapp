@@ -20,7 +20,6 @@ export const useSignUpViewModel = () => {
         password,
         `${firstName} ${lastName}`
       );
-      console.log(response);
       Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
         {
           text: "Fazer login",

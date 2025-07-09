@@ -16,6 +16,7 @@ export const FormTitle = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.large};
+  line-height: ${({ theme }) => theme.defaultSizes.large};
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
 `;

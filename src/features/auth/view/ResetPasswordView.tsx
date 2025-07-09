@@ -8,18 +8,18 @@ import {
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
-import { useSignInViewModel } from "../viewModel/useSignInViewModel";
+import { useResetPasswordViewModel } from "../viewModel/useResetPasswordViewModel";
 import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 
-export const SignInView = () => {
+export const ResetPasswordView = () => {
   const colorScheme = useColorScheme();
   const theme = useTheme();
-  const { loading, handleSignIn } = useSignInViewModel();
+  const { loading, handlePasswordReset } = useResetPasswordViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
-    handleSignIn(data.email, data.password);
+    handlePasswordReset(data.email);
   };
 
   const formFields = [
@@ -29,15 +29,6 @@ export const SignInView = () => {
       placeholder: "Email",
       validationRules: {
         required: true,
-      },
-    },
-    {
-      fieldName: "password",
-      iconName: "lock" as FeatherIconName,
-      placeholder: "Senha",
-      validationRules: {
-        required: true,
-        minLength: 8,
       },
     },
   ];
@@ -55,32 +46,18 @@ export const SignInView = () => {
             <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
           ) : (
             <DynamicForm
-              formTitle="Entre na sua conta"
+              formTitle="Informe o e-mail para redefinir sua senha."
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Entrar"
+              submitBtnText="Enviar"
             />
           )}
-
-          <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
-            <Pressable>
-              <S.SecondaryContentText>Recuperar senha</S.SecondaryContentText>
-            </Pressable>
-          </Link>
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/signup" asChild dismissTo>
+          <Link href="/" asChild dismissTo>
             <Pressable>
-              <S.SecondaryContentText>
-                Não tem uma conta? Crie aqui.
-              </S.SecondaryContentText>
-            </Pressable>
-          </Link>
-
-          <Link href="/+not-found" asChild>
-            <Pressable>
-              <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+              <S.SecondaryContentText>Voltar</S.SecondaryContentText>
             </Pressable>
           </Link>
         </S.SecondaryContentRow>
