@@ -9,17 +9,12 @@ export const useSignUpViewModel = () => {
   const handleSignUp = async (
     email: string,
     password: string,
-    firstName: string,
-    lastName: string
+    displayName: string
   ) => {
     setLoading(true);
 
     try {
-      const response = await registerUser(
-        email,
-        password,
-        `${firstName} ${lastName}`
-      );
+      const response = await registerUser(email, password, displayName);
       Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
         {
           text: "Fazer login",

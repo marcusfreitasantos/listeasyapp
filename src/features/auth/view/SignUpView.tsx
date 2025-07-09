@@ -19,24 +19,14 @@ export const SignUpView = () => {
   const { loading, handleSignUp } = useSignUpViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
-    handleSignUp(data.email, data.password, data.firstName, data.lastName);
+    handleSignUp(data.email, data.password, data.displayName);
   };
 
   const formFields = [
     {
-      fieldName: "firstName",
+      fieldName: "displayName",
       iconName: "user" as FeatherIconName,
-      placeholder: "Nome",
-      validationRules: {
-        required: true,
-        maxLength: 20,
-        minLength: 3,
-      },
-    },
-    {
-      fieldName: "lastName",
-      iconName: "user" as FeatherIconName,
-      placeholder: "Sobrenome",
+      placeholder: "Seu nome e sobrenome",
       validationRules: {
         required: true,
         maxLength: 20,
