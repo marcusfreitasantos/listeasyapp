@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import * as S from "./styles";
 import {
@@ -11,11 +11,16 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { useTheme } from "styled-components/native";
 import { FeatherIconName } from "@/@types/icons";
 import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
+import { useUpdateProfileViewModel } from "../viewModel/useUpdateProfile";
 
 export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
-  const { loading, handlePasswordReset } = useResetPasswordViewModel();
+  const { handlePasswordReset } = useResetPasswordViewModel();
+  const { loading, handleUpdate } = useUpdateProfileViewModel();
+  const [newPhotoURL, setNewPhotoURL] = useState(
+    "https://mafreitas.com.br/wp-content/themes/mafreitas/assets/img/img-inicio.png"
+  );
 
   const formFields = [
     {
@@ -39,7 +44,7 @@ export const ProfileView = () => {
   const onSubmit = (data: Record<string, string>) => {
     const newName = data.displayName ?? currentUser?.user.displayName;
     const newEmail = data.email ?? currentUser?.user.email;
-    console.log(newName, newEmail);
+    handleUpdate(newName, newEmail, newPhotoURL);
   };
 
   const handleImageUpload = async () => {

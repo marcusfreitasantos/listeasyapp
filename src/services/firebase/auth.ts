@@ -69,7 +69,12 @@ export const updateUserData = async (
       displayName: displayName || "",
       photoURL: photoURL || "",
     });
+
+    const userUpdated = getAuth().currentUser;
+
+    return userUpdated;
   } catch (error: any) {
+    console.log(error);
     throw new Error("Não foi possível atualizar seus dados.");
   }
 };
