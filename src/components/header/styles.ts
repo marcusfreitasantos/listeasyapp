@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+const imageSize = "80px";
 
 export const HeaderWrapper = styled.View`
   background-color: ${({ theme }) => theme.secondaryColor};
@@ -42,6 +43,12 @@ export const HeaderUserInfoAvatarWrapper = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 50px;
+  overflow: hidden;
+`;
+
+export const HeaderUserInfoAvatarImage = styled.Image`
+  width: ${imageSize};
+  height: ${imageSize};
 `;
 
 export const HeaderUserInfoAvatarDefaultContent = styled.Text`
