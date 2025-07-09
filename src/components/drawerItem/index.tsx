@@ -27,7 +27,7 @@ export const DrawerItem = ({
       <S.DrawerItemText>{title}</S.DrawerItemText>
     </S.DrawerItem>
   ) : (
-    <Link href={route as any} asChild dismissTo>
+    <Link href={route as any} asChild>
       <S.DrawerItem>
         <Feather name={iconName} size={iconSize} color={theme.primaryColor} />
         <S.DrawerItemText>{title}</S.DrawerItemText>

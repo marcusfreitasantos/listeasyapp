@@ -11,17 +11,17 @@ export default function Layout() {
 
   const drawerItems = [
     {
-      route: "/lists",
+      route: "lists",
       title: "Minhas listas",
       iconName: "list" as FeatherIconName,
     },
     {
-      route: "/profile",
+      route: "profile",
       title: "Perfil",
       iconName: "user" as FeatherIconName,
     },
     {
-      route: "/subscriptions",
+      route: "subscriptions",
       title: "Assinaturas",
       iconName: "credit-card" as FeatherIconName,
     },
