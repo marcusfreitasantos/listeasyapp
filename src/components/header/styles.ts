@@ -30,10 +30,21 @@ export const HeaderUserInfoTitle = styled.Text`
   width: 80%;
 `;
 
+export const HeaderUserInfoTextRow = styled.Text`
+  flex-direction: row;
+`;
+
 export const HeaderUserInfoText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   color: white;
+`;
+
+export const HeaderUserInfoTextBold = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.small};
+  color: ${({ theme }) => theme.primaryColor};
+  font-weight: 700;
 `;
 
 export const HeaderUserInfoAvatarWrapper = styled.View`

@@ -1,13 +1,13 @@
-type ListItem = {
+export type ListItemType = {
   title: string;
   price: number;
   quantity: number;
 };
 
-type ListEntity = {
-  id?: string;
+export type ListEntityType = {
+  id: string;
   title: string;
-  creationDate: string;
+  creationDate: number;
   totalPrice: number;
   items: ListItem[];
   author: {

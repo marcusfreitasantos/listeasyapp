@@ -41,7 +41,10 @@ export const Header = () => {
           </S.HeaderUserInfo>
         )}
 
-        <S.HeaderUserInfoText>Minhas listas: 100</S.HeaderUserInfoText>
+        <S.HeaderUserInfoTextRow>
+          <S.HeaderUserInfoText>Minhas listas:</S.HeaderUserInfoText>
+          <S.HeaderUserInfoTextBold>100</S.HeaderUserInfoTextBold>
+        </S.HeaderUserInfoTextRow>
       </S.HeaderContainer>
     </S.HeaderWrapper>
   );

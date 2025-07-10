@@ -1,0 +1,38 @@
+export const SampleLists = [
+  {
+    id: "1",
+    title: "Lista 01",
+    creationDate: 1752168482754,
+    totalPrice: 0,
+    items: [],
+    author: {
+      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
+      name: "Marcus Freitas",
+      email: "marcusfreitasantos+listeasy2@gmail.com",
+    },
+  },
+  {
+    id: "2",
+    title: "Lista 02",
+    creationDate: 1752168482754,
+    totalPrice: 0,
+    items: [],
+    author: {
+      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
+      name: "Marcus Freitas",
+      email: "marcusfreitasantos+listeasy2@gmail.com",
+    },
+  },
+  {
+    id: "3",
+    title: "Lista 03",
+    creationDate: 1752168482754,
+    totalPrice: 0,
+    items: [],
+    author: {
+      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
+      name: "Marcus Freitas",
+      email: "marcusfreitasantos+listeasy2@gmail.com",
+    },
+  },
+];
