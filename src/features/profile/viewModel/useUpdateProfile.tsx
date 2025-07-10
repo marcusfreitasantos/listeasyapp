@@ -43,7 +43,6 @@ export const useUpdateProfileViewModel = () => {
 
   const handleUpdate = async (
     displayName: string,
-    email: string,
     localPhotoURL: string | null
   ) => {
     setLoading(true);
@@ -57,10 +56,6 @@ export const useUpdateProfileViewModel = () => {
       }
 
       const response = await updateUserData(currentUser, displayName, photoURL);
-
-      if (currentUser.user.email !== email) {
-        await updateUserEmail(currentUser, email);
-      }
 
       if (response) {
         setCurrentUser({

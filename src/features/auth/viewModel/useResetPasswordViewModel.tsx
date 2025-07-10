@@ -17,8 +17,7 @@ export const useResetPasswordViewModel = () => {
         "O e-mail para redifinição de senha foi enviado.",
         [
           {
-            text: "Voltar para o login",
-            onPress: () => router.push("/"),
+            text: "Confirmar",
           },
         ]
       );

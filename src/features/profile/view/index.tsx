@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   Pressable,
+  Alert,
 } from "react-native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { useTheme } from "styled-components/native";
@@ -31,25 +32,32 @@ export const ProfileView = () => {
         required: false,
       },
     },
-    {
-      fieldName: "email",
-      iconName: "mail" as FeatherIconName,
-      placeholder: currentUser?.user.email ?? "Seu e-mail",
-      validationRules: {
-        required: false,
-      },
-    },
   ];
 
   const onSubmit = (data: Record<string, string>) => {
     const newName = data.displayName ?? currentUser?.user.displayName;
-    const newEmail = data.email ?? currentUser?.user.email;
-    handleUpdate(newName, newEmail, localPhotoUrl);
+    handleUpdate(newName, localPhotoUrl);
   };
 
   const handlePickImage = async () => {
     const pickedImgURI = await pickImage();
     setLocalPhotoUrl(pickedImgURI ?? null);
+  };
+
+  const confirmResetPassword = () => {
+    Alert.alert(
+      "Atenção!",
+      "Um link para recuperação de senha será enviado para o seu e-mail.",
+      [
+        {
+          text: "Cancelar",
+        },
+        {
+          text: "Continuar",
+          onPress: () => handlePasswordReset(currentUser?.user.email ?? ""),
+        },
+      ]
+    );
   };
 
   return (
@@ -88,9 +96,7 @@ export const ProfileView = () => {
         )}
 
         {!loading && (
-          <Pressable
-            onPress={() => handlePasswordReset(currentUser?.user.email ?? "")}
-          >
+          <Pressable onPress={confirmResetPassword}>
             <S.ContentText>Redefinir senha?</S.ContentText>
           </Pressable>
         )}
