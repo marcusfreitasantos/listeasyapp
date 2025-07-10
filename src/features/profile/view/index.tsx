@@ -17,8 +17,10 @@ export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
   const { handlePasswordReset } = useResetPasswordViewModel();
-  const { loading, handleUpdate, pickImage, newPhotoURL } =
-    useUpdateProfileViewModel();
+  const { loading, handleUpdate, pickImage } = useUpdateProfileViewModel();
+  const [localPhotoUrl, setLocalPhotoUrl] = useState(
+    currentUser?.user.photoURL ?? null
+  );
 
   const formFields = [
     {
@@ -42,7 +44,12 @@ export const ProfileView = () => {
   const onSubmit = (data: Record<string, string>) => {
     const newName = data.displayName ?? currentUser?.user.displayName;
     const newEmail = data.email ?? currentUser?.user.email;
-    handleUpdate(newName, newEmail, newPhotoURL);
+    handleUpdate(newName, newEmail, localPhotoUrl);
+  };
+
+  const handlePickImage = async () => {
+    const pickedImgURI = await pickImage();
+    setLocalPhotoUrl(pickedImgURI ?? null);
   };
 
   return (
@@ -58,8 +65,8 @@ export const ProfileView = () => {
           <>
             <S.UserInfoAvatarWrapper>
               <S.UserInfoAvatarImgWrapper>
-                {newPhotoURL ? (
-                  <S.UserInfoAvatarImage source={{ uri: newPhotoURL }} />
+                {localPhotoUrl ? (
+                  <S.UserInfoAvatarImage source={{ uri: localPhotoUrl }} />
                 ) : (
                   <S.UserInfoAvatarDefaultContent>
                     {currentUser?.user.displayName?.split("")[0]}
@@ -67,7 +74,7 @@ export const ProfileView = () => {
                 )}
               </S.UserInfoAvatarImgWrapper>
 
-              <Pressable onPress={pickImage}>
+              <Pressable onPress={handlePickImage}>
                 <S.ContentText>Alterar imagem</S.ContentText>
               </Pressable>
             </S.UserInfoAvatarWrapper>

@@ -8,9 +8,6 @@ import * as ImagePicker from "expo-image-picker";
 export const useUpdateProfileViewModel = () => {
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
-  const [newPhotoURL, setNewPhotoURL] = useState<string | null>(
-    currentUser?.user.photoURL ?? null
-  );
 
   const handleImageUpload = async (fileLocalPath: string) => {
     setLoading(true);
@@ -40,20 +37,24 @@ export const useUpdateProfileViewModel = () => {
     });
 
     if (!result.canceled) {
-      const photoURL = await handleImageUpload(result.assets[0].uri);
-      if (photoURL) setNewPhotoURL(photoURL);
+      return result.assets[0].uri;
     }
   };
 
   const handleUpdate = async (
     displayName: string,
     email: string,
-    photoURL: string | null
+    localPhotoURL: string | null
   ) => {
     setLoading(true);
+    let photoURL = null;
 
     try {
       if (!currentUser) throw new Error("Invalid user");
+
+      if (localPhotoURL) {
+        photoURL = (await handleImageUpload(localPhotoURL)) ?? null;
+      }
 
       const response = await updateUserData(currentUser, displayName, photoURL);
 
@@ -79,6 +80,5 @@ export const useUpdateProfileViewModel = () => {
     loading,
     handleUpdate,
     pickImage,
-    newPhotoURL,
   };
 };
