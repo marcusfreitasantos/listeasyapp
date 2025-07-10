@@ -18,7 +18,8 @@ export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
   const { handlePasswordReset } = useResetPasswordViewModel();
-  const { loading, handleUpdate, pickImage } = useUpdateProfileViewModel();
+  const { loading, handleUpdate, pickImage, fileMaxSize } =
+    useUpdateProfileViewModel();
   const [localPhotoUrl, setLocalPhotoUrl] = useState(
     currentUser?.user.photoURL ?? null
   );
@@ -85,6 +86,9 @@ export const ProfileView = () => {
               <Pressable onPress={handlePickImage}>
                 <S.ContentText>Alterar imagem</S.ContentText>
               </Pressable>
+              <S.ContentSubText>
+                Tamanho máximo: {fileMaxSize}kb
+              </S.ContentSubText>
             </S.UserInfoAvatarWrapper>
 
             <DynamicForm

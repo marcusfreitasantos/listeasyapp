@@ -23,6 +23,12 @@ export const ContentText = styled.Text`
   margin-top: ${({ theme }) => theme.defaultSizes.small};
 `;
 
+export const ContentSubText = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.xSmall};
+  color: ${({ theme }) => theme.primaryColor};
+`;
+
 export const UserInfoAvatarWrapper = styled.View`
   margin: ${({ theme }) => theme.defaultSizes.medium} 0;
   justify-content: center;

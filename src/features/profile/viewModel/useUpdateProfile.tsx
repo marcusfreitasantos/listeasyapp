@@ -8,9 +8,9 @@ import * as ImagePicker from "expo-image-picker";
 export const useUpdateProfileViewModel = () => {
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
+  const fileMaxSize = 500;
 
   const handleImageUpload = async (fileLocalPath: string) => {
-    setLoading(true);
     try {
       const reference = storage().ref(
         `user_uploads/${currentUser?.user.uid}/profile_image_${currentUser?.user.uid}.png`
@@ -23,8 +23,6 @@ export const useUpdateProfileViewModel = () => {
       return photoURL;
     } catch (e) {
       console.log("handleImageUpload__", e);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -37,6 +35,17 @@ export const useUpdateProfileViewModel = () => {
     });
 
     if (!result.canceled) {
+      if (
+        result.assets[0].fileSize &&
+        result.assets[0].fileSize > fileMaxSize * 1024
+      ) {
+        Alert.alert(
+          "Imagem não enviada!",
+          `O arquivo precisa ter no máximo ${fileMaxSize}kb.`
+        );
+        return;
+      }
+
       return result.assets[0].uri;
     }
   };
@@ -58,11 +67,17 @@ export const useUpdateProfileViewModel = () => {
       const response = await updateUserData(currentUser, displayName, photoURL);
 
       if (response) {
-        setCurrentUser({
-          additionalUserInfo: currentUser.additionalUserInfo,
-          user: response,
-        });
-        Alert.alert("Sucesso!", "Seu perfil foi atualizado.");
+        Alert.alert("Sucesso!", "Seu perfil foi atualizado.", [
+          {
+            text: "Confirmar",
+            onPress: () => {
+              setCurrentUser({
+                additionalUserInfo: currentUser.additionalUserInfo,
+                user: response,
+              });
+            },
+          },
+        ]);
       }
     } catch (error: any) {
       Alert.alert("Oops! Algo deu errado:", `${error?.message || error}`);
@@ -75,5 +90,6 @@ export const useUpdateProfileViewModel = () => {
     loading,
     handleUpdate,
     pickImage,
+    fileMaxSize,
   };
 };
