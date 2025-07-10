@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import { updateUserData } from "@/src/services/firebase/auth";
+import { updateUserData, updateUserEmail } from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 
 export const useUpdateProfileViewModel = () => {
@@ -52,14 +52,14 @@ export const useUpdateProfileViewModel = () => {
     try {
       if (!currentUser) throw new Error("Invalid user");
 
-      if (localPhotoURL) {
+      if (localPhotoURL && localPhotoURL !== currentUser.user.photoURL) {
         photoURL = (await handleImageUpload(localPhotoURL)) ?? null;
       }
 
       const response = await updateUserData(currentUser, displayName, photoURL);
 
       if (currentUser.user.email !== email) {
-        console.log("You may need to handle Firebase email update separately.");
+        await updateUserEmail(currentUser, email);
       }
 
       if (response) {

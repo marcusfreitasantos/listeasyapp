@@ -27,7 +27,7 @@ export const HeaderUserInfoTitle = styled.Text`
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: 700;
   color: white;
-  width: 90%;
+  width: 80%;
 `;
 
 export const HeaderUserInfoText = styled.Text`

@@ -6,6 +6,7 @@ import {
   updateProfile,
   signOut,
   sendPasswordResetEmail,
+  updateEmail,
 } from "@react-native-firebase/auth";
 
 export const registerUser = async (
@@ -76,6 +77,20 @@ export const updateUserData = async (
   } catch (error: any) {
     console.log(error);
     throw new Error("Não foi possível atualizar seus dados.");
+  }
+};
+
+export const updateUserEmail = async (
+  userObj: FirebaseAuthTypes.UserCredential,
+  email: string
+) => {
+  try {
+    await updateEmail(userObj.user, email);
+    const userUpdated = getAuth().currentUser;
+    return userUpdated;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error("Não foi possível atualizar seu e-mail.");
   }
 };
 

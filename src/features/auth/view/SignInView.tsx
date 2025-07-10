@@ -50,40 +50,46 @@ export const SignInView = () => {
       <S.Container>
         <Logo color={colorScheme ?? "dark"} />
 
-        <S.MainContent>
-          {loading ? (
-            <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
-          ) : (
-            <DynamicForm
-              formTitle="Entre na sua conta"
-              formFields={formFields}
-              handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Entrar"
-            />
-          )}
+        {loading ? (
+          <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
+        ) : (
+          <>
+            <S.MainContent>
+              <DynamicForm
+                formTitle="Entre na sua conta"
+                formFields={formFields}
+                handleFormData={(formData: any) => onSubmit(formData)}
+                submitBtnText="Entrar"
+              />
 
-          <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
-            <Pressable>
-              <S.SecondaryContentText>Recuperar senha</S.SecondaryContentText>
-            </Pressable>
-          </Link>
-        </S.MainContent>
+              <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
+                <Pressable>
+                  <S.SecondaryContentText>
+                    Recuperar senha
+                  </S.SecondaryContentText>
+                </Pressable>
+              </Link>
+            </S.MainContent>
 
-        <S.SecondaryContentRow>
-          <Link href="/signup" asChild dismissTo>
-            <Pressable>
-              <S.SecondaryContentText>
-                Não tem uma conta? Crie aqui.
-              </S.SecondaryContentText>
-            </Pressable>
-          </Link>
+            <S.SecondaryContentRow>
+              <Link href="/signup" asChild dismissTo>
+                <Pressable>
+                  <S.SecondaryContentText>
+                    Não tem uma conta? Crie aqui.
+                  </S.SecondaryContentText>
+                </Pressable>
+              </Link>
 
-          <Link href="/+not-found" asChild>
-            <Pressable>
-              <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
-            </Pressable>
-          </Link>
-        </S.SecondaryContentRow>
+              <Link href="/+not-found" asChild>
+                <Pressable>
+                  <S.SecondaryContentText>
+                    Precisa de ajuda?
+                  </S.SecondaryContentText>
+                </Pressable>
+              </Link>
+            </S.SecondaryContentRow>
+          </>
+        )}
       </S.Container>
     </KeyboardAvoidingView>
   );

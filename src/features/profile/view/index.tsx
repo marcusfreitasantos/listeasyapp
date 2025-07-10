@@ -87,11 +87,13 @@ export const ProfileView = () => {
           </>
         )}
 
-        <Pressable
-          onPress={() => handlePasswordReset(currentUser?.user.email ?? "")}
-        >
-          <S.ContentText>Redefinir senha?</S.ContentText>
-        </Pressable>
+        {!loading && (
+          <Pressable
+            onPress={() => handlePasswordReset(currentUser?.user.email ?? "")}
+          >
+            <S.ContentText>Redefinir senha?</S.ContentText>
+          </Pressable>
+        )}
       </S.Container>
     </KeyboardAvoidingView>
   );
