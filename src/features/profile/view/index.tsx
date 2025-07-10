@@ -17,10 +17,8 @@ export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
   const { handlePasswordReset } = useResetPasswordViewModel();
-  const { loading, handleUpdate, pickImage } = useUpdateProfileViewModel();
-  const [newPhotoURL, setNewPhotoURL] = useState(
-    "https://mafreitas.com.br/wp-content/themes/mafreitas/assets/img/img-inicio.png"
-  );
+  const { loading, handleUpdate, pickImage, newPhotoURL } =
+    useUpdateProfileViewModel();
 
   const formFields = [
     {
@@ -60,14 +58,12 @@ export const ProfileView = () => {
           <>
             <S.UserInfoAvatarWrapper>
               <S.UserInfoAvatarImgWrapper>
-                {!currentUser?.user.photoURL ? (
+                {newPhotoURL ? (
+                  <S.UserInfoAvatarImage source={{ uri: newPhotoURL }} />
+                ) : (
                   <S.UserInfoAvatarDefaultContent>
                     {currentUser?.user.displayName?.split("")[0]}
                   </S.UserInfoAvatarDefaultContent>
-                ) : (
-                  <S.UserInfoAvatarImage
-                    source={{ uri: currentUser.user.photoURL }}
-                  />
                 )}
               </S.UserInfoAvatarImgWrapper>
 

@@ -62,7 +62,7 @@ export const authUser = async (userEmail: string, userPass: string) => {
 export const updateUserData = async (
   userObj: FirebaseAuthTypes.UserCredential,
   displayName: string,
-  photoURL: string
+  photoURL: string | null
 ) => {
   try {
     await updateProfile(userObj.user, {

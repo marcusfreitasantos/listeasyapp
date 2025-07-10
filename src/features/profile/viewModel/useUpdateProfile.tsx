@@ -1,14 +1,35 @@
 import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
-import { useRouter } from "expo-router";
+import storage from "@react-native-firebase/storage";
 import { updateUserData } from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 
 export const useUpdateProfileViewModel = () => {
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [newPhotoURL, setNewPhotoURL] = useState<string | null>(
+    currentUser?.user.photoURL ?? null
+  );
+
+  const handleImageUpload = async (fileLocalPath: string) => {
+    setLoading(true);
+    try {
+      const reference = storage().ref(
+        `user_uploads/${currentUser?.user.uid}/profile_image_${currentUser?.user.uid}.png`
+      );
+
+      await reference.putFile(fileLocalPath);
+      const photoURL = await reference.getDownloadURL();
+
+      console.log("url", photoURL);
+      return photoURL;
+    } catch (e) {
+      console.log("handleImageUpload__", e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -18,17 +39,16 @@ export const useUpdateProfileViewModel = () => {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const photoURL = await handleImageUpload(result.assets[0].uri);
+      if (photoURL) setNewPhotoURL(photoURL);
     }
   };
 
   const handleUpdate = async (
     displayName: string,
     email: string,
-    photoURL: string
+    photoURL: string | null
   ) => {
     setLoading(true);
 
@@ -59,5 +79,6 @@ export const useUpdateProfileViewModel = () => {
     loading,
     handleUpdate,
     pickImage,
+    newPhotoURL,
   };
 };
