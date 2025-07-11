@@ -10,10 +10,8 @@ type AddItemBtnProps = {
 export const AddItemBtn = ({ onPress }: AddItemBtnProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
-  const [isPressed, setIsPressed] = useState(false);
 
   const handleBtnPress = () => {
-    setIsPressed(!isPressed);
     onPress();
   };
 
@@ -23,7 +21,7 @@ export const AddItemBtn = ({ onPress }: AddItemBtnProps) => {
         <Feather
           size={iconSize}
           color={theme.secondaryColor}
-          name={isPressed ? "x" : "plus-circle"}
+          name="plus-circle"
         />
       </S.BtnContent>
     </S.BtnWrapper>

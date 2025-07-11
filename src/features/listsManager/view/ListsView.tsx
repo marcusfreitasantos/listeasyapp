@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { useEffect, useRef } from "react";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useTheme } from "styled-components/native";
 import { ListCard } from "../components/listCard";
 import { FlatList } from "react-native-gesture-handler";
@@ -11,36 +15,59 @@ import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 
 const ListsView = () => {
   const theme = useTheme();
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { loading, searchTerm, setSearchTerm, currentUserLists } =
-    useListManagerViewModel();
+  const flatListRef = useRef<FlatList>(null);
+
+  const {
+    loading,
+    searchTerm,
+    setSearchTerm,
+    currentUserLists,
+    createNewList,
+    modalIsOpen,
+    setModalIsOpen,
+  } = useListManagerViewModel();
+
+  const scrollToTop = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [currentUserLists]);
 
   return (
-    <S.ListView>
-      {loading ? (
-        <ActivityIndicator color={theme.primaryColor} />
-      ) : (
-        <>
-          <InputField
-            placeholder="Pesquisar"
-            iconName="search"
-            onChangeText={(t) => setSearchTerm(t)}
-          />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <S.ListView>
+        {loading ? (
+          <ActivityIndicator color={theme.primaryColor} />
+        ) : (
+          <>
+            <InputField
+              placeholder="Pesquisar"
+              iconName="search"
+              onChangeText={(t) => setSearchTerm(t)}
+            />
 
-          <FlatList
-            data={currentUserLists.filter((list) =>
-              list.title.toLowerCase().includes(searchTerm.toLowerCase())
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <ListCard list={item} />}
-          />
-        </>
-      )}
+            <FlatList
+              ref={flatListRef}
+              inverted
+              data={currentUserLists.filter((list) =>
+                list.title.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <ListCard list={item} />}
+            />
+          </>
+        )}
 
-      {modalIsOpen && <ModalAddList />}
+        {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
 
-      <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
-    </S.ListView>
+        <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
+      </S.ListView>
+    </KeyboardAvoidingView>
   );
 };
 

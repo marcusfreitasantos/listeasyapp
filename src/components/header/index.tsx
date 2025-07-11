@@ -1,18 +1,14 @@
-import Logo from "../logo";
+import { useContext } from "react";
 import * as S from "./styles";
-import Feather from "@expo/vector-icons/Feather";
-import { useTheme } from "styled-components/native";
 import { useNavigation } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
-
-import { useContext } from "react";
+import { GlobalListContext } from "@/src/context/listContext";
 import { GlobalUserContext } from "@/src/context/userContext";
 
 export const Header = () => {
   const navigation = useNavigation();
   const { currentUser } = useContext(GlobalUserContext);
-  const theme = useTheme();
-  const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
+  const { listsLength } = useContext(GlobalListContext);
 
   const openDrawerMenu = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -42,8 +38,8 @@ export const Header = () => {
         )}
 
         <S.HeaderUserInfoTextRow>
-          <S.HeaderUserInfoText>Minhas listas:</S.HeaderUserInfoText>
-          <S.HeaderUserInfoTextBold>100</S.HeaderUserInfoTextBold>
+          <S.HeaderUserInfoText>Minhas listas: </S.HeaderUserInfoText>
+          <S.HeaderUserInfoTextBold>{listsLength}</S.HeaderUserInfoTextBold>
         </S.HeaderUserInfoTextRow>
       </S.HeaderContainer>
     </S.HeaderWrapper>

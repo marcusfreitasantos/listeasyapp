@@ -1,9 +1,12 @@
 import * as S from "./styles";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
-import { useState } from "react";
 
-export const ModalAddList = () => {
+type ModalAddListProps = {
+  onSubmit: (listName: string) => void;
+};
+
+export const ModalAddList = ({ onSubmit }: ModalAddListProps) => {
   const formFields = [
     {
       fieldName: "listName",
@@ -15,16 +18,12 @@ export const ModalAddList = () => {
     },
   ];
 
-  const onSubmit = (formData: any) => {
-    console.log(formData);
-  };
-
   return (
     <S.ModalWrapper>
       <DynamicForm
         formTitle="Nova lista"
         formFields={formFields}
-        handleFormData={(formData: any) => onSubmit(formData)}
+        handleFormData={(formData: any) => onSubmit(formData.listName)}
         submitBtnText="Criar"
       />
     </S.ModalWrapper>
