@@ -1,7 +1,7 @@
 export const SampleLists = [
   {
     id: "1",
-    title: "Lista 01",
+    title: "Nome de lista grande pra um caraleo",
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],

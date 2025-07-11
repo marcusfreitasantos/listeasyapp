@@ -1,19 +1,14 @@
-import { View, Text } from "react-native";
-import { useContext, useState } from "react";
-import { GlobalUserContext } from "@/src/context/userContext";
-import { Button } from "@/src/components/button";
-import { userLogout } from "@/src/services/firebase/auth";
-import { useRouter } from "expo-router";
+import { useState } from "react";
 import { ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
 import { SampleLists } from "@/src/mocks/lists";
 import { ListCard } from "../components/listCard";
 import { ListEntityType } from "../model/list";
 import { FlatList } from "react-native-gesture-handler";
+import * as S from "./styles";
+import { InputField } from "@/src/components/inputField";
 
 const ListsView = () => {
-  const router = useRouter();
-  const { currentUser } = useContext(GlobalUserContext);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
   const [currentUserLists, setCurrentUserLists] = useState<
@@ -21,17 +16,21 @@ const ListsView = () => {
   >(SampleLists);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <S.ListViewWrapper>
       {isLoading ? (
         <ActivityIndicator color={theme.primaryColor} />
       ) : (
-        <FlatList
-          data={currentUserLists}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ListCard list={item} />}
-        />
+        <>
+          <InputField placeholder="Pesquisar" iconName="search" />
+
+          <FlatList
+            data={currentUserLists}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ListCard list={item} />}
+          />
+        </>
       )}
-    </View>
+    </S.ListViewWrapper>
   );
 };
 
