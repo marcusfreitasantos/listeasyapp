@@ -53,7 +53,6 @@ const ListsView = () => {
 
             <FlatList
               ref={flatListRef}
-              inverted
               data={currentUserLists.filter((list) =>
                 list.title.toLowerCase().includes(searchTerm.toLowerCase())
               )}

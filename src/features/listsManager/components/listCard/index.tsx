@@ -5,6 +5,7 @@ import { useTheme } from "styled-components/native";
 import { ListMenu } from "../listMenu";
 import { useState } from "react";
 import { FeatherIconName } from "@/@types/icons";
+import { useListManagerViewModel } from "../../viewModel/useListManagerViewModel";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -14,6 +15,7 @@ export const ListCard = ({ list }: ListCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { removeList } = useListManagerViewModel();
 
   const listMenuOptions = [
     {
@@ -35,7 +37,7 @@ export const ListCard = ({ list }: ListCardProps) => {
     {
       label: "Excluir",
       iconName: "trash" as FeatherIconName,
-      onPress: () => console.log("excluir"),
+      onPress: () => removeList(list.id),
     },
   ];
 

@@ -10,9 +10,5 @@ export type ListEntityType = {
   creationDate: number;
   totalPrice: number;
   items: ListItem[];
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  authorId: string;
 };

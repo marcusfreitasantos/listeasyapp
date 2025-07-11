@@ -5,11 +5,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "2",
@@ -17,11 +13,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "3",
@@ -29,11 +21,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "4",
@@ -41,11 +29,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "5",
@@ -53,11 +37,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "6",
@@ -65,11 +45,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "7",
@@ -77,11 +53,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "8",
@@ -89,11 +61,7 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
   {
     id: "9",
@@ -101,10 +69,6 @@ export const SampleLists = [
     creationDate: 1752168482754,
     totalPrice: 0,
     items: [],
-    author: {
-      id: "OEfMen524jQxw0AUTjNBHzk6AkC2",
-      name: "Marcus Freitas",
-      email: "marcusfreitasantos+listeasy2@gmail.com",
-    },
+    authorId: "OEfMen524jQxw0AUTjNBHzk6AkC2",
   },
 ];

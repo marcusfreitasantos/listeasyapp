@@ -16,21 +16,26 @@ export const useListManagerViewModel = () => {
   >(SampleLists);
 
   const createNewList = (listName: string) => {
-    const newEmptyList = {
-      id: Math.random().toString(),
-      title: listName,
-      creationDate: new Date().getTime(),
-      totalPrice: 0,
-      items: [],
-      author: {
-        id: "string",
-        name: "string",
-        email: "string",
-      },
-    };
+    if (currentUser?.user?.uid) {
+      const newEmptyList = {
+        id: Math.random().toString(),
+        title: listName,
+        creationDate: new Date().getTime(),
+        totalPrice: 0,
+        items: [],
+        authorId: currentUser.user.uid,
+      };
 
-    setCurrentUserLists((prev) => [...prev, newEmptyList]);
-    setModalIsOpen(false);
+      setCurrentUserLists((prev) => [...prev, newEmptyList]);
+      setModalIsOpen(false);
+    }
+  };
+
+  const removeList = (listId: string) => {
+    const newCurrentUserLists = currentUserLists.filter(
+      (list) => list.id !== listId
+    );
+    setCurrentUserLists(newCurrentUserLists);
   };
 
   useEffect(() => {
@@ -45,5 +50,6 @@ export const useListManagerViewModel = () => {
     createNewList,
     modalIsOpen,
     setModalIsOpen,
+    removeList,
   };
 };
