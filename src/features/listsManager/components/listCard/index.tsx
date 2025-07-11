@@ -1,7 +1,6 @@
 import * as S from "./styles";
 import { ListEntityType } from "../../model/list";
 import Feather from "@expo/vector-icons/Feather";
-import { FeatherIconName } from "@/@types/icons";
 import { useTheme } from "styled-components/native";
 
 type ListCardProps = {

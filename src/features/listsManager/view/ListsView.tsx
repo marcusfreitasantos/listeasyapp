@@ -7,6 +7,7 @@ import { ListEntityType } from "../model/list";
 import { FlatList } from "react-native-gesture-handler";
 import * as S from "./styles";
 import { InputField } from "@/src/components/inputField";
+import { AddItemBtn } from "@/src/components/addItemBtn";
 
 const ListsView = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ const ListsView = () => {
   >(SampleLists);
 
   return (
-    <S.ListViewWrapper>
+    <S.ListView>
       {isLoading ? (
         <ActivityIndicator color={theme.primaryColor} />
       ) : (
@@ -30,7 +31,9 @@ const ListsView = () => {
           />
         </>
       )}
-    </S.ListViewWrapper>
+
+      <AddItemBtn onPress={() => console.log("add new list")} />
+    </S.ListView>
   );
 };
 
