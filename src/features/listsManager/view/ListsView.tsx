@@ -8,9 +8,12 @@ import { FlatList } from "react-native-gesture-handler";
 import * as S from "./styles";
 import { InputField } from "@/src/components/inputField";
 import { AddItemBtn } from "@/src/components/addItemBtn";
+import { ModalAddList } from "../components/modalAddList";
 
 const ListsView = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const theme = useTheme();
   const [currentUserLists, setCurrentUserLists] = useState<
     ListEntityType[] | []
@@ -32,7 +35,9 @@ const ListsView = () => {
         </>
       )}
 
-      <AddItemBtn onPress={() => console.log("add new list")} />
+      {modalIsOpen && <ModalAddList />}
+
+      <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
     </S.ListView>
   );
 };
