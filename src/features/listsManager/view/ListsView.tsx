@@ -12,6 +12,7 @@ import { InputField } from "@/src/components/inputField";
 import { AddItemBtn } from "@/src/components/addItemBtn";
 import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
+import { ListEmpty } from "@/src/components/listEmpty";
 
 const ListsView = () => {
   const theme = useTheme();
@@ -60,6 +61,12 @@ const ListsView = () => {
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <ListCard list={item} removeList={removeList} />
+              )}
+              ListEmptyComponent={() => (
+                <ListEmpty
+                  title="Nenhuma lista encontrada."
+                  text="Crie sua primeira lista com o botão abaixo."
+                />
               )}
             />
           </>
