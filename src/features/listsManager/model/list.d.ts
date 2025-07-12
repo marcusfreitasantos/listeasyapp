@@ -5,9 +5,9 @@ export type ListItemType = {
 };
 
 export type ListEntityType = {
-  id: string;
+  id?: string;
   title: string;
-  creationDate: number;
+  createdAt?: string;
   totalPrice: number;
   items: ListItem[];
   authorId: string;

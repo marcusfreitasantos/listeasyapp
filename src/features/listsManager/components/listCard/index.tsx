@@ -5,17 +5,17 @@ import { useTheme } from "styled-components/native";
 import { ListMenu } from "../listMenu";
 import { useState } from "react";
 import { FeatherIconName } from "@/@types/icons";
-import { useListManagerViewModel } from "../../viewModel/useListManagerViewModel";
+import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 
 type ListCardProps = {
   list: ListEntityType;
+  removeList: (listId: string) => void;
 };
 
-export const ListCard = ({ list }: ListCardProps) => {
+export const ListCard = ({ list, removeList }: ListCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { removeList } = useListManagerViewModel();
 
   const listMenuOptions = [
     {
@@ -37,7 +37,9 @@ export const ListCard = ({ list }: ListCardProps) => {
     {
       label: "Excluir",
       iconName: "trash" as FeatherIconName,
-      onPress: () => removeList(list.id),
+      onPress: () => {
+        if (list.id) removeList(list.id);
+      },
     },
   ];
 
@@ -48,6 +50,7 @@ export const ListCard = ({ list }: ListCardProps) => {
       ) : (
         <S.ListCardInfoWrapper>
           <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
+
           <S.ListCardTotalPriceWrapper>
             <S.ListCardTotalPriceTextBold>Total: </S.ListCardTotalPriceTextBold>
 
@@ -55,6 +58,10 @@ export const ListCard = ({ list }: ListCardProps) => {
               {list.totalPrice}
             </S.ListCardTotalPriceTextRegular>
           </S.ListCardTotalPriceWrapper>
+
+          <S.ListCardTotalPriceTextRegular>
+            {getFormattedDate(list.createdAt)}
+          </S.ListCardTotalPriceTextRegular>
         </S.ListCardInfoWrapper>
       )}
 

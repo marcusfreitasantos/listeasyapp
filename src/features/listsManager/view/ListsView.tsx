@@ -25,6 +25,7 @@ const ListsView = () => {
     createNewList,
     modalIsOpen,
     setModalIsOpen,
+    removeList,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -57,7 +58,9 @@ const ListsView = () => {
                 list.title.toLowerCase().includes(searchTerm.toLowerCase())
               )}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => <ListCard list={item} />}
+              renderItem={({ item }) => (
+                <ListCard list={item} removeList={removeList} />
+              )}
             />
           </>
         )}
