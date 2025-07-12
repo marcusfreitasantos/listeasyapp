@@ -44,7 +44,7 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
   ];
 
   return (
-    <S.ListCardWrapper>
+    <S.ListCardWrapper onPress={() => setIsMenuOpen(!isMenuOpen)}>
       {isMenuOpen ? (
         <ListMenu options={listMenuOptions} />
       ) : (
