@@ -6,6 +6,7 @@ import { ListMenu } from "../listMenu";
 import { useState } from "react";
 import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
+import { useRouter } from "expo-router";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -13,6 +14,7 @@ type ListCardProps = {
 };
 
 export const ListCard = ({ list, removeList }: ListCardProps) => {
+  const router = useRouter();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,7 +23,7 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
     {
       label: "Editar",
       iconName: "edit" as FeatherIconName,
-      onPress: () => console.log("editar"),
+      onPress: () => router.push(`/lists/${list.id}`),
     },
     {
       label: "Compartilhar",
