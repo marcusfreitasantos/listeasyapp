@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
-import { Text } from "react-native";
 import * as S from "./styles";
+import { InputField } from "@/src/components/inputField";
 
 export const SingleListView = () => {
   const { currentList } = useContext(GlobalListContext);
@@ -10,7 +10,13 @@ export const SingleListView = () => {
 
   return (
     <S.ListView>
-      <Text>SIngle list: {currentList.title}</Text>
+      <S.ListName>{currentList.title}</S.ListName>
+
+      <InputField
+        placeholder="Pesquisar item"
+        iconName="search"
+        onChangeText={(t) => console.log(t)}
+      />
     </S.ListView>
   );
 };

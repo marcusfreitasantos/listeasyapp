@@ -5,3 +5,13 @@ export const ListView = styled.View`
   flex: 1;
   padding: ${({ theme }) => theme.defaultContainerSpacing};
 `;
+
+export const ListName = styled.Text`
+  color: ${({ theme }) => theme.primaryColor};
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.large};
+  border-bottom-width: 1px;
+  border-color: ${({ theme }) => theme.primaryColor};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.small};
+  margin-bottom: ${({ theme }) => theme.defaultSizes.small};
+`;
