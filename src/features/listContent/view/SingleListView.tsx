@@ -1,10 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import * as S from "./styles";
 import { InputField } from "@/src/components/inputField";
+import { ListItemCard } from "../components/listItemCard";
+import { AddItemBtn } from "@/src/components/addItemBtn";
+import { FlatList } from "react-native-gesture-handler";
+import { ListEmpty } from "@/src/components/listEmpty";
 
 export const SingleListView = () => {
   const { currentList } = useContext(GlobalListContext);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   if (!currentList) return null;
 
@@ -15,8 +21,19 @@ export const SingleListView = () => {
       <InputField
         placeholder="Pesquisar item"
         iconName="search"
-        onChangeText={(t) => console.log(t)}
+        onChangeText={(t) => setSearchTerm(t)}
       />
+
+      <FlatList
+        data={currentList.items.filter((item) =>
+          item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ListItemCard listItem={item} />}
+        ListEmptyComponent={() => <ListEmpty title="Nenhum item encontrado." />}
+      />
+
+      <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
     </S.ListView>
   );
 };
