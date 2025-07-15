@@ -1,9 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
 import { useTheme } from "styled-components/native";
 import { ListCard } from "../components/listCard";
 import { FlatList } from "react-native-gesture-handler";
@@ -13,6 +9,7 @@ import { AddItemBtn } from "@/src/components/addItemBtn";
 import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
+import { LoadingSpinner } from "@/src/components/loadingSpinner";
 
 const ListsView = () => {
   const theme = useTheme();
@@ -44,7 +41,7 @@ const ListsView = () => {
     >
       <S.ListView>
         {loading ? (
-          <ActivityIndicator color={theme.primaryColor} />
+          <LoadingSpinner />
         ) : (
           <>
             <InputField
@@ -69,12 +66,11 @@ const ListsView = () => {
                 />
               )}
             />
+            {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
+
+            <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
           </>
         )}
-
-        {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
-
-        <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
       </S.ListView>
     </KeyboardAvoidingView>
   );

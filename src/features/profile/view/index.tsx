@@ -1,18 +1,13 @@
 import { useContext, useState } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import * as S from "./styles";
-import {
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  Alert,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, Alert } from "react-native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { useTheme } from "styled-components/native";
 import { FeatherIconName } from "@/@types/icons";
 import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 import { useUpdateProfileViewModel } from "../viewModel/useUpdateProfile";
+import { LoadingSpinner } from "@/src/components/loadingSpinner";
 
 export const ProfileView = () => {
   const { currentUser } = useContext(GlobalUserContext);
@@ -69,7 +64,7 @@ export const ProfileView = () => {
       <S.Container>
         <S.ContentTitle>Atualizar perfil</S.ContentTitle>
         {loading ? (
-          <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
+          <LoadingSpinner />
         ) : (
           <>
             <S.UserInfoAvatarWrapper>

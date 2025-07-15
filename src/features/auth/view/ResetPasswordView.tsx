@@ -2,7 +2,6 @@ import {
   useColorScheme,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
   Pressable,
 } from "react-native";
 import * as S from "./styles";
@@ -12,6 +11,7 @@ import { useResetPasswordViewModel } from "../viewModel/useResetPasswordViewMode
 import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
+import { LoadingSpinner } from "@/src/components/loadingSpinner";
 
 export const ResetPasswordView = () => {
   const colorScheme = useColorScheme();
@@ -43,7 +43,7 @@ export const ResetPasswordView = () => {
 
         <S.MainContent>
           {loading ? (
-            <ActivityIndicator color={theme.primaryColor} style={{ flex: 1 }} />
+            <LoadingSpinner />
           ) : (
             <DynamicForm
               formTitle="Informe o e-mail para redefinir sua senha."

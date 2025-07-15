@@ -4,7 +4,7 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import { DrawerItem } from "../drawerItem";
 import { FeatherIconName } from "@/@types/icons";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
-import { ActivityIndicator } from "react-native";
+import { LoadingSpinner } from "../loadingSpinner";
 
 type DrawerCustomContentProps = {
   items: {
@@ -22,7 +22,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
     <S.DrawerWrapper>
       <S.DrawerContainer>
         {loading ? (
-          <ActivityIndicator />
+          <LoadingSpinner />
         ) : (
           <>
             <S.DrawerItemGroup>
