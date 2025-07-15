@@ -68,7 +68,10 @@ const ListsView = () => {
             />
             {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
 
-            <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
+            <AddItemBtn
+              modalIsOpen={modalIsOpen}
+              onPress={() => setModalIsOpen(!modalIsOpen)}
+            />
           </>
         )}
       </S.ListView>

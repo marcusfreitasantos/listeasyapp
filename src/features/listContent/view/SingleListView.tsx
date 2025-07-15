@@ -6,6 +6,7 @@ import { ListItemCard } from "../components/listItemCard";
 import { AddItemBtn } from "@/src/components/addItemBtn";
 import { FlatList } from "react-native-gesture-handler";
 import { ListEmpty } from "@/src/components/listEmpty";
+import { AddListItemModal } from "../components/addListItemModal";
 
 export const SingleListView = () => {
   const { currentList } = useContext(GlobalListContext);
@@ -33,7 +34,12 @@ export const SingleListView = () => {
         ListEmptyComponent={() => <ListEmpty title="Nenhum item encontrado." />}
       />
 
-      <AddItemBtn onPress={() => setModalIsOpen(!modalIsOpen)} />
+      {modalIsOpen && <AddListItemModal />}
+
+      <AddItemBtn
+        modalIsOpen={modalIsOpen}
+        onPress={() => setModalIsOpen(!modalIsOpen)}
+      />
     </S.ListView>
   );
 };

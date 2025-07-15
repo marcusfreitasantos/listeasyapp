@@ -3,6 +3,7 @@ import { Button } from "@/src/components/button";
 import { useForm, Controller } from "react-hook-form";
 import { InputField } from "../inputField";
 import { FeatherIconName } from "@/@types/icons";
+import { KeyboardTypeOptions } from "react-native";
 
 type DynamicFormProps = {
   formTitle?: string;
@@ -11,6 +12,7 @@ type DynamicFormProps = {
     fieldName: string;
     iconName: FeatherIconName;
     placeholder: string;
+    keyboardType?: KeyboardTypeOptions;
     validationRules: {
       required: boolean;
       maxLength?: number;
@@ -77,6 +79,7 @@ export const DynamicForm = ({
                     value={value}
                     onChangeText={onChange}
                     secureTextEntry={item.fieldName === "password"}
+                    keyboardType={item.keyboardType ?? "default"}
                   />
                 )}
               />

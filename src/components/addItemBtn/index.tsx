@@ -4,10 +4,11 @@ import Feather from "@expo/vector-icons/Feather";
 import { useState } from "react";
 
 type AddItemBtnProps = {
+  modalIsOpen: boolean;
   onPress: () => void;
 };
 
-export const AddItemBtn = ({ onPress }: AddItemBtnProps) => {
+export const AddItemBtn = ({ onPress, modalIsOpen }: AddItemBtnProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
 
@@ -21,7 +22,7 @@ export const AddItemBtn = ({ onPress }: AddItemBtnProps) => {
         <Feather
           size={iconSize}
           color={theme.secondaryColor}
-          name="plus-circle"
+          name={modalIsOpen ? "x" : "plus-circle"}
         />
       </S.BtnContent>
     </S.BtnWrapper>
