@@ -3,7 +3,8 @@ import { ListEntityType } from "../../model/list";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { ListMenu } from "../listMenu";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { GlobalListContext } from "@/src/context/listContext";
 import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
@@ -14,16 +15,22 @@ type ListCardProps = {
 };
 
 export const ListCard = ({ list, removeList }: ListCardProps) => {
+  const { setCurrentList } = useContext(GlobalListContext);
   const router = useRouter();
   const theme = useTheme();
-  const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+  const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleEditList = () => {
+    setCurrentList(list);
+    router.push(`/lists/${list.id}`);
+  };
 
   const listMenuOptions = [
     {
       label: "Editar",
       iconName: "edit" as FeatherIconName,
-      onPress: () => router.push(`/lists/${list.id}`),
+      onPress: () => handleEditList(),
     },
     {
       label: "Compartilhar",
@@ -46,13 +53,23 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
   ];
 
   return (
-    <S.ListCardWrapper onPress={() => setIsMenuOpen(!isMenuOpen)}>
+    <S.ListCardWrapper>
+      <S.ListCardHeader>
+        <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
+
+        <S.ListCardMenuBtn onPress={() => setIsMenuOpen(!isMenuOpen)}>
+          <Feather
+            size={iconSize}
+            color={theme.primaryColor}
+            name={isMenuOpen ? "x" : "more-horizontal"}
+          />
+        </S.ListCardMenuBtn>
+      </S.ListCardHeader>
+
       {isMenuOpen ? (
         <ListMenu options={listMenuOptions} />
       ) : (
         <S.ListCardInfoWrapper>
-          <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
-
           <S.ListCardTotalPriceWrapper>
             <S.ListCardTotalPriceTextBold>Total: </S.ListCardTotalPriceTextBold>
 
@@ -66,14 +83,6 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
           </S.ListCardTotalPriceTextRegular>
         </S.ListCardInfoWrapper>
       )}
-
-      <S.ListCardMenuBtn onPress={() => setIsMenuOpen(!isMenuOpen)}>
-        <Feather
-          size={iconSize}
-          color={theme.primaryColor}
-          name={isMenuOpen ? "x-circle" : "more-vertical"}
-        />
-      </S.ListCardMenuBtn>
     </S.ListCardWrapper>
   );
 };

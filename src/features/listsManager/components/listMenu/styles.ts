@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 
 export const ListMenuWrapper = styled.View`
-  flex: 1;
   gap: ${({ theme }) => theme.defaultSizes.medium};
 `;
 
@@ -17,3 +16,5 @@ export const ListMenuItemText = styled.Text`
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;
+
+export const ListCardMenuBtn = styled.TouchableOpacity``;

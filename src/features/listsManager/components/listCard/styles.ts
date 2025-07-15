@@ -1,19 +1,24 @@
 import styled from "styled-components/native";
 
-export const ListCardWrapper = styled.TouchableOpacity`
+export const ListCardWrapper = styled.View`
   background-color: ${({ theme }) => theme.thirdColor};
   margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
   padding: ${({ theme }) => theme.defaultSizes.small}
     ${({ theme }) => theme.defaultSizes.medium};
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
-  flex-direction: row;
-  jusitify-content: space-between;
-  align-items: center;
 `;
 
-export const ListCardInfoWrapper = styled.View`
-  flex: 1;
+export const ListCardHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-color: ${({ theme }) => theme.secondaryColor};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.xSmall};
+  margin-bottom: ${({ theme }) => theme.defaultSizes.xSmall};
 `;
+
+export const ListCardInfoWrapper = styled.View``;
 
 export const ListCardTitle = styled.Text`
   color: white;
