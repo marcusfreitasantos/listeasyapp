@@ -1,11 +1,11 @@
 import * as S from "./styles";
-import { ListItemType } from "../../model/list";
+import { ListItemType } from "../../../listsManager/model/list";
 
-type ListItemProps = {
+type ListItemCardProps = {
   listItem: ListItemType;
 };
 
-export const ListItem = ({ listItem }: ListItemProps) => {
+export const ListItemCard = ({ listItem }: ListItemCardProps) => {
   return (
     <S.ListItemWrapper>
       <S.ListItemTitle>Title</S.ListItemTitle>

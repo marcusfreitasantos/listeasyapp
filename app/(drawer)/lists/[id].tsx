@@ -1,4 +1,4 @@
-import { SingleListView } from "@/src/features/listsManager/view/SingleListView";
+import { SingleListView } from "@/src/features/listContent/view/SingleListView";
 
 const SingleList = () => {
   return <SingleListView />;
