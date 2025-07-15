@@ -1,7 +1,14 @@
-import firestore from "@react-native-firebase/firestore";
+import firestore, {
+  getFirestore,
+  query,
+  collection,
+  where,
+  getDocs,
+  orderBy,
+} from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
 
-const listsCollection = firestore().collection("Lists");
+const listsCollection = collection(getFirestore(), "Lists");
 
 export const insertNewList = async (listEntity: ListEntityType) => {
   try {
@@ -21,10 +28,13 @@ export const getListsByAuthorId = async (
   userId: string
 ): Promise<ListEntityType[]> => {
   try {
-    const querySnapshot = await listsCollection
-      .where("authorId", "==", userId)
-      .orderBy("createdAt", "desc")
-      .get();
+    const queryCommand = query(
+      listsCollection,
+      where("authorId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
     return querySnapshot.docs.map(
       (doc) =>
         ({
