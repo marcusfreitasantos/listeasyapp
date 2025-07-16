@@ -54,7 +54,9 @@ export const SingleListView = () => {
               item.name.toLowerCase().includes(searchTerm.toLowerCase())
             )}
             keyExtractor={(item) => item.name.toString()}
-            renderItem={({ item }) => <ListItemCard listItem={item} />}
+            renderItem={({ item }) => (
+              <ListItemCard listItem={item} setModalIsOpen={setModalIsOpen} />
+            )}
             ListEmptyComponent={() => (
               <ListEmpty title="Nenhum item encontrado." />
             )}

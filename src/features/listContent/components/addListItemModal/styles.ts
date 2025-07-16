@@ -5,7 +5,7 @@ export const FormWrapper = styled.View`
   top: 0;
   right: ${({ theme }) => theme.defaultContainerSpacing};
   width: 100%;
-  height: 90%;
+  height: 100%;
   background-color: ${({ theme }) => theme.secondaryColor};
   justify-content: center;
   padding: ${({ theme }) => theme.defaultSizes.large};
