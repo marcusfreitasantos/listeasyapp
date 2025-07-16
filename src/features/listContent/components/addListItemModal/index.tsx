@@ -3,6 +3,7 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { ListItemType } from "@/src/features/listsManager/model/list";
 import { KeyboardTypeOptions } from "react-native";
+import { reaisToCents } from "@/src/utils/convertCurrency";
 
 type AddListItemModalProps = {
   handleAddNewItem: (listItem: ListItemType) => void;
@@ -40,13 +41,22 @@ export const AddListItemModal = ({
     },
   ];
 
+  const handleSubmit = (formData: ListItemType) => {
+    const formatedData = {
+      name: formData.name,
+      price: reaisToCents(Number(formData.price)),
+      quantity: Number(formData.quantity),
+    };
+    handleAddNewItem(formatedData);
+  };
+
   return (
     <S.FormWrapper>
       <S.FormContent>
         <DynamicForm
           formTitle="Novo item"
           formFields={formFields}
-          handleFormData={(formData: any) => handleAddNewItem(formData)}
+          handleFormData={(formData: any) => handleSubmit(formData)}
           submitBtnText="Criar"
         />
       </S.FormContent>

@@ -2,6 +2,7 @@ import * as S from "./styles";
 import { ListItemType } from "../../../listsManager/model/list";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
+import { centsToReais } from "@/src/utils/convertCurrency";
 
 type ListItemCardProps = {
   listItem: ListItemType;
@@ -38,7 +39,9 @@ export const ListItemCard = ({
       </S.ListItemHeader>
 
       <S.ListInfoRow>
-        <S.ListItemPrice>Preço: R${listItem.price}</S.ListItemPrice>
+        <S.ListItemPrice>
+          Preço: R${centsToReais(listItem.price).toFixed(2)}
+        </S.ListItemPrice>
         <S.ListItemQnt>Quantidade: {listItem.quantity}</S.ListItemQnt>
       </S.ListInfoRow>
     </S.ListItemWrapper>
