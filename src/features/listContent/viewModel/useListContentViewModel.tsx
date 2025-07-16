@@ -16,6 +16,7 @@ export const useListContentViewModel = () => {
 
       const updatedList = {
         ...currentList,
+        totalPrice: calculateCurrentListTotal(),
         items: [...currentList.items, listItems],
       };
 
@@ -39,6 +40,7 @@ export const useListContentViewModel = () => {
 
       const updatedList = {
         ...currentList,
+        totalPrice: calculateCurrentListTotal(),
         items: itemsUpdated,
       };
 

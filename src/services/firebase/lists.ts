@@ -5,6 +5,8 @@ import firestore, {
   where,
   getDocs,
   orderBy,
+  doc,
+  updateDoc,
 } from "@react-native-firebase/firestore";
 import {
   ListEntityType,
@@ -18,6 +20,7 @@ export const insertNewList = async (listEntity: ListEntityType) => {
     const listObj = {
       ...listEntity,
       createdAt: firestore.FieldValue.serverTimestamp(),
+      updatedAt: firestore.FieldValue.serverTimestamp(),
     };
     await listsCollection.add(listObj);
     console.log("List added!");
@@ -53,7 +56,11 @@ export const getListsByAuthorId = async (
 
 export const updateListContent = async (currentList: ListEntityType) => {
   try {
-    await listsCollection.doc(currentList.id).update(currentList);
+    const listRef = doc(listsCollection, currentList.id);
+    await updateDoc(listRef, {
+      ...currentList,
+      updatedAt: firestore.FieldValue.serverTimestamp(),
+    });
     console.log("List updated");
   } catch (error) {
     throw new Error(`Error updating list: ${error}`);

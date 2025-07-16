@@ -44,11 +44,11 @@ export const SingleListView = () => {
                 color={theme.primaryColor}
                 onPress={() => router.push("/lists")}
               />
-              <S.ListName>{currentList.title}</S.ListName>
+              <S.ListName numberOfLines={1}>{currentList.title}</S.ListName>
             </S.ListViewHeaderGroup>
 
             <S.ListTotal>
-              Total: {centsToReais(calculateCurrentListTotal())}
+              Total: R$ {centsToReais(calculateCurrentListTotal()).toFixed(2)}
             </S.ListTotal>
           </S.ListViewHeader>
 

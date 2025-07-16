@@ -9,6 +9,7 @@ import { GlobalListContext } from "@/src/context/listContext";
 import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
+import { centsToReais } from "@/src/utils/convertCurrency";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -87,12 +88,12 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
             <S.ListCardTotalPriceTextBold>Total: </S.ListCardTotalPriceTextBold>
 
             <S.ListCardTotalPriceTextRegular>
-              {list.totalPrice}
+              {centsToReais(list.totalPrice).toFixed(2)}
             </S.ListCardTotalPriceTextRegular>
           </S.ListCardTotalPriceWrapper>
 
           <S.ListCardTotalPriceTextRegular>
-            {getFormattedDate(list.createdAt)}
+            Atualização: {getFormattedDate(list.updatedAt)}
           </S.ListCardTotalPriceTextRegular>
         </S.ListCardInfoWrapper>
       )}

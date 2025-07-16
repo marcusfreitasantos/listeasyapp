@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 export const ListItemWrapper = styled.View`
   padding: ${({ theme }) => theme.defaultContainerSpacing};
   background-color: ${({ theme }) => theme.thirdColor};
-  margin: ${({ theme }) => theme.defaultSizes.xxSmall} 0;
+  margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
 `;
 
