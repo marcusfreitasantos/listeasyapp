@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
+import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -19,7 +20,6 @@ export const useListContentViewModel = () => {
         items: [...currentList.items, listItems],
       };
 
-      console.log("updatedList__", updatedList);
       await updateListContent(updatedList);
       setCurrentList(updatedList);
     } catch (e) {

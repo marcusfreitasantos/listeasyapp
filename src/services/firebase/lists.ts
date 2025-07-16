@@ -6,7 +6,10 @@ import firestore, {
   getDocs,
   orderBy,
 } from "@react-native-firebase/firestore";
-import { ListEntityType } from "@/src/features/listsManager/model/list";
+import {
+  ListEntityType,
+  ListItemType,
+} from "@/src/features/listsManager/model/list";
 
 const listsCollection = collection(getFirestore(), "Lists");
 

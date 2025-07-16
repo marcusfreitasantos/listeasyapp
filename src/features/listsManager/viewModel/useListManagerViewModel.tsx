@@ -8,8 +8,10 @@ import {
   removeListById,
 } from "@/src/services/firebase/lists";
 import { Alert } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 export const useListManagerViewModel = () => {
+  const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
   const { setListsLength } = useContext(GlobalListContext);
   const [loading, setLoading] = useState(false);
@@ -65,8 +67,8 @@ export const useListManagerViewModel = () => {
   };
 
   useEffect(() => {
-    getUserLists();
-  }, []);
+    if (isFocused) getUserLists();
+  }, [isFocused]);
 
   useEffect(() => {
     setListsLength(currentUserLists.length);
@@ -81,5 +83,6 @@ export const useListManagerViewModel = () => {
     modalIsOpen,
     setModalIsOpen,
     removeList,
+    getUserLists,
   };
 };
