@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { useRouter } from "expo-router";
+import { centsToReais } from "@/src/utils/convertCurrency";
 
 export const SingleListView = () => {
   const {
@@ -20,6 +21,7 @@ export const SingleListView = () => {
     setModalIsOpen,
     updateListItems,
     loading,
+    calculateCurrentListTotal,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -44,7 +46,9 @@ export const SingleListView = () => {
               <S.ListName>{currentList.title}</S.ListName>
             </S.ListViewHeaderGroup>
 
-            <S.ListTotal>Total: {currentList.totalPrice}</S.ListTotal>
+            <S.ListTotal>
+              Total: {centsToReais(calculateCurrentListTotal())}
+            </S.ListTotal>
           </S.ListViewHeader>
 
           <InputField
