@@ -34,13 +34,17 @@ export const SingleListView = () => {
       ) : (
         <>
           <S.ListViewHeader>
-            <Feather
-              size={24}
-              name="arrow-left"
-              color={theme.primaryColor}
-              onPress={() => router.push("/lists")}
-            />
-            <S.ListName>{currentList.title}</S.ListName>
+            <S.ListViewHeaderGroup>
+              <Feather
+                size={24}
+                name="arrow-left"
+                color={theme.primaryColor}
+                onPress={() => router.push("/lists")}
+              />
+              <S.ListName>{currentList.title}</S.ListName>
+            </S.ListViewHeaderGroup>
+
+            <S.ListTotal>Total: {currentList.totalPrice}</S.ListTotal>
           </S.ListViewHeader>
 
           <InputField

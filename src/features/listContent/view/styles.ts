@@ -10,6 +10,7 @@ export const ListViewHeader = styled.View`
   flex-direction: row;
   gap: 12px;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   border-bottom-width: 1px;
   border-color: ${({ theme }) => theme.primaryColor};
@@ -17,8 +18,20 @@ export const ListViewHeader = styled.View`
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
 `;
 
+export const ListViewHeaderGroup = styled.View`
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+`;
+
 export const ListName = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.large};
+`;
+
+export const ListTotal = styled.Text`
+  color: white;
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.medium};
 `;
