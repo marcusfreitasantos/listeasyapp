@@ -1,5 +1,3 @@
-import { useContext, useState } from "react";
-import { GlobalListContext } from "@/src/context/listContext";
 import * as S from "./styles";
 import { InputField } from "@/src/components/inputField";
 import { ListItemCard } from "../components/listItemCard";
@@ -7,39 +5,71 @@ import { AddItemBtn } from "@/src/components/addItemBtn";
 import { FlatList } from "react-native-gesture-handler";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { AddListItemModal } from "../components/addListItemModal";
+import { useListContentViewModel } from "../viewModel/useListContentViewModel";
+import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import Feather from "@expo/vector-icons/Feather";
+import { useTheme } from "styled-components/native";
+import { useRouter } from "expo-router";
 
 export const SingleListView = () => {
-  const { currentList } = useContext(GlobalListContext);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    currentList,
+    searchTerm,
+    setSearchTerm,
+    modalIsOpen,
+    setModalIsOpen,
+    updateListItems,
+    loading,
+  } = useListContentViewModel();
+
+  const router = useRouter();
+  const theme = useTheme();
 
   if (!currentList) return null;
 
   return (
     <S.ListView>
-      <S.ListName>{currentList.title}</S.ListName>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <S.ListViewHeader>
+            <Feather
+              size={24}
+              name="arrow-left"
+              color={theme.primaryColor}
+              onPress={() => router.push("/lists")}
+            />
+            <S.ListName>{currentList.title}</S.ListName>
+          </S.ListViewHeader>
 
-      <InputField
-        placeholder="Pesquisar item"
-        iconName="search"
-        onChangeText={(t) => setSearchTerm(t)}
-      />
+          <InputField
+            placeholder="Pesquisar item"
+            iconName="search"
+            onChangeText={(t) => setSearchTerm(t)}
+          />
 
-      <FlatList
-        data={currentList.items.filter((item) =>
-          item.title.toLowerCase().includes(searchTerm.toLowerCase())
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <ListItemCard listItem={item} />}
-        ListEmptyComponent={() => <ListEmpty title="Nenhum item encontrado." />}
-      />
+          <FlatList
+            data={currentList.items.filter((item) =>
+              item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )}
+            keyExtractor={(item) => item.name.toString()}
+            renderItem={({ item }) => <ListItemCard listItem={item} />}
+            ListEmptyComponent={() => (
+              <ListEmpty title="Nenhum item encontrado." />
+            )}
+          />
 
-      {modalIsOpen && <AddListItemModal />}
+          {modalIsOpen && (
+            <AddListItemModal handleAddNewItem={updateListItems} />
+          )}
 
-      <AddItemBtn
-        modalIsOpen={modalIsOpen}
-        onPress={() => setModalIsOpen(!modalIsOpen)}
-      />
+          <AddItemBtn
+            modalIsOpen={modalIsOpen}
+            onPress={() => setModalIsOpen(!modalIsOpen)}
+          />
+        </>
+      )}
     </S.ListView>
   );
 };

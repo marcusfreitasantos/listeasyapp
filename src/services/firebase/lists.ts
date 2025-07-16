@@ -48,6 +48,15 @@ export const getListsByAuthorId = async (
   }
 };
 
+export const updateListContent = async (currentList: ListEntityType) => {
+  try {
+    await listsCollection.doc(currentList.id).update(currentList);
+    console.log("List updated");
+  } catch (error) {
+    throw new Error(`Error updating list: ${error}`);
+  }
+};
+
 export const removeListById = async (listId: string) => {
   try {
     await listsCollection.doc(listId).delete();

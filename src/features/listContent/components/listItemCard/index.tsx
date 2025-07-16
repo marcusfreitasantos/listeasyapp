@@ -8,7 +8,9 @@ type ListItemCardProps = {
 export const ListItemCard = ({ listItem }: ListItemCardProps) => {
   return (
     <S.ListItemWrapper>
-      <S.ListItemTitle>Title</S.ListItemTitle>
+      <S.ListItemTitle>{listItem.name}</S.ListItemTitle>
+      <S.ListItemTitle>{listItem.price}</S.ListItemTitle>
+      <S.ListItemTitle>{listItem.quantity}</S.ListItemTitle>
     </S.ListItemWrapper>
   );
 };
