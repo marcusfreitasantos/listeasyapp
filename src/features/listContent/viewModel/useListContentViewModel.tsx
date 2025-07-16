@@ -29,6 +29,28 @@ export const useListContentViewModel = () => {
     }
   };
 
+  const removeItemFromList = async (itemToRemoveIndex: number) => {
+    try {
+      setLoading(true);
+      if (!currentList) throw new Error("Lista inválida");
+
+      const itemsUpdated = currentList?.items;
+      itemsUpdated?.splice(itemToRemoveIndex, 1);
+
+      const updatedList = {
+        ...currentList,
+        items: itemsUpdated,
+      };
+
+      await updateListContent(updatedList);
+      setCurrentList(updatedList);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const calculateCurrentListTotal = () => {
     let total = 0;
 
@@ -49,5 +71,6 @@ export const useListContentViewModel = () => {
     setSearchTerm,
     loading,
     calculateCurrentListTotal,
+    removeItemFromList,
   };
 };

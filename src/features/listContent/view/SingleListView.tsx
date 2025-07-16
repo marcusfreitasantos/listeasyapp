@@ -21,6 +21,7 @@ export const SingleListView = () => {
     setModalIsOpen,
     updateListItems,
     loading,
+    removeItemFromList,
     calculateCurrentListTotal,
   } = useListContentViewModel();
 
@@ -61,9 +62,14 @@ export const SingleListView = () => {
             data={currentList.items.filter((item) =>
               item.name.toLowerCase().includes(searchTerm.toLowerCase())
             )}
-            keyExtractor={(item) => item.name.toString()}
-            renderItem={({ item }) => (
-              <ListItemCard listItem={item} setModalIsOpen={setModalIsOpen} />
+            keyExtractor={(item) => (Math.random() + item.name).toString()}
+            renderItem={({ item, index }) => (
+              <ListItemCard
+                listItem={item}
+                setModalIsOpen={setModalIsOpen}
+                itemIndex={index}
+                removeItemFromList={removeItemFromList}
+              />
             )}
             ListEmptyComponent={() => (
               <ListEmpty title="Nenhum item encontrado." />

@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import * as S from "./styles";
 import { ListEntityType } from "../../model/list";
 import Feather from "@expo/vector-icons/Feather";
@@ -20,6 +21,20 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleDeleteList = () => {
+    Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
+      {
+        text: "Cancelar",
+      },
+      {
+        text: "Confirmar",
+        onPress: () => {
+          if (list.id) removeList(list.id);
+        },
+      },
+    ]);
+  };
 
   const handleEditList = () => {
     setCurrentList(list);
@@ -46,9 +61,7 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
     {
       label: "Excluir",
       iconName: "trash" as FeatherIconName,
-      onPress: () => {
-        if (list.id) removeList(list.id);
-      },
+      onPress: () => handleDeleteList(),
     },
   ];
 

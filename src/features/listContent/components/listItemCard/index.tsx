@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import * as S from "./styles";
 import { ListItemType } from "../../../listsManager/model/list";
 import Feather from "@expo/vector-icons/Feather";
@@ -6,15 +7,31 @@ import { centsToReais } from "@/src/utils/convertCurrency";
 
 type ListItemCardProps = {
   listItem: ListItemType;
+  itemIndex: number;
+  removeItemFromList: (itemIndex: number) => void;
   setModalIsOpen: (state: boolean) => void;
 };
 
 export const ListItemCard = ({
   listItem,
+  itemIndex,
   setModalIsOpen,
+  removeItemFromList,
 }: ListItemCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+
+  const handleRemoveItemFromList = () => {
+    Alert.alert("Atenção!", `O item '${listItem.name}' será removido.`, [
+      {
+        text: "Cancelar",
+      },
+      {
+        text: "Confirmar",
+        onPress: () => removeItemFromList(itemIndex),
+      },
+    ]);
+  };
 
   return (
     <S.ListItemWrapper>
@@ -33,7 +50,7 @@ export const ListItemCard = ({
             size={iconSize}
             color={theme.primaryColor}
             name="trash"
-            onPress={() => console.log("remove item")}
+            onPress={() => handleRemoveItemFromList()}
           />
         </S.ListItemIconsRow>
       </S.ListItemHeader>
