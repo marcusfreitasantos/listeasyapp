@@ -8,9 +8,8 @@ export const ListView = styled.View`
 
 export const ListViewHeader = styled.View`
   flex-direction: row;
-  gap: ${({ theme }) => theme.defaultSizes.large};
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   border-bottom-width: 1px;
   border-color: ${({ theme }) => theme.primaryColor};
@@ -27,12 +26,12 @@ export const ListViewHeaderGroup = styled.View`
 export const ListName = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
-  font-size: ${({ theme }) => theme.defaultSizes.large};
+  font-size: ${({ theme }) => theme.defaultSizes.medium};
 `;
 
-export const ListTotal = styled.Text`
-  color: white;
-  font-family: ${({ theme }) => theme.defaultFontFamily};
-  font-size: ${({ theme }) => theme.defaultSizes.medium};
-  font-weight: bold;
+export const ListViewFooter = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${({ theme }) => theme.defaultSizes.medium} 0;
 `;

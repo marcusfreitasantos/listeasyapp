@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
+import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -16,7 +17,7 @@ export const useListContentViewModel = () => {
 
       const updatedList = {
         ...currentList,
-        totalPrice: calculateCurrentListTotal(),
+        totalPrice: calculateCurrentListTotal(currentList.items),
         items: [...currentList.items, listItems],
       };
 
@@ -40,7 +41,7 @@ export const useListContentViewModel = () => {
 
       const updatedList = {
         ...currentList,
-        totalPrice: calculateCurrentListTotal(),
+        totalPrice: calculateCurrentListTotal(currentList.items),
         items: itemsUpdated,
       };
 
@@ -53,17 +54,6 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const calculateCurrentListTotal = () => {
-    let total = 0;
-
-    currentList?.items.forEach((item: ListItemType) => {
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-    });
-
-    return total;
-  };
-
   return {
     updateListItems,
     currentList,
@@ -72,7 +62,6 @@ export const useListContentViewModel = () => {
     setModalIsOpen,
     setSearchTerm,
     loading,
-    calculateCurrentListTotal,
     removeItemFromList,
   };
 };

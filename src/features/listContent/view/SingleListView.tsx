@@ -10,7 +10,7 @@ import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { useRouter } from "expo-router";
-import { centsToReais } from "@/src/utils/convertCurrency";
+import { ListTotalPrice } from "../components/listTotalPrice";
 
 export const SingleListView = () => {
   const {
@@ -22,7 +22,6 @@ export const SingleListView = () => {
     updateListItems,
     loading,
     removeItemFromList,
-    calculateCurrentListTotal,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -47,9 +46,12 @@ export const SingleListView = () => {
               <S.ListName numberOfLines={1}>{currentList.title}</S.ListName>
             </S.ListViewHeaderGroup>
 
-            <S.ListTotal>
-              Total: R$ {centsToReais(calculateCurrentListTotal()).toFixed(2)}
-            </S.ListTotal>
+            <Feather
+              size={24}
+              name="edit"
+              color={theme.primaryColor}
+              onPress={() => console.log("rename")}
+            />
           </S.ListViewHeader>
 
           <InputField
@@ -80,10 +82,14 @@ export const SingleListView = () => {
             <AddListItemModal handleAddNewItem={updateListItems} />
           )}
 
-          <AddItemBtn
-            modalIsOpen={modalIsOpen}
-            onPress={() => setModalIsOpen(!modalIsOpen)}
-          />
+          <S.ListViewFooter>
+            <ListTotalPrice totalPrice={currentList.totalPrice} />
+
+            <AddItemBtn
+              modalIsOpen={modalIsOpen}
+              onPress={() => setModalIsOpen(!modalIsOpen)}
+            />
+          </S.ListViewFooter>
         </>
       )}
     </S.ListView>
