@@ -9,6 +9,9 @@ import {
 } from "@/src/services/firebase/lists";
 import { Alert } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { printToFileAsync } from "expo-print";
+import { shareAsync } from "expo-sharing";
+import * as FileSystem from "expo-file-system";
 
 export const useListManagerViewModel = () => {
   const isFocused = useIsFocused();
@@ -66,6 +69,33 @@ export const useListManagerViewModel = () => {
     }
   };
 
+  const generatePdf = async (listName: string, html: string) => {
+    try {
+      setLoading(true);
+      const file = await printToFileAsync({
+        html,
+        base64: false,
+      });
+
+      const pdfName = `${file.uri.slice(
+        0,
+        file.uri.lastIndexOf("/") + 1
+      )}lista_${listName.toLowerCase().replaceAll(" ", "_")}.pdf`;
+
+      await FileSystem.moveAsync({
+        from: file.uri,
+        to: pdfName,
+      });
+
+      await shareAsync(pdfName);
+    } catch (error) {
+      console.log("Erro ao gerar pdf", error);
+      Alert.alert("Oops!", `Não foi possível gerar o PDF da lista: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isFocused) getUserLists();
   }, [isFocused]);
@@ -84,5 +114,6 @@ export const useListManagerViewModel = () => {
     setModalIsOpen,
     removeList,
     getUserLists,
+    generatePdf,
   };
 };

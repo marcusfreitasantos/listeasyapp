@@ -24,6 +24,7 @@ const ListsView = () => {
     modalIsOpen,
     setModalIsOpen,
     removeList,
+    generatePdf,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -57,7 +58,11 @@ const ListsView = () => {
               )}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
-                <ListCard list={item} removeList={removeList} />
+                <ListCard
+                  list={item}
+                  removeList={removeList}
+                  generatePdf={generatePdf}
+                />
               )}
               ListEmptyComponent={() => (
                 <ListEmpty

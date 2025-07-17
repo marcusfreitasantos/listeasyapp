@@ -10,18 +10,22 @@ import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
 import { centsToReais } from "@/src/utils/convertCurrency";
+import { useListManagerViewModel } from "../../viewModel/useListManagerViewModel";
+import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 
 type ListCardProps = {
   list: ListEntityType;
   removeList: (listId: string) => void;
+  generatePdf: (listName: string, html: string) => void;
 };
 
-export const ListCard = ({ list, removeList }: ListCardProps) => {
+export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
   const { setCurrentList } = useContext(GlobalListContext);
   const router = useRouter();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
 
   const handleDeleteList = () => {
     Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
@@ -37,6 +41,10 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
     ]);
   };
 
+  const handlePDFExport = () => {
+    const html = buildHtmlPDFTemplate(list.title, list.items);
+    generatePdf(list.title, html);
+  };
   const handleEditList = () => {
     setCurrentList(list);
     router.push(`/lists/${list.id}`);
@@ -56,8 +64,7 @@ export const ListCard = ({ list, removeList }: ListCardProps) => {
     {
       label: "Exportar PDF",
       iconName: "file-text" as FeatherIconName,
-
-      onPress: () => console.log("Exportar em pdf"),
+      onPress: () => handlePDFExport(),
     },
     {
       label: "Excluir",
