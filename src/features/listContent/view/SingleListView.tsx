@@ -22,6 +22,8 @@ export const SingleListView = () => {
     updateListItems,
     loading,
     removeItemFromList,
+    currentItem,
+    setCurrentItem,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -71,6 +73,7 @@ export const SingleListView = () => {
                 setModalIsOpen={setModalIsOpen}
                 itemIndex={index}
                 removeItemFromList={removeItemFromList}
+                setCurrentItem={setCurrentItem}
               />
             )}
             ListEmptyComponent={() => (
@@ -79,7 +82,10 @@ export const SingleListView = () => {
           />
 
           {modalIsOpen && (
-            <AddListItemModal handleAddNewItem={updateListItems} />
+            <AddListItemModal
+              handleAddNewItem={updateListItems}
+              currentItem={currentItem}
+            />
           )}
 
           <S.ListViewFooter>

@@ -8,7 +8,6 @@ export const ListView = styled.View`
 
 export const ListViewHeader = styled.View`
   flex-direction: row;
-  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
   align-items: center;
   width: 100%;
   border-bottom-width: 1px;
@@ -21,6 +20,7 @@ export const ListViewHeaderGroup = styled.View`
   flex-direction: row;
   align-items: center;
   flex: 1;
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
 `;
 
 export const ListName = styled.Text`

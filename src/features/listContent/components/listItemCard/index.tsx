@@ -10,6 +10,7 @@ type ListItemCardProps = {
   itemIndex: number;
   removeItemFromList: (itemIndex: number) => void;
   setModalIsOpen: (state: boolean) => void;
+  setCurrentItem: React.Dispatch<React.SetStateAction<ListItemType | null>>;
 };
 
 export const ListItemCard = ({
@@ -17,6 +18,7 @@ export const ListItemCard = ({
   itemIndex,
   setModalIsOpen,
   removeItemFromList,
+  setCurrentItem,
 }: ListItemCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
@@ -33,6 +35,11 @@ export const ListItemCard = ({
     ]);
   };
 
+  const handleEditItem = () => {
+    setCurrentItem(listItem);
+    setModalIsOpen(true);
+  };
+
   return (
     <S.ListItemWrapper>
       <S.ListItemHeader>
@@ -43,7 +50,7 @@ export const ListItemCard = ({
             size={iconSize}
             color={theme.primaryColor}
             name="edit"
-            onPress={() => setModalIsOpen(true)}
+            onPress={() => handleEditItem()}
           />
 
           <Feather

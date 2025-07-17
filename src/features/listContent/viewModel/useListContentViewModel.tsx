@@ -9,6 +9,7 @@ export const useListContentViewModel = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
 
   const updateListItems = async (listItems: ListItemType) => {
     try {
@@ -65,5 +66,7 @@ export const useListContentViewModel = () => {
     setSearchTerm,
     loading,
     removeItemFromList,
+    currentItem,
+    setCurrentItem,
   };
 };
