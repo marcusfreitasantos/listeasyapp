@@ -11,6 +11,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { useRouter } from "expo-router";
 import { ListTotalPrice } from "../components/listTotalPrice";
+import { RenameListModal } from "../components/renameListModal";
 
 export const SingleListView = () => {
   const {
@@ -25,6 +26,9 @@ export const SingleListView = () => {
     loading,
     currentItem,
     setCurrentItem,
+    renameModalIsOpen,
+    setRenameModalIsOpen,
+    updateListName,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -46,6 +50,7 @@ export const SingleListView = () => {
                 color={theme.primaryColor}
                 onPress={() => router.push("/lists")}
               />
+
               <S.ListName numberOfLines={1}>{currentList.title}</S.ListName>
             </S.ListViewHeaderGroup>
 
@@ -53,9 +58,16 @@ export const SingleListView = () => {
               size={24}
               name="edit"
               color={theme.primaryColor}
-              onPress={() => console.log("rename")}
+              onPress={() => setRenameModalIsOpen(!renameModalIsOpen)}
             />
           </S.ListViewHeader>
+
+          {renameModalIsOpen && (
+            <RenameListModal
+              listName={currentList.title}
+              handleSubmit={updateListName}
+            />
+          )}
 
           <InputField
             placeholder="Pesquisar item"

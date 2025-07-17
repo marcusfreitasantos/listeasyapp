@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { useForm, Controller } from "react-hook-form";
-import { InputField } from "../inputField";
+import { InputField } from "@/src/components/inputField";
 import { FeatherIconName } from "@/@types/icons";
 import { KeyboardTypeOptions } from "react-native";
 import { useEffect } from "react";

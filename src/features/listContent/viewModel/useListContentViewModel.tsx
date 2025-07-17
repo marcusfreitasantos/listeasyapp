@@ -10,6 +10,14 @@ export const useListContentViewModel = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
+  const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
+
+  const resetStates = () => {
+    setModalIsOpen(false);
+    setLoading(false);
+    setCurrentItem(null);
+    setRenameModalIsOpen(false);
+  };
 
   const updateListItems = async (listItems: ListItemType) => {
     try {
@@ -29,9 +37,26 @@ export const useListContentViewModel = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      setModalIsOpen(false);
-      setLoading(false);
-      setCurrentItem(null);
+      resetStates();
+    }
+  };
+
+  const updateListName = async (listName: string) => {
+    try {
+      setLoading(true);
+      if (!currentList) throw new Error("Lista inválida");
+
+      const updatedList = {
+        ...currentList,
+        title: listName,
+      };
+
+      await updateListContent(updatedList);
+      setCurrentList(updatedList);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      resetStates();
     }
   };
 
@@ -57,9 +82,7 @@ export const useListContentViewModel = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      setModalIsOpen(false);
-      setLoading(false);
-      setCurrentItem(null);
+      resetStates();
     }
   };
 
@@ -82,8 +105,7 @@ export const useListContentViewModel = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(false);
-      setCurrentItem(null);
+      resetStates();
     }
   };
 
@@ -103,5 +125,8 @@ export const useListContentViewModel = () => {
     currentItem,
     setCurrentItem,
     updateItemInList,
+    renameModalIsOpen,
+    setRenameModalIsOpen,
+    updateListName,
   };
 };
