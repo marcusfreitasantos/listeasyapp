@@ -39,6 +39,16 @@ export const DynamicForm = ({
     handleFormData(data);
   };
 
+  const handleNumericInput = (inputValue: string) => {
+    // Remove all non-digit and non-dot/comma characters
+    let sanitized = inputValue?.replace(/[^\d.,]/g, "");
+    // Replace commas with dots
+    sanitized = sanitized?.replace(/,/g, ".");
+    // Prevent multiple dots: keep only the first dot
+    sanitized = sanitized?.replace(/\.(?=.*\.)/g, "");
+    return sanitized;
+  };
+
   const handleFormErrors = (fieldName: string, errorType: string) => {
     let errorMsg = "";
 
@@ -78,7 +88,7 @@ export const DynamicForm = ({
                     placeholder={item.placeholder}
                     value={
                       item.keyboardType === "numeric"
-                        ? value?.replace(",", ".")
+                        ? handleNumericInput(value)
                         : value
                     }
                     onChangeText={onChange}

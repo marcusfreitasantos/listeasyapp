@@ -24,7 +24,6 @@ export const useListContentViewModel = () => {
       };
 
       await updateListContent(updatedList);
-      console.log("updatedList__", updatedList);
       setCurrentList(updatedList);
     } catch (e) {
       console.log(e);
@@ -49,7 +48,6 @@ export const useListContentViewModel = () => {
       };
 
       await updateListContent(updatedList);
-      console.log("updatedList__", updatedList);
       setCurrentList(updatedList);
     } catch (e) {
       console.log(e);
