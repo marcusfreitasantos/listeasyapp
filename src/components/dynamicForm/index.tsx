@@ -76,7 +76,11 @@ export const DynamicForm = ({
                     {...register(item.fieldName, item.validationRules)}
                     iconName={item.iconName}
                     placeholder={item.placeholder}
-                    value={value}
+                    value={
+                      item.keyboardType === "numeric"
+                        ? value?.replace(",", ".")
+                        : value
+                    }
                     onChangeText={onChange}
                     secureTextEntry={item.fieldName === "password"}
                     keyboardType={item.keyboardType ?? "default"}

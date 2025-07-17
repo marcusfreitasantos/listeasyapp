@@ -15,13 +15,16 @@ export const useListContentViewModel = () => {
       setLoading(true);
       if (!currentList) throw new Error("Lista inválida");
 
+      const updatedItems = [...currentList.items, listItems];
+
       const updatedList = {
         ...currentList,
-        totalPrice: calculateCurrentListTotal(currentList.items),
-        items: [...currentList.items, listItems],
+        totalPrice: calculateCurrentListTotal(updatedItems),
+        items: updatedItems,
       };
 
       await updateListContent(updatedList);
+      console.log("updatedList__", updatedList);
       setCurrentList(updatedList);
     } catch (e) {
       console.log(e);
@@ -41,11 +44,12 @@ export const useListContentViewModel = () => {
 
       const updatedList = {
         ...currentList,
-        totalPrice: calculateCurrentListTotal(currentList.items),
+        totalPrice: calculateCurrentListTotal(itemsUpdated),
         items: itemsUpdated,
       };
 
       await updateListContent(updatedList);
+      console.log("updatedList__", updatedList);
       setCurrentList(updatedList);
     } catch (e) {
       console.log(e);
