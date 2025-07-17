@@ -36,7 +36,7 @@ export const ListItemCard = ({
   };
 
   const handleEditItem = () => {
-    setCurrentItem(listItem);
+    setCurrentItem({ ...listItem, index: itemIndex });
     setModalIsOpen(true);
   };
 

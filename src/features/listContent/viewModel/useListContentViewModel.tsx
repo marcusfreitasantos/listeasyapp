@@ -31,6 +31,35 @@ export const useListContentViewModel = () => {
     } finally {
       setModalIsOpen(false);
       setLoading(false);
+      setCurrentItem(null);
+    }
+  };
+
+  const updateItemInList = async (
+    itemIndex: number,
+    updatedItem: ListItemType
+  ) => {
+    try {
+      setLoading(true);
+      if (!currentList) throw new Error("Lista inválida");
+
+      const itemsUpdated = [...currentList.items];
+      itemsUpdated[itemIndex] = updatedItem;
+
+      const updatedList = {
+        ...currentList,
+        totalPrice: calculateCurrentListTotal(itemsUpdated),
+        items: itemsUpdated,
+      };
+
+      await updateListContent(updatedList);
+      setCurrentList(updatedList);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setModalIsOpen(false);
+      setLoading(false);
+      setCurrentItem(null);
     }
   };
 
@@ -54,8 +83,13 @@ export const useListContentViewModel = () => {
       console.log(e);
     } finally {
       setLoading(false);
+      setCurrentItem(null);
     }
   };
+
+  useEffect(() => {
+    if (!modalIsOpen) setCurrentItem(null);
+  }, [modalIsOpen]);
 
   return {
     updateListItems,
@@ -68,5 +102,6 @@ export const useListContentViewModel = () => {
     removeItemFromList,
     currentItem,
     setCurrentItem,
+    updateItemInList,
   };
 };

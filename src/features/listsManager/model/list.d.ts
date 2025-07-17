@@ -1,4 +1,5 @@
 export type ListItemType = {
+  index?: number;
   name: string;
   price: number;
   quantity: number;

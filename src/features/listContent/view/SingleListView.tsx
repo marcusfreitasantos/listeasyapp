@@ -20,8 +20,9 @@ export const SingleListView = () => {
     modalIsOpen,
     setModalIsOpen,
     updateListItems,
-    loading,
     removeItemFromList,
+    updateItemInList,
+    loading,
     currentItem,
     setCurrentItem,
   } = useListContentViewModel();
@@ -84,6 +85,7 @@ export const SingleListView = () => {
           {modalIsOpen && (
             <AddListItemModal
               handleAddNewItem={updateListItems}
+              handleEditItem={updateItemInList}
               currentItem={currentItem}
             />
           )}

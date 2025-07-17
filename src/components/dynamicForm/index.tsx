@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { InputField } from "../inputField";
 import { FeatherIconName } from "@/@types/icons";
 import { KeyboardTypeOptions } from "react-native";
+import { useEffect } from "react";
 
 type DynamicFormProps = {
   formTitle?: string;
@@ -11,6 +12,7 @@ type DynamicFormProps = {
   formFields: {
     fieldName: string;
     iconName: FeatherIconName;
+    defaultValue?: string;
     placeholder: string;
     keyboardType?: KeyboardTypeOptions;
     validationRules: {
@@ -28,12 +30,20 @@ export const DynamicForm = ({
   formFields,
   handleFormData,
 }: DynamicFormProps) => {
+  const formDefaultValues = formFields.reduce((acc, field) => {
+    acc[field.fieldName] = field.defaultValue ?? "";
+    return acc;
+  }, {} as Record<string, string>);
+
   const {
     control,
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<Record<string, string>>();
+    reset,
+  } = useForm<Record<string, string>>({
+    defaultValues: formDefaultValues,
+  });
 
   const onSubmit = (data: Record<string, string>) => {
     handleFormData(data);
@@ -70,6 +80,12 @@ export const DynamicForm = ({
 
     return errorMsg;
   };
+
+  useEffect(() => {
+    console.log(formDefaultValues);
+    reset(formDefaultValues);
+  }, []);
+
   return (
     <S.FormWrapper>
       {formTitle && <S.FormTitle>{formTitle}</S.FormTitle>}

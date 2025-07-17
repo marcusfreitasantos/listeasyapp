@@ -7,18 +7,21 @@ import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
 
 type AddListItemModalProps = {
   handleAddNewItem: (listItem: ListItemType) => void;
+  handleEditItem: (itemIndex: number, updatedItem: ListItemType) => void;
   currentItem: ListItemType | null;
 };
 
 export const AddListItemModal = ({
   handleAddNewItem,
+  handleEditItem,
   currentItem,
 }: AddListItemModalProps) => {
   const formFields = [
     {
       fieldName: "name",
       iconName: "file" as FeatherIconName,
-      placeholder: currentItem ? currentItem.name : "Nome do item",
+      placeholder: "Nome do item",
+      defaultValue: currentItem ? currentItem.name : "",
       validationRules: {
         required: true,
       },
@@ -26,9 +29,10 @@ export const AddListItemModal = ({
     {
       fieldName: "price",
       iconName: "dollar-sign" as FeatherIconName,
-      placeholder: currentItem
+      placeholder: "Preço",
+      defaultValue: currentItem
         ? centsToReais(currentItem.price).toFixed(2).toString()
-        : "Preço",
+        : "",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
         required: true,
@@ -37,7 +41,8 @@ export const AddListItemModal = ({
     {
       fieldName: "quantity",
       iconName: "grid" as FeatherIconName,
-      placeholder: currentItem ? currentItem.quantity.toString() : "Quantidade",
+      placeholder: "Quantidade",
+      defaultValue: currentItem ? currentItem.quantity.toString() : "",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
         required: true,
@@ -51,7 +56,12 @@ export const AddListItemModal = ({
       price: reaisToCents(Number(formData.price)),
       quantity: Number(formData.quantity),
     };
-    handleAddNewItem(formatedData);
+
+    if (currentItem && typeof currentItem.index === "number") {
+      handleEditItem(currentItem.index, formatedData);
+    } else {
+      handleAddNewItem(formatedData);
+    }
   };
 
   return (
