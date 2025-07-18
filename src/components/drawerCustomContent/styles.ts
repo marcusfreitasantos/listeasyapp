@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 const imageSize = "80px";
 
 export const DrawerWrapper = styled.View`
-  padding-top: ${({ theme }) => theme.defaultSizes.xLarge};
+  padding: ${({ theme }) => theme.defaultSizes.xLarge} 0;
   background-color: ${({ theme }) => theme.secondaryColor};
 `;
 

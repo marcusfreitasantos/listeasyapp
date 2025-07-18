@@ -57,12 +57,12 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
       onPress: () => handleEditList(),
     },
     {
-      label: "Compartilhar",
+      label: "Compartilhar acesso",
       iconName: "share-2" as FeatherIconName,
       onPress: () => console.log("comparitlhar"),
     },
     {
-      label: "Exportar PDF",
+      label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
     },

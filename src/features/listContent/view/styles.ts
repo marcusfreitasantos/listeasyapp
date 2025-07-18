@@ -33,5 +33,5 @@ export const ListViewFooter = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.defaultSizes.medium} 0;
+  padding: ${({ theme }) => theme.defaultSizes.xLarge} 0;
 `;
