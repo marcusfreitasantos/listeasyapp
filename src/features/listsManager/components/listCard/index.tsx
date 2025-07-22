@@ -42,7 +42,7 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
   };
 
   const handlePDFExport = () => {
-    const html = buildHtmlPDFTemplate(list.title, list.items);
+    const html = buildHtmlPDFTemplate(list.title, list.items, list.totalPrice);
     generatePdf(list.title, html);
   };
   const handleEditList = () => {
