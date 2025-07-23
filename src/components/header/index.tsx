@@ -1,14 +1,29 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
+import { Platform } from "react-native";
 import * as S from "./styles";
 import { useNavigation } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
 import { GlobalListContext } from "@/src/context/listContext";
 import { GlobalUserContext } from "@/src/context/userContext";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+  useForeground,
+} from "react-native-google-mobile-ads";
 
 export const Header = () => {
   const navigation = useNavigation();
   const { currentUser } = useContext(GlobalUserContext);
   const { listsLength } = useContext(GlobalListContext);
+  const adUnitId = __DEV__
+    ? TestIds.ADAPTIVE_BANNER
+    : "ca-app-pub-8430347978354434/3994109034";
+  const bannerRef = useRef<BannerAd>(null);
+
+  useForeground(() => {
+    Platform.OS === "ios" && bannerRef.current?.load();
+  });
 
   const openDrawerMenu = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -16,6 +31,12 @@ export const Header = () => {
 
   return (
     <S.HeaderWrapper>
+      <BannerAd
+        ref={bannerRef}
+        unitId={adUnitId}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+      />
+
       <S.HeaderContainer>
         {currentUser && (
           <S.HeaderUserInfo onPress={openDrawerMenu}>
