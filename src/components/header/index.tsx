@@ -5,6 +5,7 @@ import { useNavigation } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
 import { GlobalListContext } from "@/src/context/listContext";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import {
   BannerAd,
   BannerAdSize,
@@ -16,6 +17,7 @@ export const Header = () => {
   const navigation = useNavigation();
   const { currentUser } = useContext(GlobalUserContext);
   const { listsLength } = useContext(GlobalListContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const adUnitId = __DEV__
     ? TestIds.ADAPTIVE_BANNER
     : "ca-app-pub-8430347978354434/3994109034";
@@ -31,11 +33,13 @@ export const Header = () => {
 
   return (
     <S.HeaderWrapper>
-      <BannerAd
-        ref={bannerRef}
-        unitId={adUnitId}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-      />
+      {!currentSubscription?.isActive && (
+        <BannerAd
+          ref={bannerRef}
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      )}
 
       <S.HeaderContainer>
         {currentUser && (

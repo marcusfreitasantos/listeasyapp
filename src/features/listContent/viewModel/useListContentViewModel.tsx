@@ -1,19 +1,21 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, use } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
   const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
-    TestIds.INTERSTITIAL
+    __DEV__ ? TestIds.INTERSTITIAL : "ca-app-pub-8430347978354434/6035864738"
   );
 
   const resetStates = () => {
@@ -126,7 +128,7 @@ export const useListContentViewModel = () => {
   }, [modalIsOpen]);
 
   useEffect(() => {
-    load();
+    if (!currentSubscription || !currentSubscription.isActive) load();
   }, [load]);
 
   useEffect(() => {

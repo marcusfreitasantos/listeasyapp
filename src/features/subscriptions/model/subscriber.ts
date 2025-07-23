@@ -1,8 +1,7 @@
 type SubscriptionEntityType = {
   id: string;
-  billing_cycle_anchor: string;
-  current_period_start: string;
-  current_period_end: string;
+  current_period_start: number;
+  current_period_end: number;
   customer: string;
   isActive: boolean;
   plan: {
@@ -14,9 +13,14 @@ type SubscriptionEntityType = {
     currency: string;
     interval: string;
     interval_count: number;
-    nickname: null;
+    nickname: string;
     product: string;
   };
+};
+
+type SubscriberType = {
+  userId: string;
+  subscription: SubscriptionEntityType;
 };
 
 type SubscriptionContextType = {
@@ -26,4 +30,4 @@ type SubscriptionContextType = {
   >;
 };
 
-export type { SubscriptionContextType, SubscriptionEntityType };
+export type { SubscriptionEntityType, SubscriberType, SubscriptionContextType };
