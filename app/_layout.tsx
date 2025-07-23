@@ -2,8 +2,7 @@ import { useColorScheme } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "@/src/global/theme";
 import { Stack } from "expo-router";
-import UserContextProvider from "@/src/context/userContext";
-import ListContextProvider from "@/src/context/listContext";
+import MainContextProvider from "@/src/context/mainContextProvider";
 import mobileAds from "react-native-google-mobile-ads";
 
 export default function Layout() {
@@ -16,16 +15,14 @@ export default function Layout() {
     });
 
   return (
-    <ThemeProvider theme={colorScheme === "dark" ? darkTheme : lightTheme}>
-      <UserContextProvider>
-        <ListContextProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-        </ListContextProvider>
-      </UserContextProvider>
+    <ThemeProvider theme={darkTheme}>
+      <MainContextProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+      </MainContextProvider>
     </ThemeProvider>
   );
 }
