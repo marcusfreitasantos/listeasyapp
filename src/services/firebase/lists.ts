@@ -23,7 +23,6 @@ export const insertNewList = async (listEntity: ListEntityType) => {
       updatedAt: firestore.FieldValue.serverTimestamp(),
     };
     await listsCollection.add(listObj);
-    console.log("List added!");
     return true;
   } catch (error: any) {
     throw new Error(`Error adding list: ${error}`);
@@ -61,7 +60,6 @@ export const updateListContent = async (currentList: ListEntityType) => {
       ...currentList,
       updatedAt: firestore.FieldValue.serverTimestamp(),
     });
-    console.log("List updated");
   } catch (error) {
     throw new Error(`Error updating list: ${error}`);
   }
@@ -70,7 +68,6 @@ export const updateListContent = async (currentList: ListEntityType) => {
 export const removeListById = async (listId: string) => {
   try {
     await listsCollection.doc(listId).delete();
-    console.log("List removed");
   } catch (error) {
     throw new Error(`Error removing list: ${error}`);
   }

@@ -29,6 +29,7 @@ export const SingleListView = () => {
     renameModalIsOpen,
     setRenameModalIsOpen,
     updateListName,
+    handleAddNewItem,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -107,7 +108,7 @@ export const SingleListView = () => {
 
             <AddItemBtn
               modalIsOpen={modalIsOpen}
-              onPress={() => setModalIsOpen(!modalIsOpen)}
+              onPress={() => handleAddNewItem()}
             />
           </S.ListViewFooter>
         </>

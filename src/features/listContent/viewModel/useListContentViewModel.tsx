@@ -3,6 +3,7 @@ import { GlobalListContext } from "@/src/context/listContext";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
+import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -11,6 +12,9 @@ export const useListContentViewModel = () => {
   const [loading, setLoading] = useState(false);
   const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
   const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(
+    TestIds.INTERSTITIAL
+  );
 
   const resetStates = () => {
     setModalIsOpen(false);
@@ -109,9 +113,27 @@ export const useListContentViewModel = () => {
     }
   };
 
+  const handleAddNewItem = () => {
+    if (isLoaded && currentList && currentList.items.length % 5 === 0) {
+      show();
+    } else {
+      setModalIsOpen(!modalIsOpen);
+    }
+  };
+
   useEffect(() => {
     if (!modalIsOpen) setCurrentItem(null);
   }, [modalIsOpen]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    if (isClosed) {
+      setModalIsOpen(true);
+    }
+  }, [isClosed]);
 
   return {
     updateListItems,
@@ -128,5 +150,6 @@ export const useListContentViewModel = () => {
     renameModalIsOpen,
     setRenameModalIsOpen,
     updateListName,
+    handleAddNewItem,
   };
 };

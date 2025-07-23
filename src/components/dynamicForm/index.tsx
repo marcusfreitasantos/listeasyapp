@@ -82,7 +82,6 @@ export const DynamicForm = ({
   };
 
   useEffect(() => {
-    console.log(formDefaultValues);
     reset(formDefaultValues);
   }, []);
 

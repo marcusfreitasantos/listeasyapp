@@ -18,8 +18,6 @@ export const useUpdateProfileViewModel = () => {
 
       await reference.putFile(fileLocalPath);
       const photoURL = await reference.getDownloadURL();
-
-      console.log("url", photoURL);
       return photoURL;
     } catch (e) {
       console.log("handleImageUpload__", e);

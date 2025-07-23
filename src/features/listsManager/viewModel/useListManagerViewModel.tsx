@@ -89,7 +89,6 @@ export const useListManagerViewModel = () => {
 
       await shareAsync(pdfName);
     } catch (error) {
-      console.log("Erro ao gerar pdf", error);
       Alert.alert("Oops!", `Não foi possível gerar o PDF da lista: ${error}`);
     } finally {
       setLoading(false);
