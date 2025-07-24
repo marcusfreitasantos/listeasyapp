@@ -17,9 +17,12 @@
     "@react-native-firebase/firestore": "^22.2.1",
     "@react-native-firebase/perf": "^22.2.1",
     "@react-native-firebase/remote-config": "^22.2.1",
+    "@react-native-firebase/storage": "22.2.1",
     "@react-navigation/drawer": "^7.5.3",
     "@react-navigation/native": "^7.1.6",
     "@react-navigation/native-stack": "^7.3.10",
+    "@stripe/stripe-react-native": "0.45.0",
+    "axios": "^1.11.0",
     "expo": "^53.0.12",
     "expo-application": "~6.1.4",
     "expo-build-properties": "~0.14.6",
@@ -28,6 +31,7 @@
     "expo-device": "~7.1.4",
     "expo-file-system": "~18.1.10",
     "expo-font": "~13.3.1",
+    "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.5",
     "expo-print": "~14.1.4",
     "expo-router": "~5.1.0",
@@ -54,9 +58,7 @@
     "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "react-native-web": "^0.20.0",
-    "styled-components": "^6.1.19",
-    "expo-image-picker": "~16.1.4",
-    "@react-native-firebase/storage": "22.2.1"
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

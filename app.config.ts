@@ -74,6 +74,12 @@ const config: ExpoConfig = {
           "O List Easy precisa acessar sua câmera para armazenar sua foto de perfil",
       },
     ],
+    [
+      "@stripe/stripe-react-native",
+      {
+        enableGooglePay: true,
+      },
+    ],
   ],
   experiments: {
     typedRoutes: true,
@@ -85,6 +91,7 @@ const config: ExpoConfig = {
     eas: {
       projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
     },
+    stripeApiPublicKeyTest: process.env.STRIPE_API_PUBLIC_KEY_TEST,
   },
 
   owner: "marcusfreitas",
