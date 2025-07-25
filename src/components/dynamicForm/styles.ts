@@ -22,7 +22,7 @@ export const FormTitle = styled.Text`
 `;
 
 export const FormErrorText = styled.Text`
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.xSmall};
   font-weight: 700;

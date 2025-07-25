@@ -2,9 +2,37 @@ import { useState } from "react";
 import { registerUser } from "@/src/services/firebase/auth";
 import { Alert } from "react-native";
 import { router } from "expo-router";
+import { createCustomerOnStripe } from "@/src/services/stripe/customer";
+import { insertNewSubscriber } from "@/src/services/firebase/auth";
 
 export const useSignUpViewModel = () => {
   const [loading, setLoading] = useState(false);
+
+  const handleStripeCustomerCreation = async (
+    userEmail: string,
+    userName: string
+  ) => {
+    try {
+      const stripeCustomer = await createCustomerOnStripe(userEmail, userName);
+      console.log("Stripe Customer Created:", stripeCustomer);
+      return stripeCustomer;
+    } catch (error: any) {
+      throw new Error(`Error creating Stripe customer: ${error.message}`);
+    }
+  };
+
+  const handleInsertNewSubscriber = async (
+    userId: string,
+    stripeCustomerId: string
+  ) => {
+    try {
+      const newSubscriber = await insertNewSubscriber(userId, stripeCustomerId);
+      console.log("New Subscriber Inserted:", newSubscriber);
+      return newSubscriber;
+    } catch (error: any) {
+      throw new Error(`Error inserting new subscriber: ${error.message}`);
+    }
+  };
 
   const handleSignUp = async (
     email: string,
@@ -14,7 +42,23 @@ export const useSignUpViewModel = () => {
     setLoading(true);
 
     try {
-      const response = await registerUser(email, password, displayName);
+      const registeredUser = await registerUser(email, password, displayName);
+      console.log(registeredUser.user.uid);
+
+      if (registeredUser.user.uid) {
+        const newStripeCustomer = await handleStripeCustomerCreation(
+          email,
+          displayName
+        );
+
+        if (newStripeCustomer.stripeCustomerId) {
+          await handleInsertNewSubscriber(
+            registeredUser.user.uid,
+            newStripeCustomer.stripeCustomerId
+          );
+        }
+      }
+
       Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
         {
           text: "Fazer login",

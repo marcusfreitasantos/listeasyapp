@@ -1,8 +1,13 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
+type UserEntityType = {
+  stripeCustomerId?: string;
+  stripeSubscriptionStatus?: string;
+} & FirebaseAuthTypes.UserCredential;
+
 type UserContextType = {
-  currentUser: FirebaseAuthTypes.UserCredential | null;
-  setCurrentUser: (user: FirebaseAuthTypes.UserCredential | null) => void;
+  currentUser: UserEntityType | null;
+  setCurrentUser: (user: UserEntityType | null) => void;
 };
 
-export { UserContextType };
+export { UserEntityType, UserContextType };
