@@ -9,21 +9,6 @@ import {
   updateEmail,
 } from "@react-native-firebase/auth";
 
-import firestore, {
-  getFirestore,
-  query,
-  collection,
-  where,
-  getDocs,
-  orderBy,
-  doc,
-  updateDoc,
-} from "@react-native-firebase/firestore";
-
-import { UserEntityType } from "@/src/features/auth/model/user";
-
-const subsCollection = collection(getFirestore(), "Subscribers");
-
 export const registerUser = async (
   userEmail: string,
   userPass: string,
@@ -129,24 +114,5 @@ export const userLogout = async () => {
     return response;
   } catch (error) {
     throw new Error(`Não foi possível fazer logout. ${error}`);
-  }
-};
-
-export const insertNewSubscriber = async (
-  userId: string,
-  stripeCustomerId: string
-) => {
-  try {
-    const subscriberData = {
-      userId,
-      stripeCustomerId,
-      stripeSubscriptionStatus: "inactive",
-    };
-
-    console.log("Inserting user in Users collection:", subscriberData);
-    await subsCollection.add(subscriberData);
-    return true;
-  } catch (error: any) {
-    throw new Error(`Error adding list: ${error}`);
   }
 };

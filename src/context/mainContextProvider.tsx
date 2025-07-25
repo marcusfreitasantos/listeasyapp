@@ -6,9 +6,7 @@ import SubscriptionContextProvider from "@/src/context/subscriptionContext";
 const MainContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <UserContextProvider>
-      <SubscriptionContextProvider>
-        <ListContextProvider>{children}</ListContextProvider>
-      </SubscriptionContextProvider>
+      <ListContextProvider>{children}</ListContextProvider>
     </UserContextProvider>
   );
 };
