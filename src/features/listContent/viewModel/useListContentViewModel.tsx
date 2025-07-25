@@ -4,11 +4,11 @@ import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
-import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
-  const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { currentUser } = useContext(GlobalUserContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -116,7 +116,12 @@ export const useListContentViewModel = () => {
   };
 
   const handleAddNewItem = () => {
-    if (isLoaded && currentList && currentList.items.length % 5 === 0) {
+    const showAd =
+      (!currentUser || currentUser.stripeSubscriptionStatus !== "active") &&
+      currentList &&
+      currentList.items.length &&
+      currentList.items.length % 5 === 0;
+    if (isLoaded && showAd) {
       show();
     } else {
       setModalIsOpen(!modalIsOpen);
@@ -128,7 +133,7 @@ export const useListContentViewModel = () => {
   }, [modalIsOpen]);
 
   useEffect(() => {
-    if (!currentSubscription || !currentSubscription.isActive) load();
+    load();
   }, [load]);
 
   useEffect(() => {
