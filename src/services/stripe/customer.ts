@@ -1,7 +1,9 @@
-const localApiBaseUrl = "http://10.0.2.2:5001/list-easy-41446/us-central1";
+const createCustomerUrl = __DEV__
+  ? `${process.env.EXPO_PUBLIC_BACKEND_BASE_URL}/createStripeCustomer`
+  : "https://createstripecustomer-ttyxjwblsa-uc.a.run.app";
 
 export const createCustomerOnStripe = async (email: string, name: string) => {
-  const response = await fetch(`${localApiBaseUrl}/createStripeCustomer`, {
+  const response = await fetch(createCustomerUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
