@@ -6,13 +6,14 @@ import SubscriptionContextProvider from "./subscriptionContext";
 import Constants from "expo-constants";
 
 const MainContextProvider = ({ children }: { children: ReactNode }) => {
+  const stripePublishableKey = __DEV__
+    ? Constants?.expoConfig?.extra?.stripeApiPublicKeyTest
+    : Constants?.expoConfig?.extra?.stripeApiPublicKeyProd ?? "";
   return (
     <UserContextProvider>
       <SubscriptionContextProvider>
         <StripeProvider
-          publishableKey={
-            Constants?.expoConfig?.extra?.stripeApiPublicKeyTest ?? ""
-          }
+          publishableKey={stripePublishableKey}
           merchantIdentifier="merchant.identifier" // required for Apple Pay
           urlScheme="your-url-scheme"
         >

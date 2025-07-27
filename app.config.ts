@@ -92,6 +92,7 @@ const config: ExpoConfig = {
       projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
     },
     stripeApiPublicKeyTest: process.env.STRIPE_API_PUBLIC_KEY_TEST,
+    stripeApiPublicKeyProd: process.env.STRIPE_API_PUBLIC_KEY_PROD,
   },
 
   owner: "marcusfreitas",
