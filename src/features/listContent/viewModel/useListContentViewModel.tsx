@@ -5,10 +5,11 @@ import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
-  const { currentUser } = useContext(GlobalUserContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -117,7 +118,8 @@ export const useListContentViewModel = () => {
 
   const handleAddNewItem = () => {
     const showAd =
-      (!currentUser || currentUser.stripeSubscriptionStatus !== "active") &&
+      (!currentSubscription ||
+        currentSubscription.stripeSubscriptionStatus !== "active") &&
       currentList &&
       currentList.items.length &&
       currentList.items.length % 5 === 0;

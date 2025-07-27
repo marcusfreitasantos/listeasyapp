@@ -4,6 +4,7 @@ import { getProductsFromStripe } from "@/src/services/stripe/products";
 import { useEffect, useContext } from "react";
 import { ProductEntity } from "../model/product";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useStripe } from "@stripe/stripe-react-native";
 import {
   createNewSubscription,
@@ -14,7 +15,7 @@ import {
 export const useSubscriptionsViewModel = () => {
   const [products, setProducts] = useState<ProductEntity[] | []>([]);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { currentUser } = useContext(GlobalUserContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [loading, setLoading] = useState(false);
 
   const setup = async (clientSecret: string) => {
@@ -39,11 +40,11 @@ export const useSubscriptionsViewModel = () => {
   const handleSubscription = async (priceId: string) => {
     setLoading(true);
     try {
-      if (!currentUser || !currentUser.stripeCustomerId)
+      if (!currentSubscription || !currentSubscription.stripeCustomerId)
         throw new Error("Stripe Customer ID is required.");
 
       const clientSecret = await fetchClientSecret(
-        currentUser.stripeCustomerId
+        currentSubscription.stripeCustomerId
       );
 
       if (clientSecret) {
@@ -56,12 +57,12 @@ export const useSubscriptionsViewModel = () => {
         throw new Error(error.message);
       } else {
         const defaultPaymentMethod = await setDefaultPaymentMethod(
-          currentUser.stripeCustomerId
+          currentSubscription.stripeCustomerId
         );
 
         if (defaultPaymentMethod.defaultPaymentMethod) {
           const response = await createNewSubscription(
-            currentUser.stripeCustomerId,
+            currentSubscription.stripeCustomerId,
             priceId
           );
 

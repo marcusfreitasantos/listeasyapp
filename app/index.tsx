@@ -6,31 +6,46 @@ import { useRouter } from "expo-router";
 import { getSubscriberByUserId } from "@/src/services/firebase/subscriptions";
 import { ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const SignIn = () => {
   const router = useRouter();
   const theme = useTheme();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
+  const { currentSubscription, setCurrentSubscription } = useContext(
+    GlobalSubscriptionContext
+  );
   const [initializing, setInitializing] = useState(true);
 
-  const handleSubscriptionCheck = async (userId: string) => {
+  const handleSubscriptionCheck = async (
+    userData: FirebaseAuthTypes.UserCredential["user"]
+  ) => {
     try {
-      let subscriberData = {
-        stripeCustomerId: null,
+      let subscriptionData = {
+        id: "",
+        stripeCustomerId: "",
         stripeSubscriptionStatus: "inactive",
+        userId: userData.uid,
+        userName: userData.displayName ?? "",
+        productId: "",
       };
 
-      const subscriber = await getSubscriberByUserId(userId);
+      const subscriber = await getSubscriberByUserId(userData.uid);
 
       if (subscriber.length) {
-        subscriberData = {
-          stripeCustomerId: subscriber[0].stripeCustomerId || null,
+        subscriptionData = {
+          id: "",
+          stripeCustomerId: subscriber[0].stripeCustomerId,
           stripeSubscriptionStatus:
             subscriber[0].stripeSubscriptionStatus || "inactive",
+          userId: userData.uid,
+          userName: userData.displayName ?? "",
+          productId: "",
         };
       }
 
-      return subscriberData;
+      return subscriptionData;
     } catch (error: any) {
       throw new Error(`Error fetching subscriber: ${error.message}`);
     }
@@ -38,12 +53,12 @@ const SignIn = () => {
 
   const handleAuthStateChanged = async (user: any) => {
     if (user) {
-      const subscriberData = await handleSubscriptionCheck(user.uid);
+      const subscriptionData = await handleSubscriptionCheck(user);
       setCurrentUser({
         user,
-        stripeCustomerId: subscriberData.stripeCustomerId,
-        stripeSubscriptionStatus: subscriberData.stripeSubscriptionStatus,
       });
+
+      setCurrentSubscription(subscriptionData);
     }
     if (initializing) setInitializing(false);
   };
@@ -54,14 +69,14 @@ const SignIn = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && currentSubscription) {
       router.replace("/lists");
     }
-  }, [currentUser]);
+  }, [currentUser, currentSubscription]);
 
   if (initializing) return null;
 
-  if (!currentUser) {
+  if (!currentUser || !currentSubscription) {
     return <SignInView />;
   }
 

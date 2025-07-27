@@ -1,32 +1,35 @@
-import firestore, {
+import {
   getFirestore,
   query,
   collection,
   where,
   getDocs,
-  orderBy,
   doc,
   updateDoc,
 } from "@react-native-firebase/firestore";
 
-const subsCollection = collection(getFirestore(), "Subscribers");
+import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
 
-export const insertNewSubscriber = async (
+const subsCollection = collection(getFirestore(), "Subscriptions");
+
+export const insertNewSubscription = async (
   userId: string,
-  stripeCustomerId: string
+  stripeCustomerId: string,
+  userName: string
 ) => {
   try {
-    const subscriberData = {
+    const subscriberData: SubscriptionEntity = {
       userId,
       stripeCustomerId,
       stripeSubscriptionStatus: "inactive",
+      productId: "",
+      userName,
     };
 
-    console.log("Inserting user in Users collection:", subscriberData);
     await subsCollection.add(subscriberData);
     return true;
   } catch (error: any) {
-    throw new Error(`Error adding list: ${error}`);
+    throw new Error(`Error inserting new subscrition: ${error}`);
   }
 };
 
@@ -35,11 +38,26 @@ export const getSubscriberByUserId = async (userId: string) => {
     const queryCommand = query(subsCollection, where("userId", "==", userId));
     const querySnapshot = await getDocs(queryCommand);
 
-    return querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-    }));
+    return querySnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as SubscriptionEntity)
+    );
   } catch (error) {
     console.log(error);
-    throw new Error(`Error fetching lists by authorId: ${error}`);
+    throw new Error(`Error fetching subscription by userId: ${error}`);
+  }
+};
+
+export const updateSubscription = async (subscription: SubscriptionEntity) => {
+  try {
+    const listRef = doc(subsCollection, subscription.id);
+    await updateDoc(listRef, {
+      ...subscription,
+    });
+  } catch (error) {
+    throw new Error(`Error updating subscription: ${error}`);
   }
 };

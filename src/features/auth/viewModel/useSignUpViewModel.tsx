@@ -3,7 +3,7 @@ import { registerUser } from "@/src/services/firebase/auth";
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { createCustomerOnStripe } from "@/src/services/stripe/customer";
-import { insertNewSubscriber } from "@/src/services/firebase/subscriptions";
+import { insertNewSubscription } from "@/src/services/firebase/subscriptions";
 
 export const useSignUpViewModel = () => {
   const [loading, setLoading] = useState(false);
@@ -20,12 +20,17 @@ export const useSignUpViewModel = () => {
     }
   };
 
-  const handleInsertNewSubscriber = async (
+  const handleInsertNewSubscription = async (
     userId: string,
-    stripeCustomerId: string
+    stripeCustomerId: string,
+    userName: string
   ) => {
     try {
-      const newSubscriber = await insertNewSubscriber(userId, stripeCustomerId);
+      const newSubscriber = await insertNewSubscription(
+        userId,
+        stripeCustomerId,
+        userName
+      );
       return newSubscriber;
     } catch (error: any) {
       throw new Error(`Error inserting new subscriber: ${error.message}`);
@@ -49,9 +54,10 @@ export const useSignUpViewModel = () => {
         );
 
         if (newStripeCustomer.stripeCustomerId) {
-          await handleInsertNewSubscriber(
+          await handleInsertNewSubscription(
             registeredUser.user.uid,
-            newStripeCustomer.stripeCustomerId
+            newStripeCustomer.stripeCustomerId,
+            displayName
           );
         }
       }
