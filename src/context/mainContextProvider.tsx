@@ -15,7 +15,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
         <StripeProvider
           publishableKey={stripePublishableKey}
           merchantIdentifier="merchant.identifier" // required for Apple Pay
-          urlScheme="your-url-scheme"
+          urlScheme="listeasy"
         >
           <ListContextProvider>{children}</ListContextProvider>
         </StripeProvider>
