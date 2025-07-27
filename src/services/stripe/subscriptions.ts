@@ -10,6 +10,10 @@ const setDefaultPaymentMethodUrl = __DEV__
   ? `${process.env.EXPO_PUBLIC_BACKEND_BASE_URL}/attachDefaultPaymentMethod`
   : "https://attachDefaultPaymentMethod-ttyxjwblsa-uc.a.run.app";
 
+const cancelSubscriptionUrl = __DEV__
+  ? `${process.env.EXPO_PUBLIC_BACKEND_BASE_URL}/cancelSubscription`
+  : "https://cancelSubscription-ttyxjwblsa-uc.a.run.app";
+
 export const createNewSubscription = async (
   customerId: string,
   priceId: string
@@ -48,6 +52,19 @@ export const setDefaultPaymentMethod = async (customerId: string) => {
     },
     body: JSON.stringify({
       customerId,
+    }),
+  });
+  return response.json();
+};
+
+export const cancelSubscription = async (subscriptionId: string) => {
+  const response = await fetch(cancelSubscriptionUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      subscriptionId,
     }),
   });
   return response.json();

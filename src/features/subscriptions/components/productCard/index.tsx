@@ -4,21 +4,36 @@ import { centsToReais } from "@/src/utils/convertCurrency";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { Button } from "@/src/components/button";
+import { SubscriptionEntity } from "../../model/subscription";
 
 type ProductCardProps = {
   productData: ProductEntity;
-  onPress: (priceId: string) => void;
   currentUserPlan?: string;
+  currentSubscription: SubscriptionEntity | null;
+  handleSubscription: (priceId: string) => void;
+  handleCancelSubscription: (subscriptionId: string) => void;
 };
 
 export const ProductCard = ({
   productData,
-  onPress,
+  currentSubscription,
+  handleSubscription,
+  handleCancelSubscription,
   currentUserPlan,
 }: ProductCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
-  const isCurrentPlan = currentUserPlan === productData.priceId;
+  const isCurrentPlan =
+    currentUserPlan === productData.priceId &&
+    currentSubscription?.stripeSubscriptionStatus === "active";
+
+  const handleBtnPress = () => {
+    return isCurrentPlan
+      ? handleCancelSubscription(
+          currentSubscription?.stripeSubscriptionId ?? ""
+        )
+      : handleSubscription(productData.priceId);
+  };
 
   return (
     <S.ProductCard>
@@ -48,7 +63,7 @@ export const ProductCard = ({
       <Button
         btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
         btnType={isCurrentPlan ? "dark" : "light"}
-        onPress={() => onPress(productData.priceId)}
+        onPress={() => handleBtnPress()}
       />
     </S.ProductCard>
   );

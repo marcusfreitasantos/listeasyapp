@@ -9,6 +9,7 @@ import {
   createNewSubscription,
   getClientSecret,
   setDefaultPaymentMethod,
+  cancelSubscription,
 } from "@/src/services/stripe/subscriptions";
 import { updateSubscription } from "@/src/services/firebase/subscriptions";
 
@@ -20,7 +21,10 @@ export const useSubscriptionsViewModel = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  const updateSubscriptionInFirebase = async (productId: string) => {
+  const updateSubscriptionInFirebase = async (
+    productId: string,
+    stripeSubscriptionId: string
+  ) => {
     try {
       if (!currentSubscription || !currentSubscription.id)
         throw new Error("Invalid Subscription.");
@@ -28,6 +32,7 @@ export const useSubscriptionsViewModel = () => {
         ...currentSubscription,
         productId,
         stripeSubscriptionStatus: "active",
+        stripeSubscriptionId,
       };
 
       await updateSubscription(updatedSubscription);
@@ -86,7 +91,10 @@ export const useSubscriptionsViewModel = () => {
           );
 
           if (response.subscriptionId) {
-            await updateSubscriptionInFirebase(priceId);
+            await updateSubscriptionInFirebase(
+              priceId,
+              response.subscriptionId
+            );
             Alert.alert("Maravilha!", "Seu plano foi contratado com sucesso.");
           } else {
             throw new Error("Error on subscription creation.");
@@ -101,6 +109,43 @@ export const useSubscriptionsViewModel = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCancelSubscription = async (stripeSubscriptionId: string) => {
+    Alert.alert(
+      "Atenção!",
+      "Sua assinatura será cancelada. Deseja prosseguir?",
+      [
+        {
+          text: "Voltar",
+        },
+        {
+          text: "Cancelar assinatura",
+          onPress: async () => {
+            try {
+              setLoading(true);
+              if (!currentSubscription || !currentSubscription.id)
+                throw new Error("Invalid Subscription.");
+              const response = await cancelSubscription(stripeSubscriptionId);
+
+              const updatedSubscription = {
+                ...currentSubscription,
+                stripeSubscriptionStatus: response.subscriptionStatus,
+                stripeSubscriptionId,
+              };
+
+              await updateSubscription(updatedSubscription);
+              setCurrentSubscription(updatedSubscription);
+            } catch (error) {
+              Alert.alert("Oops!", "Não foi possível cancelar sua assinatura!");
+              console.log(error);
+            } finally {
+              setLoading(false);
+            }
+          },
+        },
+      ]
+    );
   };
 
   useEffect(() => {
@@ -129,5 +174,6 @@ export const useSubscriptionsViewModel = () => {
     handleSubscription,
     loading,
     currentSubscription,
+    handleCancelSubscription,
   };
 };

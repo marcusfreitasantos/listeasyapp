@@ -24,6 +24,7 @@ export const insertNewSubscription = async (
       stripeSubscriptionStatus: "inactive",
       productId: "",
       userName,
+      stripeSubscriptionId: "",
     };
 
     await subsCollection.add(subscriberData);

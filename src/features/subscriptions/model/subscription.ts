@@ -3,6 +3,7 @@ type SubscriptionEntity = {
   stripeCustomerId: string;
   stripeSubscriptionStatus: string;
   productId: string;
+  stripeSubscriptionId: string;
   userId: string;
   userName: string;
 };
