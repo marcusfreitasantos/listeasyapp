@@ -1,9 +1,8 @@
-import { Alert, Text, TouchableOpacity } from "react-native";
+import { Alert } from "react-native";
 import { useState } from "react";
 import { getProductsFromStripe } from "@/src/services/stripe/products";
 import { useEffect, useContext } from "react";
 import { ProductEntity } from "../model/product";
-import { GlobalUserContext } from "@/src/context/userContext";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useStripe } from "@stripe/stripe-react-native";
 import {
@@ -11,12 +10,32 @@ import {
   getClientSecret,
   setDefaultPaymentMethod,
 } from "@/src/services/stripe/subscriptions";
+import { updateSubscription } from "@/src/services/firebase/subscriptions";
 
 export const useSubscriptionsViewModel = () => {
   const [products, setProducts] = useState<ProductEntity[] | []>([]);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { currentSubscription, setCurrentSubscription } = useContext(
+    GlobalSubscriptionContext
+  );
   const [loading, setLoading] = useState(false);
+
+  const updateSubscriptionInFirebase = async (productId: string) => {
+    try {
+      if (!currentSubscription || !currentSubscription.id)
+        throw new Error("Invalid Subscription.");
+      const updatedSubscription = {
+        ...currentSubscription,
+        productId,
+        stripeSubscriptionStatus: "active",
+      };
+
+      await updateSubscription(updatedSubscription);
+      setCurrentSubscription(updatedSubscription);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const setup = async (clientSecret: string) => {
     const { error } = await initPaymentSheet({
@@ -67,6 +86,7 @@ export const useSubscriptionsViewModel = () => {
           );
 
           if (response.subscriptionId) {
+            await updateSubscriptionInFirebase(priceId);
             Alert.alert("Maravilha!", "Seu plano foi contratado com sucesso.");
           } else {
             throw new Error("Error on subscription creation.");
@@ -108,5 +128,6 @@ export const useSubscriptionsViewModel = () => {
     products,
     handleSubscription,
     loading,
+    currentSubscription,
   };
 };

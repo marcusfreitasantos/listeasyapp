@@ -33,7 +33,7 @@ export const insertNewSubscription = async (
   }
 };
 
-export const getSubscriberByUserId = async (userId: string) => {
+export const getSubscriptionByUserId = async (userId: string) => {
   try {
     const queryCommand = query(subsCollection, where("userId", "==", userId));
     const querySnapshot = await getDocs(queryCommand);
@@ -41,7 +41,7 @@ export const getSubscriberByUserId = async (userId: string) => {
     return querySnapshot.docs.map(
       (doc) =>
         ({
-          id: doc.id,
+          id: doc.ref.id,
           ...doc.data(),
         } as SubscriptionEntity)
     );
@@ -54,8 +54,10 @@ export const getSubscriberByUserId = async (userId: string) => {
 export const updateSubscription = async (subscription: SubscriptionEntity) => {
   try {
     const listRef = doc(subsCollection, subscription.id);
+    const { id, ...subscriptionData } = subscription;
+
     await updateDoc(listRef, {
-      ...subscription,
+      ...subscriptionData,
     });
   } catch (error) {
     throw new Error(`Error updating subscription: ${error}`);

@@ -3,11 +3,12 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import { SignInView } from "@/src/features/auth/view/SignInView";
 import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useRouter } from "expo-router";
-import { getSubscriberByUserId } from "@/src/services/firebase/subscriptions";
+import { getSubscriptionByUserId } from "@/src/services/firebase/subscriptions";
 import { ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
 
 const SignIn = () => {
   const router = useRouter();
@@ -31,14 +32,16 @@ const SignIn = () => {
         productId: "",
       };
 
-      const subscriber = await getSubscriberByUserId(userData.uid);
+      const subscription: SubscriptionEntity[] = await getSubscriptionByUserId(
+        userData.uid
+      );
 
-      if (subscriber.length) {
+      if (subscription.length) {
         subscriptionData = {
-          id: "",
-          stripeCustomerId: subscriber[0].stripeCustomerId,
+          id: subscription[0].id ?? "",
+          stripeCustomerId: subscription[0].stripeCustomerId,
           stripeSubscriptionStatus:
-            subscriber[0].stripeSubscriptionStatus || "inactive",
+            subscription[0].stripeSubscriptionStatus ?? "inactive",
           userId: userData.uid,
           userName: userData.displayName ?? "",
           productId: "",

@@ -31,8 +31,6 @@ export const Header = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
-  console.log("currentSubscription__", currentSubscription);
-
   return (
     <S.HeaderWrapper>
       {currentSubscription?.stripeSubscriptionStatus !== "active" && (

@@ -6,7 +6,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { ListEmpty } from "@/src/components/listEmpty";
 
 const SubscriptionsView = () => {
-  const { products, handleSubscription, loading } = useSubscriptionsViewModel();
+  const { products, handleSubscription, loading, currentSubscription } =
+    useSubscriptionsViewModel();
 
   return (
     <S.SubscriptionsViewContainer>
@@ -15,10 +16,15 @@ const SubscriptionsView = () => {
       ) : (
         <FlatList
           keyExtractor={(item) => item.priceId}
+          inverted={true}
           ListEmptyComponent={() => <ListEmpty />}
           data={products}
           renderItem={({ item }) => (
-            <ProductCard productData={item} onPress={handleSubscription} />
+            <ProductCard
+              productData={item}
+              onPress={handleSubscription}
+              currentUserPlan={currentSubscription?.productId}
+            />
           )}
         />
       )}
