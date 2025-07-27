@@ -18,13 +18,35 @@ export const Divisor = styled.View`
 export const ProductHeader = styled.View`
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: ${({ theme }) => theme.defaultSizes.xxSmall};
+`;
+
+export const ProductHeaderGroup = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
+  flex: 1;
 `;
 
 export const ProductTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   color: ${({ theme }) => theme.secondaryColor};
+  font-weight: bold;
+`;
+
+export const CurrentProductWrapper = styled.View`
+  background-color: ${({ theme }) => theme.secondaryColor};
+  padding: ${({ theme }) => theme.defaultSizes.xxSmall};
+  border-radius: ${({ theme }) => theme.defaultBorderRadius};
+`;
+
+export const CurrentProduct = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.xxSmall};
+  color: ${({ theme }) => theme.primaryColor};
+  text-transform: uppercase;
   font-weight: bold;
 `;
 

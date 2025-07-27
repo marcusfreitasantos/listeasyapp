@@ -16,9 +16,8 @@ const SubscriptionsView = () => {
       ) : (
         <FlatList
           keyExtractor={(item) => item.priceId}
-          inverted={true}
           ListEmptyComponent={() => <ListEmpty />}
-          data={products}
+          data={products.reverse()}
           renderItem={({ item }) => (
             <ProductCard
               productData={item}

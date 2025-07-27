@@ -17,11 +17,22 @@ export const ProductCard = ({
   currentUserPlan,
 }: ProductCardProps) => {
   const theme = useTheme();
+  const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+  const isCurrentPlan = currentUserPlan === productData.priceId;
+
   return (
     <S.ProductCard>
       <S.ProductHeader>
-        <Feather color={theme.primaryColor} name="award" size={24} />
-        <S.ProductTitle>{productData.name}</S.ProductTitle>
+        <S.ProductHeaderGroup>
+          <Feather color={theme.primaryColor} name="award" size={iconSize} />
+          <S.ProductTitle>{productData.name}</S.ProductTitle>
+        </S.ProductHeaderGroup>
+
+        {isCurrentPlan && (
+          <S.CurrentProductWrapper>
+            <S.CurrentProduct>Atual</S.CurrentProduct>
+          </S.CurrentProductWrapper>
+        )}
       </S.ProductHeader>
 
       <S.Divisor />
@@ -35,9 +46,8 @@ export const ProductCard = ({
       </S.ProductPrice>
 
       <Button
-        btnText={
-          currentUserPlan === productData.priceId ? "Cancelar" : "Assinar"
-        }
+        btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
+        btnType={isCurrentPlan ? "dark" : "light"}
         onPress={() => onPress(productData.priceId)}
       />
     </S.ProductCard>

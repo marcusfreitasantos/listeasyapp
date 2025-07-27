@@ -3,12 +3,17 @@ import { TouchableOpacityProps } from "react-native";
 
 type ButtonProps = {
   btnText?: string;
+  btnType?: "dark" | "light";
 } & TouchableOpacityProps;
 
-export const Button = ({ btnText, ...rest }: ButtonProps) => {
+export const Button = ({
+  btnText,
+  btnType = "light",
+  ...rest
+}: ButtonProps) => {
   return (
-    <S.ButtonWrapper {...rest}>
-      <S.ButtonText>{btnText ? btnText : "Enviar"}</S.ButtonText>
+    <S.ButtonWrapper {...rest} type={btnType}>
+      <S.ButtonText type={btnType}>{btnText ? btnText : "Enviar"}</S.ButtonText>
     </S.ButtonWrapper>
   );
 };
