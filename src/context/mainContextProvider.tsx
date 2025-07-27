@@ -9,13 +9,19 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
   const stripePublishableKey = __DEV__
     ? Constants?.expoConfig?.extra?.stripeApiPublicKeyTest
     : Constants?.expoConfig?.extra?.stripeApiPublicKeyProd ?? "";
+
+  const urlScheme =
+    typeof Constants?.expoConfig?.scheme === "string"
+      ? Constants?.expoConfig?.scheme
+      : "listeasy";
+
   return (
     <UserContextProvider>
       <SubscriptionContextProvider>
         <StripeProvider
           publishableKey={stripePublishableKey}
           merchantIdentifier="merchant.identifier" // required for Apple Pay
-          urlScheme="listeasy"
+          urlScheme={urlScheme}
         >
           <ListContextProvider>{children}</ListContextProvider>
         </StripeProvider>
