@@ -81,11 +81,11 @@ export const SingleListView = () => {
               item.name.toLowerCase().includes(searchTerm.toLowerCase())
             )}
             keyExtractor={(item) => (Math.random() + item.name).toString()}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <ListItemCard
                 listItem={item}
                 setModalIsOpen={setModalIsOpen}
-                itemIndex={index}
+                itemId={item.id}
                 removeItemFromList={removeItemFromList}
                 setCurrentItem={setCurrentItem}
               />

@@ -7,15 +7,15 @@ import { centsToReais } from "@/src/utils/convertCurrency";
 
 type ListItemCardProps = {
   listItem: ListItemType;
-  itemIndex: number;
-  removeItemFromList: (itemIndex: number) => void;
+  itemId: string;
+  removeItemFromList: (itemId: string) => void;
   setModalIsOpen: (state: boolean) => void;
   setCurrentItem: React.Dispatch<React.SetStateAction<ListItemType | null>>;
 };
 
 export const ListItemCard = ({
   listItem,
-  itemIndex,
+  itemId,
   setModalIsOpen,
   removeItemFromList,
   setCurrentItem,
@@ -30,13 +30,13 @@ export const ListItemCard = ({
       },
       {
         text: "Confirmar",
-        onPress: () => removeItemFromList(itemIndex),
+        onPress: () => removeItemFromList(itemId),
       },
     ]);
   };
 
   const handleEditItem = () => {
-    setCurrentItem({ ...listItem, index: itemIndex });
+    setCurrentItem({ ...listItem });
     setModalIsOpen(true);
   };
 

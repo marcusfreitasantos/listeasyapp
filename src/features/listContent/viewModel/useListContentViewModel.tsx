@@ -67,21 +67,21 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const updateItemInList = async (
-    itemIndex: number,
-    updatedItem: ListItemType
-  ) => {
+  const updateItemInList = async (updatedItem: ListItemType) => {
     try {
       setLoading(true);
       if (!currentList) throw new Error("Lista inválida");
 
-      const itemsUpdated = [...currentList.items];
-      itemsUpdated[itemIndex] = updatedItem;
+      let updatedItems = [...currentList.items].filter(
+        (item) => item.id !== updatedItem.id
+      );
+
+      updatedItems.push(updatedItem);
 
       const updatedList = {
         ...currentList,
-        totalPrice: calculateCurrentListTotal(itemsUpdated),
-        items: itemsUpdated,
+        totalPrice: calculateCurrentListTotal(updatedItems),
+        items: updatedItems,
       };
 
       await updateListContent(updatedList);
@@ -93,13 +93,14 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const removeItemFromList = async (itemToRemoveIndex: number) => {
+  const removeItemFromList = async (itemToRemoveId: string) => {
     try {
       setLoading(true);
       if (!currentList) throw new Error("Lista inválida");
 
-      const itemsUpdated = currentList?.items;
-      itemsUpdated?.splice(itemToRemoveIndex, 1);
+      const itemsUpdated = currentList?.items.filter(
+        (item) => item.id !== itemToRemoveId
+      );
 
       const updatedList = {
         ...currentList,

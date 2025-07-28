@@ -4,10 +4,11 @@ import { FeatherIconName } from "@/@types/icons";
 import { ListItemType } from "@/src/features/listsManager/model/list";
 import { KeyboardTypeOptions } from "react-native";
 import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
+import * as Crypto from "expo-crypto";
 
 type AddListItemModalProps = {
   handleAddNewItem: (listItem: ListItemType) => void;
-  handleEditItem: (itemIndex: number, updatedItem: ListItemType) => void;
+  handleEditItem: (updatedItem: ListItemType) => void;
   currentItem: ListItemType | null;
 };
 
@@ -52,13 +53,14 @@ export const AddListItemModal = ({
 
   const handleSubmit = (formData: ListItemType) => {
     const formatedData = {
+      id: Crypto.randomUUID(),
       name: formData.name,
       price: reaisToCents(Number(formData.price)),
       quantity: Number(formData.quantity),
     };
 
-    if (currentItem && typeof currentItem.index === "number") {
-      handleEditItem(currentItem.index, formatedData);
+    if (currentItem && typeof currentItem.id === "string") {
+      handleEditItem({ ...formatedData, id: currentItem.id });
     } else {
       handleAddNewItem(formatedData);
     }

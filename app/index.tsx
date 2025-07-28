@@ -79,7 +79,13 @@ const SignIn = () => {
     }
   }, [currentUser, currentSubscription]);
 
-  if (initializing) return null;
+  if (initializing)
+    return (
+      <ActivityIndicator
+        style={{ flex: 1, backgroundColor: theme.secondaryColor }}
+        color={theme.primaryColor}
+      />
+    );
 
   if (!currentUser || !currentSubscription) {
     return <SignInView />;
