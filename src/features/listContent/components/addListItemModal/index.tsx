@@ -1,0 +1,81 @@
+import * as S from "./styles";
+import { DynamicForm } from "@/src/components/dynamicForm";
+import { FeatherIconName } from "@/@types/icons";
+import { ListItemType } from "@/src/features/listsManager/model/list";
+import { KeyboardTypeOptions } from "react-native";
+import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
+import * as Crypto from "expo-crypto";
+
+type AddListItemModalProps = {
+  handleAddNewItem: (listItem: ListItemType) => void;
+  handleEditItem: (updatedItem: ListItemType) => void;
+  currentItem: ListItemType | null;
+};
+
+export const AddListItemModal = ({
+  handleAddNewItem,
+  handleEditItem,
+  currentItem,
+}: AddListItemModalProps) => {
+  const formFields = [
+    {
+      fieldName: "name",
+      iconName: "file" as FeatherIconName,
+      placeholder: "Nome do item",
+      defaultValue: currentItem ? currentItem.name : "",
+      validationRules: {
+        required: true,
+      },
+    },
+    {
+      fieldName: "price",
+      iconName: "dollar-sign" as FeatherIconName,
+      placeholder: "Preço",
+      defaultValue: currentItem
+        ? centsToReais(currentItem.price).toFixed(2).toString()
+        : "",
+      keyboardType: "numeric" as KeyboardTypeOptions,
+      validationRules: {
+        required: true,
+      },
+    },
+    {
+      fieldName: "quantity",
+      iconName: "grid" as FeatherIconName,
+      placeholder: "Quantidade",
+      defaultValue: currentItem ? currentItem.quantity.toString() : "",
+      keyboardType: "numeric" as KeyboardTypeOptions,
+      validationRules: {
+        required: true,
+      },
+    },
+  ];
+
+  const handleSubmit = (formData: ListItemType) => {
+    const formatedData = {
+      id: Crypto.randomUUID(),
+      name: formData.name,
+      price: reaisToCents(Number(formData.price)),
+      quantity: Number(formData.quantity),
+    };
+
+    if (currentItem && typeof currentItem.id === "string") {
+      handleEditItem({ ...formatedData, id: currentItem.id });
+    } else {
+      handleAddNewItem(formatedData);
+    }
+  };
+
+  return (
+    <S.FormWrapper>
+      <S.FormContent>
+        <DynamicForm
+          formTitle={currentItem ? `Editar '${currentItem.name}'` : "Novo item"}
+          formFields={formFields}
+          handleFormData={(formData: any) => handleSubmit(formData)}
+          submitBtnText={currentItem ? "Atualizar" : "Criar"}
+        />
+      </S.FormContent>
+    </S.FormWrapper>
+  );
+};

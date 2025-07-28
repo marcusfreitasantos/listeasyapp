@@ -1,0 +1,70 @@
+import styled from "styled-components/native";
+const imageSize = "40px";
+
+export const HeaderWrapper = styled.View`
+  background-color: ${({ theme }) => theme.secondaryColor};
+  padding-top: ${({ theme }) => theme.defaultSizes.large};
+`;
+
+export const HeaderContainer = styled.View`
+  padding: ${({ theme }) => theme.defaultContainerSpacing};
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+`;
+
+export const HeaderUserInfo = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  flex: 1;
+`;
+
+export const HeaderUserInfoTitle = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  font-weight: 700;
+  color: white;
+  width: 80%;
+`;
+
+export const HeaderUserInfoTextRow = styled.Text`
+  flex-direction: row;
+`;
+
+export const HeaderUserInfoText = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.small};
+  color: white;
+`;
+
+export const HeaderUserInfoTextBold = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.small};
+  color: ${({ theme }) => theme.primaryColor};
+  font-weight: 700;
+`;
+
+export const HeaderUserInfoAvatarWrapper = styled.View`
+  background-color: ${({ theme }) => theme.primaryColor};
+  width: ${imageSize};
+  height: ${imageSize};
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  overflow: hidden;
+`;
+
+export const HeaderUserInfoAvatarImage = styled.Image`
+  width: ${imageSize};
+  height: ${imageSize};
+`;
+
+export const HeaderUserInfoAvatarDefaultContent = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  font-weight: 700;
+  color: ${({ theme }) => theme.secondaryColor};
+`;
