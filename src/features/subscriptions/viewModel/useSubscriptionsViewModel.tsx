@@ -10,6 +10,7 @@ import {
   getClientSecret,
   setDefaultPaymentMethod,
   cancelSubscription,
+  switchUserSubscription,
 } from "@/src/services/stripe/subscriptions";
 import { updateSubscription } from "@/src/services/firebase/subscriptions";
 
@@ -148,6 +149,49 @@ export const useSubscriptionsViewModel = () => {
     );
   };
 
+  const handleSwitchSubscription = async (
+    stripeSubscriptionId: string,
+    priceId: string
+  ) => {
+    Alert.alert(
+      "Atenção!",
+      "Sua assinatura atual será migrada para o novo plano. Sua próxima fatura já contemplará o novo valor. Deseja prosseguir?",
+      [
+        {
+          text: "Voltar",
+        },
+        {
+          text: "Alterar assinatura",
+          onPress: async () => {
+            try {
+              setLoading(true);
+              if (!currentSubscription || !currentSubscription.id)
+                throw new Error("Invalid Subscription.");
+              const response = await switchUserSubscription(
+                stripeSubscriptionId,
+                priceId
+              );
+
+              const updatedSubscription = {
+                ...currentSubscription,
+                stripeSubscriptionStatus: response.subscriptionStatus,
+                stripeSubscriptionId,
+              };
+
+              await updateSubscription(updatedSubscription);
+              setCurrentSubscription(updatedSubscription);
+            } catch (error) {
+              Alert.alert("Oops!", "Não foi possível alterar sua assinatura!");
+              console.log(error);
+            } finally {
+              setLoading(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
   useEffect(() => {
     let isMounted = true;
     const fetchProducts = async () => {
@@ -169,11 +213,30 @@ export const useSubscriptionsViewModel = () => {
     };
   }, []);
 
+  const handleSubscriptionOnPress = (
+    isCurrentPlan: boolean,
+    priceId: string
+  ) => {
+    if (currentSubscription?.stripeSubscriptionStatus !== "active") {
+      return handleSubscription(priceId);
+    } else {
+      return isCurrentPlan
+        ? handleCancelSubscription(
+            currentSubscription?.stripeSubscriptionId ?? ""
+          )
+        : handleSwitchSubscription(
+            currentSubscription?.stripeSubscriptionId,
+            priceId
+          );
+    }
+  };
+
   return {
     products,
     handleSubscription,
     loading,
     currentSubscription,
     handleCancelSubscription,
+    handleSubscriptionOnPress,
   };
 };

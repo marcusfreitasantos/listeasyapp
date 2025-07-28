@@ -12,6 +12,7 @@ const SubscriptionsView = () => {
     loading,
     currentSubscription,
     handleCancelSubscription,
+    handleSubscriptionOnPress,
   } = useSubscriptionsViewModel();
 
   return (
@@ -26,8 +27,7 @@ const SubscriptionsView = () => {
           renderItem={({ item }) => (
             <ProductCard
               productData={item}
-              handleSubscription={handleSubscription}
-              handleCancelSubscription={handleCancelSubscription}
+              handleSubscription={handleSubscriptionOnPress}
               currentUserPlan={currentSubscription?.productId}
               currentSubscription={currentSubscription}
             />

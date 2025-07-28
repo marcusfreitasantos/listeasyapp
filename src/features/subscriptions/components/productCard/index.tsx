@@ -10,15 +10,13 @@ type ProductCardProps = {
   productData: ProductEntity;
   currentUserPlan?: string;
   currentSubscription: SubscriptionEntity | null;
-  handleSubscription: (priceId: string) => void;
-  handleCancelSubscription: (subscriptionId: string) => void;
+  handleSubscription: (isCurrentPlan: boolean, priceId: string) => void;
 };
 
 export const ProductCard = ({
   productData,
   currentSubscription,
   handleSubscription,
-  handleCancelSubscription,
   currentUserPlan,
 }: ProductCardProps) => {
   const theme = useTheme();
@@ -26,14 +24,6 @@ export const ProductCard = ({
   const isCurrentPlan =
     currentUserPlan === productData.priceId &&
     currentSubscription?.stripeSubscriptionStatus === "active";
-
-  const handleBtnPress = () => {
-    return isCurrentPlan
-      ? handleCancelSubscription(
-          currentSubscription?.stripeSubscriptionId ?? ""
-        )
-      : handleSubscription(productData.priceId);
-  };
 
   return (
     <S.ProductCard>
@@ -63,7 +53,7 @@ export const ProductCard = ({
       <Button
         btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
         btnType={isCurrentPlan ? "dark" : "light"}
-        onPress={() => handleBtnPress()}
+        onPress={() => handleSubscription(isCurrentPlan, productData.priceId)}
       />
     </S.ProductCard>
   );

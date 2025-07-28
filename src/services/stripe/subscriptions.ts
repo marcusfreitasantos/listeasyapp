@@ -14,6 +14,10 @@ const cancelSubscriptionUrl = __DEV__
   ? `${process.env.EXPO_PUBLIC_BACKEND_BASE_URL}/cancelSubscription`
   : "https://cancelSubscription-ttyxjwblsa-uc.a.run.app";
 
+const switchUserSubscriptionUrl = __DEV__
+  ? `${process.env.EXPO_PUBLIC_BACKEND_BASE_URL}/switchUserSubscription`
+  : "https://switchUserSubscription-ttyxjwblsa-uc.a.run.app";
+
 export const createNewSubscription = async (
   customerId: string,
   priceId: string
@@ -65,6 +69,23 @@ export const cancelSubscription = async (subscriptionId: string) => {
     },
     body: JSON.stringify({
       subscriptionId,
+    }),
+  });
+  return response.json();
+};
+
+export const switchUserSubscription = async (
+  subscriptionId: string,
+  newPriceId: string
+) => {
+  const response = await fetch(switchUserSubscriptionUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      subscriptionId,
+      newPriceId,
     }),
   });
   return response.json();
