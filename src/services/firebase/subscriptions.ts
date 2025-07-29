@@ -54,10 +54,10 @@ export const getSubscriptionByUserId = async (userId: string) => {
 
 export const updateSubscription = async (subscription: SubscriptionEntity) => {
   try {
-    const listRef = doc(subsCollection, subscription.id);
+    const subscriptionRef = doc(subsCollection, subscription.id);
     const { id, ...subscriptionData } = subscription;
 
-    await updateDoc(listRef, {
+    await updateDoc(subscriptionRef, {
       ...subscriptionData,
     });
   } catch (error) {

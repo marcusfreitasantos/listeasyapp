@@ -26,7 +26,6 @@ const config: ExpoConfig = {
       backgroundColor: "#222222",
     },
     icon: "./assets/icon.png",
-    permissions: ["com.android.vending.BILLING"],
     googleServicesFile: process.env.GOOGLE_SERVICES_FILE,
   },
   web: {
@@ -50,6 +49,9 @@ const config: ExpoConfig = {
       {
         android: {
           enableProguardInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true,
+          extraProguardRules:
+            "-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivity$g -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Args -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Error -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter -dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider",
         },
       },
     ],
@@ -77,6 +79,7 @@ const config: ExpoConfig = {
     [
       "@stripe/stripe-react-native",
       {
+        merchantIdentifier: "merchant.com.listeasy",
         enableGooglePay: true,
       },
     ],
