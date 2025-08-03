@@ -1,18 +1,20 @@
+import { useState } from "react";
+import { TextInputProps, useColorScheme } from "react-native";
 import * as S from "./styles";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
-import { TextInputProps } from "react-native";
 import { FeatherIconName } from "@/@types/icons";
-import { useColorScheme } from "react-native";
 
 type InputFieldProps = {
   iconName: FeatherIconName;
 } & TextInputProps;
 
 export const InputField = ({ iconName, ...rest }: InputFieldProps) => {
+  const [secureText, setSecureText] = useState(rest.secureTextEntry);
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+
   return (
     <S.InputFieldWrapper>
       {iconName && (
@@ -24,7 +26,18 @@ export const InputField = ({ iconName, ...rest }: InputFieldProps) => {
           }
         />
       )}
-      <S.InputField {...rest} />
+      <S.InputField {...rest} secureTextEntry={secureText} />
+
+      {rest.secureTextEntry && (
+        <Feather
+          name={secureText ? "eye" : "eye-off"}
+          size={iconSize}
+          color={
+            colorScheme === "dark" ? theme.primaryColor : theme.secondaryColor
+          }
+          onPress={() => setSecureText(!secureText)}
+        />
+      )}
     </S.InputFieldWrapper>
   );
 };
