@@ -3,6 +3,8 @@ export type ListItemType = {
   name: string;
   price: number;
   quantity: number;
+  details: string;
+  checked?: boolean;
 };
 
 export type ListEntityType = {

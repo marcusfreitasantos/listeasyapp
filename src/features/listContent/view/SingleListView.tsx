@@ -87,6 +87,7 @@ export const SingleListView = () => {
                 listItem={item}
                 setModalIsOpen={setModalIsOpen}
                 itemId={item.id}
+                updateItemInList={updateItemInList}
                 removeItemFromList={removeItemFromList}
                 setCurrentItem={setCurrentItem}
               />

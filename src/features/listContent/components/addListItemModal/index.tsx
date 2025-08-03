@@ -49,6 +49,15 @@ export const AddListItemModal = ({
         required: true,
       },
     },
+    {
+      fieldName: "details",
+      iconName: "align-left" as FeatherIconName,
+      placeholder: "Observações",
+      defaultValue: currentItem ? currentItem.details : "",
+      validationRules: {
+        required: true,
+      },
+    },
   ];
 
   const handleSubmit = (formData: ListItemType) => {
@@ -57,6 +66,7 @@ export const AddListItemModal = ({
       name: formData.name,
       price: reaisToCents(Number(formData.price)),
       quantity: Number(formData.quantity),
+      details: formData.details,
     };
 
     if (currentItem && typeof currentItem.id === "string") {

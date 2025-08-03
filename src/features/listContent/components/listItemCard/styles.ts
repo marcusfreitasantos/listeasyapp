@@ -22,12 +22,19 @@ export const ListItemIconsRow = styled.View`
   gap: 12px;
   align-items: center;
 `;
+
+export const ListItemNameWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+`;
+
 export const ListItemName = styled.Text`
   color: white;
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: bold;
-  flex: 1;
 `;
 
 export const ListInfoRow = styled.View`
@@ -44,7 +51,6 @@ export const ListItemPrice = styled.Text`
 
 export const ListItemQnt = styled.Text`
   color: white;
-
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;
