@@ -96,7 +96,10 @@ export const useListManagerViewModel = () => {
   };
 
   useEffect(() => {
-    if (isFocused) getUserLists();
+    if (isFocused) {
+      getUserLists();
+      setSearchTerm("");
+    }
   }, [isFocused]);
 
   useEffect(() => {

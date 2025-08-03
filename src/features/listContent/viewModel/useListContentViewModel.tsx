@@ -1,11 +1,11 @@
-import { useState, useContext, useEffect, use } from "react";
+import { useState, useContext, useEffect } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
-import { GlobalUserContext } from "@/src/context/userContext";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { useIsFocused } from "@react-navigation/native";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -19,11 +19,14 @@ export const useListContentViewModel = () => {
     __DEV__ ? TestIds.INTERSTITIAL : "ca-app-pub-8430347978354434/6035864738"
   );
 
+  const isFocused = useIsFocused();
+
   const resetStates = () => {
     setModalIsOpen(false);
     setLoading(false);
     setCurrentItem(null);
     setRenameModalIsOpen(false);
+    setSearchTerm("");
   };
 
   const updateListItems = async (listItems: ListItemType) => {
@@ -132,7 +135,7 @@ export const useListContentViewModel = () => {
   };
 
   useEffect(() => {
-    if (!modalIsOpen) setCurrentItem(null);
+    if (!modalIsOpen) resetStates();
   }, [modalIsOpen]);
 
   useEffect(() => {
@@ -144,6 +147,10 @@ export const useListContentViewModel = () => {
       setModalIsOpen(true);
     }
   }, [isClosed]);
+
+  useEffect(() => {
+    resetStates();
+  }, [isFocused]);
 
   return {
     updateListItems,

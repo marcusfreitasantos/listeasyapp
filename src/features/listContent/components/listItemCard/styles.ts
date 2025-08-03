@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const ListItemWrapper = styled.View`
+export const ListItemWrapper = styled.TouchableOpacity`
   padding: ${({ theme }) => theme.defaultContainerSpacing};
   background-color: ${({ theme }) => theme.thirdColor};
   margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
@@ -27,6 +27,7 @@ export const ListItemName = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: bold;
+  flex: 1;
 `;
 
 export const ListInfoRow = styled.View`

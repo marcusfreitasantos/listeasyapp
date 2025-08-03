@@ -73,6 +73,7 @@ export const SingleListView = () => {
           <InputField
             placeholder="Pesquisar item"
             iconName="search"
+            value={searchTerm}
             onChangeText={(t) => setSearchTerm(t)}
           />
 

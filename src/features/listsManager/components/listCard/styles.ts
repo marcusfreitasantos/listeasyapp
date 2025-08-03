@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const ListCardWrapper = styled.View`
+export const ListCardWrapper = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.thirdColor};
   margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
   padding: ${({ theme }) => theme.defaultSizes.small}

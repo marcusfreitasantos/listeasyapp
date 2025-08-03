@@ -41,7 +41,7 @@ export const ListItemCard = ({
   };
 
   return (
-    <S.ListItemWrapper>
+    <S.ListItemWrapper onPress={() => handleEditItem()}>
       <S.ListItemHeader>
         <S.ListItemName>{listItem.name}</S.ListItemName>
 

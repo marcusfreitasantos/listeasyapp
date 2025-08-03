@@ -1,16 +1,15 @@
+import { useState, useContext } from "react";
 import { Alert } from "react-native";
 import * as S from "./styles";
 import { ListEntityType } from "../../model/list";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { ListMenu } from "../listMenu";
-import { useState, useContext, useEffect } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
 import { centsToReais } from "@/src/utils/convertCurrency";
-import { useListManagerViewModel } from "../../viewModel/useListManagerViewModel";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 
 type ListCardProps = {
@@ -74,7 +73,7 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
   ];
 
   return (
-    <S.ListCardWrapper>
+    <S.ListCardWrapper onPress={() => handleEditList()}>
       <S.ListCardHeader>
         <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
 
@@ -82,7 +81,7 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
           <Feather
             size={iconSize}
             color={theme.primaryColor}
-            name={isMenuOpen ? "x" : "more-horizontal"}
+            name={isMenuOpen ? "x" : "menu"}
           />
         </S.ListCardMenuBtn>
       </S.ListCardHeader>
