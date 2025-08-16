@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.0.0";
+const runtimeVersion = "4.0.1";
 
 const config: ExpoConfig = {
   name: "List Easy",
