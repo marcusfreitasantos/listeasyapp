@@ -1,6 +1,10 @@
 import styled from "styled-components/native";
 
-export const InputFieldWrapper = styled.View`
+type InputFieldWrapperProps = {
+  marginBottom: boolean;
+};
+
+export const InputFieldWrapper = styled.View<InputFieldWrapperProps>`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -9,7 +13,8 @@ export const InputFieldWrapper = styled.View`
     ${({ theme }) => theme.defaultSizes.medium};
   background-color: ${({ theme }) => theme.thirdColor};
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
-  margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
+  margin-bottom: ${(props) =>
+    props.marginBottom ? props.theme.defaultSizes.xxSmall : 0};
 `;
 
 export const InputField = styled.TextInput`

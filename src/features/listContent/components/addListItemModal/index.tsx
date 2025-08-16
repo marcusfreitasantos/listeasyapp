@@ -55,7 +55,7 @@ export const AddListItemModal = ({
       placeholder: "Observações",
       defaultValue: currentItem ? currentItem.details : "",
       validationRules: {
-        required: true,
+        required: false,
       },
     },
   ];

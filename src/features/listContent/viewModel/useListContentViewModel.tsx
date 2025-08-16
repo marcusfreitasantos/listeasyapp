@@ -9,12 +9,14 @@ import { useIsFocused } from "@react-navigation/native";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
+  const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
   const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
+  const [showItemsFilter, setShowItemsFilter] = useState(false);
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
     __DEV__ ? TestIds.INTERSTITIAL : "ca-app-pub-8430347978354434/6035864738"
   );
@@ -72,7 +74,6 @@ export const useListContentViewModel = () => {
 
   const updateItemInList = async (updatedItem: ListItemType) => {
     try {
-      setLoading(true);
       if (!currentList) throw new Error("Lista inválida");
 
       let updatedItems = [...currentList.items].filter(
@@ -134,6 +135,21 @@ export const useListContentViewModel = () => {
     }
   };
 
+  const filterItemsByStatus = (status: "Marcado" | "Não marcado") => {
+    const items = currentList?.items ?? [];
+
+    if (status.length === 0 || status.length === 2) {
+      setCurrentItems(items);
+      return;
+    }
+
+    const showChecked = status.includes("Marcado");
+
+    setCurrentItems(
+      items.filter((item: ListItemType) => item.checked === showChecked)
+    );
+  };
+
   useEffect(() => {
     if (!modalIsOpen) resetStates();
   }, [modalIsOpen]);
@@ -152,6 +168,10 @@ export const useListContentViewModel = () => {
     resetStates();
   }, [isFocused]);
 
+  useEffect(() => {
+    if (currentList) setCurrentItems(currentList?.items);
+  }, [currentList?.items]);
+
   return {
     updateListItems,
     currentList,
@@ -168,5 +188,9 @@ export const useListContentViewModel = () => {
     setRenameModalIsOpen,
     updateListName,
     handleAddNewItem,
+    currentItems,
+    showItemsFilter,
+    setShowItemsFilter,
+    filterItemsByStatus,
   };
 };

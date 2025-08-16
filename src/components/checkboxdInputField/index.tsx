@@ -5,11 +5,13 @@ import { useState } from "react";
 
 type CheckboxInputFieldProps = {
   isItemChecked: boolean;
+  checkBoxLabel?: string;
   handleCheckItem: (isChecked: boolean) => void;
 };
 
 export const CheckboxInputField = ({
   isItemChecked,
+  checkBoxLabel,
   handleCheckItem,
 }: CheckboxInputFieldProps) => {
   const [isChecked, setIsChecked] = useState(isItemChecked);
@@ -22,10 +24,16 @@ export const CheckboxInputField = ({
   };
 
   return (
-    <S.CheckBoxItem size={iconSize} onPress={handleCheck}>
-      {isChecked && (
-        <Feather size={iconSize} color={theme.primaryColor} name="check" />
+    <S.CheckBoxItemWrapper onPress={handleCheck}>
+      <S.CheckBoxItem size={iconSize}>
+        {isChecked && (
+          <Feather size={iconSize} color={theme.primaryColor} name="check" />
+        )}
+      </S.CheckBoxItem>
+
+      {checkBoxLabel && (
+        <S.CheckBoxItemLabel>{checkBoxLabel}</S.CheckBoxItemLabel>
       )}
-    </S.CheckBoxItem>
+    </S.CheckBoxItemWrapper>
   );
 };

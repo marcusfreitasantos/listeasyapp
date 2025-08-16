@@ -7,16 +7,21 @@ import { FeatherIconName } from "@/@types/icons";
 
 type InputFieldProps = {
   iconName: FeatherIconName;
+  marginBottom?: boolean;
 } & TextInputProps;
 
-export const InputField = ({ iconName, ...rest }: InputFieldProps) => {
+export const InputField = ({
+  iconName,
+  marginBottom = true,
+  ...rest
+}: InputFieldProps) => {
   const [secureText, setSecureText] = useState(rest.secureTextEntry);
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
   return (
-    <S.InputFieldWrapper>
+    <S.InputFieldWrapper marginBottom={marginBottom}>
       {iconName && (
         <Feather
           name={iconName}

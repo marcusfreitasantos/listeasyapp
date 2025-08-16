@@ -12,6 +12,7 @@ import { useTheme } from "styled-components/native";
 import { useRouter } from "expo-router";
 import { ListTotalPrice } from "../components/listTotalPrice";
 import { RenameListModal } from "../components/renameListModal";
+import { ItemsFilter } from "../components/itemsFilter";
 
 export const SingleListView = () => {
   const {
@@ -30,6 +31,10 @@ export const SingleListView = () => {
     setRenameModalIsOpen,
     updateListName,
     handleAddNewItem,
+    showItemsFilter,
+    setShowItemsFilter,
+    filterItemsByStatus,
+    currentItems,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -70,15 +75,31 @@ export const SingleListView = () => {
             />
           )}
 
-          <InputField
-            placeholder="Pesquisar item"
-            iconName="search"
-            value={searchTerm}
-            onChangeText={(t) => setSearchTerm(t)}
-          />
+          <S.SearchFormContainer>
+            <S.SearchFormWrapper>
+              <InputField
+                placeholder="Pesquisar item"
+                iconName="search"
+                value={searchTerm}
+                onChangeText={(t) => setSearchTerm(t)}
+                marginBottom={false}
+              />
+            </S.SearchFormWrapper>
+
+            <Feather
+              size={24}
+              name="filter"
+              color={theme.primaryColor}
+              onPress={() => setShowItemsFilter(!showItemsFilter)}
+            />
+          </S.SearchFormContainer>
+
+          {showItemsFilter && (
+            <ItemsFilter filterMethod={filterItemsByStatus} />
+          )}
 
           <FlatList
-            data={currentList.items.filter((item) =>
+            data={currentItems.filter((item) =>
               item.name.toLowerCase().includes(searchTerm.toLowerCase())
             )}
             keyExtractor={(item) => (Math.random() + item.name).toString()}
@@ -106,7 +127,10 @@ export const SingleListView = () => {
           )}
 
           <S.ListViewFooter>
-            <ListTotalPrice totalPrice={currentList.totalPrice} />
+            <ListTotalPrice
+              totalPrice={currentList.totalPrice}
+              totalItems={currentList.items.length}
+            />
 
             <AddItemBtn
               modalIsOpen={modalIsOpen}

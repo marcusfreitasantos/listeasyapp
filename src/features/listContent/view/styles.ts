@@ -35,3 +35,19 @@ export const ListViewFooter = styled.View`
   align-items: center;
   padding: ${({ theme }) => theme.defaultSizes.xLarge} 0;
 `;
+
+export const SearchFormContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding-bottom: ${({ theme }) => theme.defaultSizes.small};
+  margin-bottom: ${({ theme }) => theme.defaultSizes.small};
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
+`;
+
+export const SearchFormWrapper = styled.View`
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
