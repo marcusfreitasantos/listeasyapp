@@ -12,7 +12,11 @@ export const ListTotalPrice = ({
 }: ListTotalPriceProps) => {
   return (
     <S.ListTotalPriceWrapper>
-      <S.ListTotalItemsText>{totalItems} itens únicos</S.ListTotalItemsText>
+      {totalItems ? (
+        <S.ListTotalItemsText>
+          {totalItems} {totalItems > 1 ? "itens únicos" : "item"}
+        </S.ListTotalItemsText>
+      ) : null}
       <S.ListTotalPriceText>
         Total: R$ {centsToReais(totalPrice).toFixed(2)}
       </S.ListTotalPriceText>
