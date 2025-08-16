@@ -28,6 +28,7 @@ export const useListContentViewModel = () => {
     setLoading(false);
     setCurrentItem(null);
     setRenameModalIsOpen(false);
+    setCurrentItems(currentList?.items ?? []);
     setSearchTerm("");
   };
 
@@ -73,14 +74,14 @@ export const useListContentViewModel = () => {
   };
 
   const updateItemInList = async (updatedItem: ListItemType) => {
+    if (modalIsOpen) setLoading(true);
+
     try {
       if (!currentList) throw new Error("Lista inválida");
 
-      let updatedItems = [...currentList.items].filter(
-        (item) => item.id !== updatedItem.id
+      const updatedItems = currentList.items.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
       );
-
-      updatedItems.push(updatedItem);
 
       const updatedList = {
         ...currentList,
@@ -135,7 +136,7 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const filterItemsByStatus = (status: "Marcado" | "Não marcado") => {
+  const filterItemsByStatus = (status: string[]) => {
     const items = currentList?.items ?? [];
 
     if (status.length === 0 || status.length === 2) {

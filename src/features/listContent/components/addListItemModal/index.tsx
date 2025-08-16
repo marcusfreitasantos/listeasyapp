@@ -67,6 +67,7 @@ export const AddListItemModal = ({
       price: reaisToCents(Number(formData.price)),
       quantity: Number(formData.quantity),
       details: formData.details,
+      checked: currentItem?.checked,
     };
 
     if (currentItem && typeof currentItem.id === "string") {

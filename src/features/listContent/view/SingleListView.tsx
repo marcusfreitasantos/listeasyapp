@@ -76,6 +76,12 @@ export const SingleListView = () => {
           )}
 
           <S.SearchFormContainer>
+            <Feather
+              size={24}
+              name="sliders"
+              color={theme.primaryColor}
+              onPress={() => setShowItemsFilter(!showItemsFilter)}
+            />
             <S.SearchFormWrapper>
               <InputField
                 placeholder="Pesquisar item"
@@ -85,13 +91,6 @@ export const SingleListView = () => {
                 marginBottom={false}
               />
             </S.SearchFormWrapper>
-
-            <Feather
-              size={24}
-              name="filter"
-              color={theme.primaryColor}
-              onPress={() => setShowItemsFilter(!showItemsFilter)}
-            />
           </S.SearchFormContainer>
 
           {showItemsFilter && (
