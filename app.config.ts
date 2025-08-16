@@ -1,5 +1,6 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.0.0";
+const runtimeVersion = "4.0.1";
+const bgColor = "#222222";
 
 const config: ExpoConfig = {
   name: "List Easy",
@@ -10,9 +11,9 @@ const config: ExpoConfig = {
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
   splash: {
-    image: "./assets/icon.png",
-    resizeMode: "cover",
-    backgroundColor: "#222222",
+    image: "./assets/splash.png",
+    resizeMode: "contain",
+    backgroundColor: bgColor,
   },
   ios: {
     supportsTablet: true,
@@ -23,7 +24,7 @@ const config: ExpoConfig = {
     package: "com.penpack.listeasy",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#222222",
+      backgroundColor: bgColor,
     },
     icon: "./assets/icon.png",
     googleServicesFile: process.env.GOOGLE_SERVICES_FILE,
