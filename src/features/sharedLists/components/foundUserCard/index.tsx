@@ -5,14 +5,24 @@ import { InvitedUserentity } from "../../model/invitedUser";
 type FoundUserCardProps = {
   invitedUser: InvitedUserentity;
   alreadyInList: boolean;
-  btnOnPress: (invitedUser: InvitedUserentity) => void;
+  handleAddColaborator: (invitedUser: InvitedUserentity) => void;
+  handleRemoveColaborator: (invitedUser: InvitedUserentity) => void;
 };
 
 export const FoundUserCard = ({
   invitedUser,
   alreadyInList,
-  btnOnPress,
+  handleAddColaborator,
+  handleRemoveColaborator,
 }: FoundUserCardProps) => {
+  const handleBtnOnPress = (invitedUser: InvitedUserentity) => {
+    if (alreadyInList) {
+      handleRemoveColaborator(invitedUser);
+    } else {
+      handleAddColaborator(invitedUser);
+    }
+  };
+
   return (
     <S.FoundUserCardWrapper>
       <S.FoundUserCardRow>
@@ -26,7 +36,7 @@ export const FoundUserCard = ({
 
       <Button
         btnText={alreadyInList ? "Remover" : "Add"}
-        onPress={() => btnOnPress(invitedUser)}
+        onPress={() => handleBtnOnPress(invitedUser)}
       />
     </S.FoundUserCardWrapper>
   );

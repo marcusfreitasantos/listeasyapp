@@ -57,6 +57,35 @@ export const useShareListsViewModel = () => {
     }
   };
 
+  const removeColaboratorsFromCurrentList = async (
+    invitedUser: InvitedUserentity
+  ) => {
+    try {
+      setLoading(true);
+      if (!currentList) throw new Error("Lista inválida");
+
+      const currentListColaborators = currentList.colaborators
+        ? [...currentList.colaborators]
+        : [];
+
+      const updatedList = {
+        ...currentList,
+        colaborators: [
+          ...currentListColaborators.filter(
+            (colaborator) => colaborator.userId !== invitedUser.userId
+          ),
+        ],
+      };
+
+      await updateListContent(updatedList);
+      setCurrentList(updatedList);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      resetStates();
+    }
+  };
+
   const handleAddColaboratorToCurrentList = async (
     invitedUser: InvitedUserentity
   ) => {
@@ -70,6 +99,24 @@ export const useShareListsViewModel = () => {
         {
           text: "Confirmar",
           onPress: () => addColaboratorToCurrentList(invitedUser),
+        },
+      ]
+    );
+  };
+
+  const handleRemoveColaboratorFromCurrentList = async (
+    invitedUser: InvitedUserentity
+  ) => {
+    Alert.alert(
+      "Atenção!",
+      `O usuário "${invitedUser.userName}" será removido da lista: "${currentList?.title}". Deseja continuar?`,
+      [
+        {
+          text: "Cancelar",
+        },
+        {
+          text: "Confirmar",
+          onPress: () => removeColaboratorsFromCurrentList(invitedUser),
         },
       ]
     );
@@ -94,6 +141,7 @@ export const useShareListsViewModel = () => {
     fetchUsersByEmail,
     foundUsers,
     handleAddColaboratorToCurrentList,
+    handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
   };
 };

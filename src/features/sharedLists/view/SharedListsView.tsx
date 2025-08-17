@@ -17,6 +17,7 @@ export const SharedListsView = () => {
     fetchUsersByEmail,
     foundUsers,
     handleAddColaboratorToCurrentList,
+    handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
   } = useShareListsViewModel();
   const formFields = [
@@ -83,7 +84,10 @@ export const SharedListsView = () => {
                         userName: item.userName,
                       }}
                       alreadyInList={isAlreadyColaborator(item.userId)}
-                      btnOnPress={handleAddColaboratorToCurrentList}
+                      handleAddColaborator={handleAddColaboratorToCurrentList}
+                      handleRemoveColaborator={
+                        handleRemoveColaboratorFromCurrentList
+                      }
                     />
                   )}
                 />
@@ -106,7 +110,10 @@ export const SharedListsView = () => {
                         userName: item.userName,
                       }}
                       alreadyInList={true}
-                      btnOnPress={handleAddColaboratorToCurrentList}
+                      handleAddColaborator={handleAddColaboratorToCurrentList}
+                      handleRemoveColaborator={
+                        handleRemoveColaboratorFromCurrentList
+                      }
                     />
                   )}
                 />
