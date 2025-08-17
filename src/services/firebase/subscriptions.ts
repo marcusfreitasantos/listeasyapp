@@ -15,7 +15,8 @@ const subsCollection = collection(getFirestore(), "Subscriptions");
 export const insertNewSubscription = async (
   userId: string,
   stripeCustomerId: string,
-  userName: string
+  userName: string,
+  userEmail: string
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
@@ -24,6 +25,7 @@ export const insertNewSubscription = async (
       stripeSubscriptionStatus: "inactive",
       productId: "",
       userName,
+      userEmail,
       stripeSubscriptionId: "",
     };
 
@@ -37,6 +39,27 @@ export const insertNewSubscription = async (
 export const getSubscriptionByUserId = async (userId: string) => {
   try {
     const queryCommand = query(subsCollection, where("userId", "==", userId));
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.ref.id,
+          ...doc.data(),
+        } as SubscriptionEntity)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching subscription by userId: ${error}`);
+  }
+};
+
+export const getSubscriptionByUserEmail = async (userEmail: string) => {
+  try {
+    const queryCommand = query(
+      subsCollection,
+      where("userEmail", "==", userEmail)
+    );
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(

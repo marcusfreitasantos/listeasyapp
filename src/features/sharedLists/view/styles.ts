@@ -23,3 +23,14 @@ export const ContentSubtitle = styled.Text`
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
 `;
+
+export const ListTitle = styled.Text`
+  color: ${({ theme }) => theme.primaryColor};
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.medium};
+  line-height: ${({ theme }) => theme.defaultSizes.xLarge};
+  margin: ${({ theme }) => theme.defaultSizes.small} 0;
+  font-weight: 300;
+  border-bottom-width: 1px;
+  border-color: ${({ theme }) => theme.primaryColor};
+`;
