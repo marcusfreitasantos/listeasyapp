@@ -11,6 +11,7 @@ import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
 import { centsToReais } from "@/src/utils/convertCurrency";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -19,12 +20,15 @@ type ListCardProps = {
 };
 
 export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
+  const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
   const router = useRouter();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
+  const isColaborator =
+    list.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ?? false;
 
   const handleDeleteList = () => {
     Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
@@ -60,28 +64,39 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
       label: "Editar",
       iconName: "edit" as FeatherIconName,
       onPress: () => handleEditList(),
+      showOption: true,
     },
     {
       label: "Acesso compartilhado",
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
+      showOption: !isColaborator,
     },
     {
       label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
+      showOption: true,
     },
     {
       label: "Excluir",
       iconName: "trash" as FeatherIconName,
       onPress: () => handleDeleteList(),
+      showOption: !isColaborator,
     },
   ];
 
   return (
-    <S.ListCardWrapper onPress={() => handleEditList()}>
+    <S.ListCardWrapper
+      onPress={() => handleEditList()}
+      isColaborator={isColaborator}
+    >
       <S.ListCardHeader>
         <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
+
+        {isColaborator && (
+          <S.ListCardSubTitle>[compartilhada]</S.ListCardSubTitle>
+        )}
 
         <S.ListCardMenuBtn onPress={() => setIsMenuOpen(!isMenuOpen)}>
           <Feather

@@ -32,7 +32,7 @@ export const useListManagerViewModel = () => {
       if (!currentUser?.user?.uid) throw new Error("Usuário inválido");
       const response = await getListsByAuthorId(currentUser.user.uid);
       const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
-      setCurrentUserLists(response.concat(sharedLists));
+      setCurrentUserLists(sharedLists.concat(response));
     } catch (error) {
       Alert.alert("Oops!", `Não foi possível resgatar suas listas: ${error}`);
     } finally {

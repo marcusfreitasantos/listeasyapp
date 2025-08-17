@@ -12,7 +12,6 @@ import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 
 const ListsView = () => {
-  const theme = useTheme();
   const flatListRef = useRef<FlatList>(null);
 
   const {
