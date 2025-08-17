@@ -44,9 +44,15 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
     const html = buildHtmlPDFTemplate(list.title, list.items, list.totalPrice);
     generatePdf(list.title, html);
   };
+
   const handleEditList = () => {
     setCurrentList(list);
     router.push(`/lists/${list.id}`);
+  };
+
+  const handleShareListAccess = () => {
+    setCurrentList(list);
+    router.push("/sharedLists");
   };
 
   const listMenuOptions = [
@@ -56,9 +62,9 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
       onPress: () => handleEditList(),
     },
     {
-      label: "Compartilhar acesso (em breve)",
+      label: "Compartilhar acesso",
       iconName: "share-2" as FeatherIconName,
-      onPress: () => console.log("compartilhar"),
+      onPress: () => handleShareListAccess(),
     },
     {
       label: "Exportar em PDF",
