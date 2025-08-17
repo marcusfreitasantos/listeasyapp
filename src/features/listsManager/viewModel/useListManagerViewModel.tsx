@@ -5,6 +5,7 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import {
   insertNewList,
   getListsByAuthorId,
+  getListsByColaboratorId,
   removeListById,
 } from "@/src/services/firebase/lists";
 import { Alert } from "react-native";
@@ -30,7 +31,8 @@ export const useListManagerViewModel = () => {
       setLoading(true);
       if (!currentUser?.user?.uid) throw new Error("Usuário inválido");
       const response = await getListsByAuthorId(currentUser.user.uid);
-      setCurrentUserLists(response);
+      const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
+      setCurrentUserLists(response.concat(sharedLists));
     } catch (error) {
       Alert.alert("Oops!", `Não foi possível resgatar suas listas: ${error}`);
     } finally {

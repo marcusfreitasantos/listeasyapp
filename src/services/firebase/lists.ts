@@ -50,6 +50,29 @@ export const getListsByAuthorId = async (
   }
 };
 
+export const getListsByColaboratorId = async (
+  userId: string
+): Promise<ListEntityType[]> => {
+  try {
+    const queryCommand = query(
+      listsCollection,
+      where("colaboratorsIds", "array-contains", userId)
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as ListEntityType)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching lists by colaboratorsId: ${error}`);
+  }
+};
+
 export const updateListContent = async (currentList: ListEntityType) => {
   try {
     const listRef = doc(listsCollection, currentList.id);

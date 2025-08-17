@@ -43,8 +43,11 @@ export const useShareListsViewModel = () => {
         ? [...currentList.colaborators]
         : [];
 
+      const colaboratorsIds = currentList.colaboratorsIds ?? [];
+
       const updatedList = {
         ...currentList,
+        colaboratorsIds: [...colaboratorsIds, invitedUser.userId],
         colaborators: [...currentListColaborators, invitedUser],
       };
 
@@ -70,6 +73,9 @@ export const useShareListsViewModel = () => {
 
       const updatedList = {
         ...currentList,
+        colaboratorsIds: currentList.colaboratorsIds?.filter(
+          (colaboratorId) => colaboratorId !== invitedUser.userId
+        ),
         colaborators: [
           ...currentListColaborators.filter(
             (colaborator) => colaborator.userId !== invitedUser.userId

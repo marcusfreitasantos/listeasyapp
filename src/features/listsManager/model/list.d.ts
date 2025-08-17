@@ -18,4 +18,5 @@ export type ListEntityType = {
   items: ListItem[];
   authorId: string;
   colaborators?: InvitedUserentity[];
+  colaboratorsIds?: string[];
 };
