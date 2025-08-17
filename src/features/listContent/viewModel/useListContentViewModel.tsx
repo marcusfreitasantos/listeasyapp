@@ -30,6 +30,7 @@ export const useListContentViewModel = () => {
     setRenameModalIsOpen(false);
     setCurrentItems(currentList?.items ?? []);
     setSearchTerm("");
+    setShowItemsFilter(false);
   };
 
   const updateListItems = async (listItems: ListItemType) => {
