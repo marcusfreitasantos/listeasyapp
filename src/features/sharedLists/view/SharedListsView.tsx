@@ -1,11 +1,14 @@
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { useShareListsViewModel } from "../viewModel/useShareListsViewModel";
 import { DynamicForm } from "@/src/components/dynamicForm";
+import Feather from "@expo/vector-icons/Feather";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import * as S from "./styles";
 import { FlatList } from "react-native-gesture-handler";
 import { FoundUserCard } from "../components/foundUserCard";
+import { useRouter } from "expo-router";
+import { useTheme } from "styled-components/native";
 
 export const SharedListsView = () => {
   const {
@@ -13,7 +16,8 @@ export const SharedListsView = () => {
     loading,
     fetchUsersByEmail,
     foundUsers,
-    handleAddUserToCurrentList,
+    handleAddColaboratorToCurrentList,
+    isAlreadyColaborator,
   } = useShareListsViewModel();
   const formFields = [
     {
@@ -26,6 +30,10 @@ export const SharedListsView = () => {
     },
   ];
 
+  const router = useRouter();
+  const theme = useTheme();
+  const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
+
   const onSubmit = (data: Record<string, string>) => {
     fetchUsersByEmail(data.userEmail);
   };
@@ -36,7 +44,15 @@ export const SharedListsView = () => {
       style={{ flex: 1 }}
     >
       <S.Container>
-        <S.ContentTitle>Convidar usuário</S.ContentTitle>
+        <S.ContentHeader>
+          <Feather
+            name="arrow-left"
+            size={iconSize}
+            color={theme.primaryColor}
+            onPress={() => router.push("/lists")}
+          />
+          <S.ContentTitle>Convidar usuário</S.ContentTitle>
+        </S.ContentHeader>
 
         <S.ContentSubtitle>
           Digite o e-mail da pessoa que deseja enviar o convite para acessar a
@@ -61,9 +77,36 @@ export const SharedListsView = () => {
                   data={foundUsers}
                   renderItem={({ item }) => (
                     <FoundUserCard
-                      email={item.userEmail}
-                      name={item.userName}
-                      btnOnPress={handleAddUserToCurrentList}
+                      invitedUser={{
+                        userId: item.userId,
+                        userEmail: item.userEmail,
+                        userName: item.userName,
+                      }}
+                      alreadyInList={isAlreadyColaborator(item.userId)}
+                      btnOnPress={handleAddColaboratorToCurrentList}
+                    />
+                  )}
+                />
+              </>
+            )}
+
+            {currentList?.colaborators && (
+              <>
+                <S.ListTitle>
+                  Colaboradores em "{currentList.title}"
+                </S.ListTitle>
+
+                <FlatList
+                  data={currentList?.colaborators}
+                  renderItem={({ item }) => (
+                    <FoundUserCard
+                      invitedUser={{
+                        userId: item.userId,
+                        userEmail: item.userEmail,
+                        userName: item.userName,
+                      }}
+                      alreadyInList={true}
+                      btnOnPress={handleAddColaboratorToCurrentList}
                     />
                   )}
                 />

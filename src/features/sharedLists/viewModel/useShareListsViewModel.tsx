@@ -2,11 +2,14 @@ import { useContext, useState, useEffect } from "react";
 import { GlobalListContext } from "@/src/context/listContext";
 import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscriptions";
 import { SubscriptionEntity } from "../../subscriptions/model/subscription";
+import { updateListContent } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
+import { InvitedUserentity } from "../model/invitedUser";
+import { Alert } from "react-native";
 
 export const useShareListsViewModel = () => {
   const isFocused = useIsFocused();
-  const { currentList } = useContext(GlobalListContext);
+  const { currentList, setCurrentList } = useContext(GlobalListContext);
   const [loading, setLoading] = useState(false);
   const [foundUsers, setFoundUsers] = useState<SubscriptionEntity[] | null>(
     null
@@ -29,11 +32,56 @@ export const useShareListsViewModel = () => {
     }
   };
 
-  const handleAddUserToCurrentList = async (userObj: {
-    name: string;
-    email: string;
-  }) => {
-    console.log(userObj);
+  const addColaboratorToCurrentList = async (
+    invitedUser: InvitedUserentity
+  ) => {
+    try {
+      setLoading(true);
+      if (!currentList) throw new Error("Lista inválida");
+
+      const currentListColaborators = currentList.colaborators
+        ? [...currentList.colaborators]
+        : [];
+
+      const updatedList = {
+        ...currentList,
+        colaborators: [...currentListColaborators, invitedUser],
+      };
+
+      await updateListContent(updatedList);
+      setCurrentList(updatedList);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      resetStates();
+    }
+  };
+
+  const handleAddColaboratorToCurrentList = async (
+    invitedUser: InvitedUserentity
+  ) => {
+    Alert.alert(
+      "Atenção!",
+      `O usuário "${invitedUser.userName}" receberá acesso à lista: "${currentList?.title}". Deseja continuar?`,
+      [
+        {
+          text: "Cancelar",
+        },
+        {
+          text: "Confirmar",
+          onPress: () => addColaboratorToCurrentList(invitedUser),
+        },
+      ]
+    );
+  };
+
+  const isAlreadyColaborator = (userId: string) => {
+    const alreadyColaborator =
+      currentList?.colaborators?.find((item) => item.userId === userId) ??
+      false;
+
+    if (alreadyColaborator) return true;
+    return false;
   };
 
   useEffect(() => {
@@ -45,6 +93,7 @@ export const useShareListsViewModel = () => {
     loading,
     fetchUsersByEmail,
     foundUsers,
-    handleAddUserToCurrentList,
+    handleAddColaboratorToCurrentList,
+    isAlreadyColaborator,
   };
 };

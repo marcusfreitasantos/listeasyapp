@@ -1,29 +1,33 @@
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
+import { InvitedUserentity } from "../../model/invitedUser";
 
 type FoundUserCardProps = {
-  name: string;
-  email: string;
-  btnOnPress: (userObj: { name: string; email: string }) => void;
+  invitedUser: InvitedUserentity;
+  alreadyInList: boolean;
+  btnOnPress: (invitedUser: InvitedUserentity) => void;
 };
 
 export const FoundUserCard = ({
-  name,
-  email,
+  invitedUser,
+  alreadyInList,
   btnOnPress,
 }: FoundUserCardProps) => {
-  const currenUserCard = {
-    name,
-    email,
-  };
   return (
     <S.FoundUserCardWrapper>
       <S.FoundUserCardRow>
-        <S.FoundUserCardName numberOfLines={1}>{name}</S.FoundUserCardName>
-        <S.FoundUserCardEmail numberOfLines={1}>{email}</S.FoundUserCardEmail>
+        <S.FoundUserCardName numberOfLines={1}>
+          {invitedUser.userName}
+        </S.FoundUserCardName>
+        <S.FoundUserCardEmail numberOfLines={1}>
+          {invitedUser.userEmail}
+        </S.FoundUserCardEmail>
       </S.FoundUserCardRow>
 
-      <Button btnText="Add" onPress={() => btnOnPress(currenUserCard)} />
+      <Button
+        btnText={alreadyInList ? "Remover" : "Add"}
+        onPress={() => btnOnPress(invitedUser)}
+      />
     </S.FoundUserCardWrapper>
   );
 };

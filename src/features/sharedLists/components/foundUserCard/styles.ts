@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 export const FoundUserCardWrapper = styled.View`
   flex-direction: row;
   align-items: center;
+  margin-bottom: ${({ theme }) => theme.defaultSizes.medium};
 `;
 
 export const FoundUserCardName = styled.Text`

@@ -6,12 +6,18 @@ export const Container = styled.View`
   height: 100%;
 `;
 
+export const ContentHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
+  margin-bottom: ${({ theme }) => theme.defaultSizes.small};
+`;
+
 export const ContentTitle = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.large};
   line-height: ${({ theme }) => theme.defaultSizes.large};
-  margin-bottom: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
 `;
 

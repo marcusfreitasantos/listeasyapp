@@ -27,10 +27,11 @@ const SignIn = () => {
         id: "",
         stripeCustomerId: "",
         stripeSubscriptionStatus: "inactive",
-        userId: userData.uid,
-        userName: userData.displayName ?? "",
         productId: "",
         stripeSubscriptionId: "",
+        userId: userData.uid,
+        userName: userData.displayName ?? "",
+        userEmail: userData.email ?? "",
       };
 
       const subscription: SubscriptionEntity[] = await getSubscriptionByUserId(
@@ -45,6 +46,7 @@ const SignIn = () => {
             subscription[0].stripeSubscriptionStatus ?? "inactive",
           userId: userData.uid,
           userName: userData.displayName ?? "",
+          userEmail: userData.email ?? "",
           productId: subscription[0].productId ?? "",
           stripeSubscriptionId: subscription[0].stripeSubscriptionId ?? "",
         };

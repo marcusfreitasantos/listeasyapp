@@ -1,3 +1,5 @@
+import { InvitedUserentity } from "../../sharedLists/model/invitedUser";
+
 export type ListItemType = {
   id: string;
   name: string;
@@ -15,4 +17,5 @@ export type ListEntityType = {
   totalPrice: number;
   items: ListItem[];
   authorId: string;
+  colaborators?: InvitedUserentity[];
 };
