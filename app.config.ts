@@ -34,6 +34,7 @@ const config: ExpoConfig = {
     output: "static",
     favicon: "./assets/favicon.png",
   },
+  platforms: ["android", "ios"],
   plugins: [
     [
       "react-native-google-mobile-ads",

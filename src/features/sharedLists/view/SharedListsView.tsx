@@ -9,6 +9,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { FoundUserCard } from "../components/foundUserCard";
 import { useRouter } from "expo-router";
 import { useTheme } from "styled-components/native";
+import { NotFoundUserCard } from "../components/notFoundUserCard";
 
 export const SharedListsView = () => {
   const {
@@ -72,7 +73,7 @@ export const SharedListsView = () => {
 
             {foundUsers && (
               <>
-                <S.ListTitle>Usuários encontrados</S.ListTitle>
+                <S.ListTitle>Resultado da sua busca</S.ListTitle>
 
                 <FlatList
                   data={foundUsers}
@@ -90,6 +91,7 @@ export const SharedListsView = () => {
                       }
                     />
                   )}
+                  ListEmptyComponent={() => <NotFoundUserCard />}
                 />
               </>
             )}
