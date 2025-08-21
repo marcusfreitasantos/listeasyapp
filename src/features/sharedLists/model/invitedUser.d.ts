@@ -1,4 +1,4 @@
-export type InvitedUserentity = {
+export type InvitedUserEntity = {
   userId: string;
   userName: string;
   userEmail: string;

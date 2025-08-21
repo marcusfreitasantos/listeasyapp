@@ -4,7 +4,7 @@ import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscription
 import { SubscriptionEntity } from "../../subscriptions/model/subscription";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
-import { InvitedUserentity } from "../model/invitedUser";
+import { InvitedUserEntity } from "../model/invitedUser";
 import { Alert } from "react-native";
 
 export const useShareListsViewModel = () => {
@@ -33,7 +33,7 @@ export const useShareListsViewModel = () => {
   };
 
   const addColaboratorToCurrentList = async (
-    invitedUser: InvitedUserentity
+    invitedUser: InvitedUserEntity
   ) => {
     try {
       setLoading(true);
@@ -61,7 +61,7 @@ export const useShareListsViewModel = () => {
   };
 
   const removeColaboratorsFromCurrentList = async (
-    invitedUser: InvitedUserentity
+    invitedUser: InvitedUserEntity
   ) => {
     try {
       setLoading(true);
@@ -93,7 +93,7 @@ export const useShareListsViewModel = () => {
   };
 
   const handleAddColaboratorToCurrentList = async (
-    invitedUser: InvitedUserentity
+    invitedUser: InvitedUserEntity
   ) => {
     Alert.alert(
       "Atenção!",
@@ -111,7 +111,7 @@ export const useShareListsViewModel = () => {
   };
 
   const handleRemoveColaboratorFromCurrentList = async (
-    invitedUser: InvitedUserentity
+    invitedUser: InvitedUserEntity
   ) => {
     Alert.alert(
       "Atenção!",

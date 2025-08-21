@@ -1,12 +1,12 @@
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
-import { InvitedUserentity } from "../../model/invitedUser";
+import { InvitedUserEntity } from "../../model/invitedUser";
 
 type FoundUserCardProps = {
-  invitedUser: InvitedUserentity;
+  invitedUser: InvitedUserEntity;
   alreadyInList: boolean;
-  handleAddColaborator: (invitedUser: InvitedUserentity) => void;
-  handleRemoveColaborator: (invitedUser: InvitedUserentity) => void;
+  handleAddColaborator: (invitedUser: InvitedUserEntity) => void;
+  handleRemoveColaborator: (invitedUser: InvitedUserEntity) => void;
 };
 
 export const FoundUserCard = ({
@@ -15,7 +15,7 @@ export const FoundUserCard = ({
   handleAddColaborator,
   handleRemoveColaborator,
 }: FoundUserCardProps) => {
-  const handleBtnOnPress = (invitedUser: InvitedUserentity) => {
+  const handleBtnOnPress = (invitedUser: InvitedUserEntity) => {
     if (alreadyInList) {
       handleRemoveColaborator(invitedUser);
     } else {
