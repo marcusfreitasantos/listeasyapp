@@ -10,6 +10,7 @@ import { FoundUserCard } from "../components/foundUserCard";
 import { useRouter } from "expo-router";
 import { useTheme } from "styled-components/native";
 import { NotFoundUserCard } from "../components/notFoundUserCard";
+import { ListEmpty } from "@/src/components/listEmpty";
 
 export const SharedListsView = () => {
   const {
@@ -96,7 +97,7 @@ export const SharedListsView = () => {
               </>
             )}
 
-            {currentList?.colaborators && (
+            {currentList?.colaborators?.length ? (
               <>
                 <S.ListTitle>
                   Colaboradores em "{currentList.title}"
@@ -118,9 +119,12 @@ export const SharedListsView = () => {
                       }
                     />
                   )}
+                  ListEmptyComponent={() => (
+                    <ListEmpty text="Esta lista não tem colaboradores." />
+                  )}
                 />
               </>
-            )}
+            ) : null}
           </>
         )}
       </S.Container>

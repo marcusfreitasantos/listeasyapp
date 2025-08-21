@@ -3,7 +3,7 @@ import { InviteEntity } from "../model/invite";
 import { insertNewInvite } from "@/src/services/firebase/invitations";
 import { Alert } from "react-native";
 
-export const UseInvitationViewModel = () => {
+export const useInvitationViewModel = () => {
   const createInvitation = async (inviteObj: InviteEntity) => {
     try {
       const response = await insertNewInvite(inviteObj);

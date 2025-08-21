@@ -1,15 +1,20 @@
 import { useContext, useState, useEffect } from "react";
+import { Alert } from "react-native";
 import { GlobalListContext } from "@/src/context/listContext";
 import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscriptions";
 import { SubscriptionEntity } from "../../subscriptions/model/subscription";
 import { updateListContent } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
 import { InvitedUserEntity } from "../model/invitedUser";
-import { Alert } from "react-native";
+import { useInvitationViewModel } from "../../invitation/viewModel/useInvitationViewModel";
+import { InviteEntity } from "../../invitation/model/invite";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useShareListsViewModel = () => {
+  const useInvitation = useInvitationViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
+  const { currentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
   const [foundUsers, setFoundUsers] = useState<SubscriptionEntity[] | null>(
     null
@@ -95,16 +100,27 @@ export const useShareListsViewModel = () => {
   const handleAddColaboratorToCurrentList = async (
     invitedUser: InvitedUserEntity
   ) => {
+    const inviteObj: InviteEntity = {
+      userEmail: invitedUser.userEmail,
+      referralUsername:
+        currentUser?.user.displayName ?? currentUser?.user.email ?? "",
+      list: {
+        id: currentList?.id ?? "",
+        name: currentList?.title ?? "",
+      },
+      status: "pending",
+    };
+
     Alert.alert(
       "Atenção!",
-      `O usuário "${invitedUser.userName}" receberá acesso à lista: "${currentList?.title}". Deseja continuar?`,
+      `O usuário "${invitedUser.userName}" receberá um convite para ter acesso à lista: "${currentList?.title}". Deseja continuar?`,
       [
         {
           text: "Cancelar",
         },
         {
           text: "Confirmar",
-          onPress: () => addColaboratorToCurrentList(invitedUser),
+          onPress: () => useInvitation.createInvitation(inviteObj),
         },
       ]
     );

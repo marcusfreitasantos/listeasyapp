@@ -6,6 +6,6 @@ export type InviteEntity = {
     name: string;
   };
   status: "pending" | "accepted" | "declined";
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
