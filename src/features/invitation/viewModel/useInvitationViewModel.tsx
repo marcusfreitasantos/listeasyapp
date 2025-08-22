@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { InviteEntity } from "../model/invite";
-import { insertNewInvite } from "@/src/services/firebase/invitations";
+import {
+  insertNewInvite,
+  getInvitesByUserEmail,
+} from "@/src/services/firebase/invitations";
 import { Alert } from "react-native";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useInvitationViewModel = () => {
+  const [invites, setInvites] = useState<InviteEntity[]>([]);
   const createInvitation = async (inviteObj: InviteEntity) => {
     try {
       const response = await insertNewInvite(inviteObj);
@@ -17,5 +22,17 @@ export const useInvitationViewModel = () => {
     }
   };
 
-  return { createInvitation };
+  const fetchUserInvites = async (userEmail: string) => {
+    try {
+      const response = await getInvitesByUserEmail(userEmail);
+      const sortedInvites = response.filter(
+        (invite) => invite.status === "pending"
+      );
+      if (response.length) setInvites(sortedInvites);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  return { createInvitation, fetchUserInvites, invites };
 };

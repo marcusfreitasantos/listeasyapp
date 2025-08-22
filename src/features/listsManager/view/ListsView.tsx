@@ -10,6 +10,7 @@ import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { InvitesList } from "../../invitation/components/invitesList";
 
 const ListsView = () => {
   const flatListRef = useRef<FlatList>(null);
@@ -24,6 +25,7 @@ const ListsView = () => {
     setModalIsOpen,
     removeList,
     generatePdf,
+    invites,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -33,6 +35,8 @@ const ListsView = () => {
   useEffect(() => {
     scrollToTop();
   }, [currentUserLists]);
+
+  if (invites.length) return <InvitesList invites={invites} />;
 
   return (
     <KeyboardAvoidingView

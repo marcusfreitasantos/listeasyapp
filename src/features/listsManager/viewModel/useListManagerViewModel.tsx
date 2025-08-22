@@ -13,8 +13,10 @@ import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import { useInvitationViewModel } from "../../invitation/viewModel/useInvitationViewModel";
 
 export const useListManagerViewModel = () => {
+  const { fetchUserInvites, invites } = useInvitationViewModel();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
   const { setListsLength } = useContext(GlobalListContext);
@@ -29,7 +31,9 @@ export const useListManagerViewModel = () => {
   const getUserLists = async () => {
     try {
       setLoading(true);
-      if (!currentUser?.user?.uid) throw new Error("Usuário inválido");
+      if (!currentUser?.user?.uid || !currentUser?.user?.email)
+        throw new Error("Usuário inválido");
+      await fetchUserInvites(currentUser.user.email);
       const response = await getListsByAuthorId(currentUser.user.uid);
       const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
       setCurrentUserLists(sharedLists.concat(response));
@@ -119,5 +123,6 @@ export const useListManagerViewModel = () => {
     removeList,
     getUserLists,
     generatePdf,
+    invites,
   };
 };

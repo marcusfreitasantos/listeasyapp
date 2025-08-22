@@ -25,3 +25,27 @@ export const insertNewInvite = async (invite: InviteEntity) => {
     throw new Error(`Error adding invite: ${error}`);
   }
 };
+
+export const getInvitesByUserEmail = async (
+  userEmail: string
+): Promise<InviteEntity[]> => {
+  try {
+    const queryCommand = query(
+      invitesCollection,
+      where("userEmail", "==", userEmail),
+      orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as InviteEntity)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching invites by userEmail: ${error}`);
+  }
+};
