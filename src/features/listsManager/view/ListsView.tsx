@@ -9,9 +9,11 @@ import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 
 const ListsView = () => {
   const flatListRef = useRef<FlatList>(null);
+  const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
 
   const {
     loading,
@@ -60,6 +62,9 @@ const ListsView = () => {
                   list={item}
                   removeList={removeList}
                   generatePdf={generatePdf}
+                  removeCurrentUserFromSharedList={
+                    handleRemoveColaboratorFromCurrentList
+                  }
                 />
               )}
               ListEmptyComponent={() => (

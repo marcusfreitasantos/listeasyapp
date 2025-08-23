@@ -12,14 +12,24 @@ import { useRouter } from "expo-router";
 import { centsToReais } from "@/src/utils/convertCurrency";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { InvitedUserEntity } from "@/src/features/sharedLists/model/invitedUser";
 
 type ListCardProps = {
   list: ListEntityType;
   removeList: (listId: string) => void;
   generatePdf: (listName: string, html: string) => void;
+  removeCurrentUserFromSharedList: (
+    invitedUser: InvitedUserEntity,
+    list: ListEntityType
+  ) => void;
 };
 
-export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
+export const ListCard = ({
+  list,
+  removeList,
+  generatePdf,
+  removeCurrentUserFromSharedList,
+}: ListCardProps) => {
   const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
   const router = useRouter();
@@ -42,6 +52,18 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
         },
       },
     ]);
+  };
+
+  const handleRemoveCurrentUserFromSharedList = () => {
+    setCurrentList(list);
+
+    const invitedUser = {
+      userId: currentUser?.user.uid ?? "",
+      userName: currentUser?.user.displayName ?? "",
+      userEmail: currentUser?.user.email ?? "",
+    };
+
+    removeCurrentUserFromSharedList(invitedUser, list);
   };
 
   const handlePDFExport = () => {
@@ -83,6 +105,12 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
       iconName: "trash" as FeatherIconName,
       onPress: () => handleDeleteList(),
       showOption: !isColaborator,
+    },
+    {
+      label: "Sair da lista",
+      iconName: "delete" as FeatherIconName,
+      onPress: () => handleRemoveCurrentUserFromSharedList(),
+      showOption: isColaborator,
     },
   ];
 

@@ -10,9 +10,12 @@ import { InviteEntity } from "../../invitation/model/invite";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { useInvitationsViewModel } from "../../invitation/viewModel/useInvitationsViewModel";
 import { updateInvite } from "@/src/services/firebase/invitations";
+import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
+import { ListEntityType } from "../../listsManager/model/list";
 
 export const useShareListsViewModel = () => {
   const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
+  const { getUserLists } = useListManagerViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentUser } = useContext(GlobalUserContext);
@@ -69,19 +72,20 @@ export const useShareListsViewModel = () => {
   };
 
   const removeColaboratorsFromCurrentList = async (
-    invitedUser: InvitedUserEntity
+    invitedUser: InvitedUserEntity,
+    listToUpdate = currentList
   ) => {
     try {
       setLoading(true);
-      if (!currentList) throw new Error("Lista inválida");
+      if (!listToUpdate) throw new Error("Lista inválida");
 
-      const currentListColaborators = currentList.colaborators
-        ? [...currentList.colaborators]
+      const currentListColaborators = listToUpdate.colaborators
+        ? [...listToUpdate.colaborators]
         : [];
 
       const updatedList = {
-        ...currentList,
-        colaboratorsIds: currentList.colaboratorsIds?.filter(
+        ...listToUpdate,
+        colaboratorsIds: listToUpdate.colaboratorsIds?.filter(
           (colaboratorId) => colaboratorId !== invitedUser.userId
         ),
         colaborators: [
@@ -97,6 +101,7 @@ export const useShareListsViewModel = () => {
       console.log(e);
     } finally {
       resetStates();
+      getUserLists();
     }
   };
 
@@ -139,21 +144,23 @@ export const useShareListsViewModel = () => {
   };
 
   const handleRemoveColaboratorFromCurrentList = async (
-    invitedUser: InvitedUserEntity
+    invitedUser: InvitedUserEntity,
+    list: ListEntityType
   ) => {
-    Alert.alert(
-      "Atenção!",
-      `O usuário "${invitedUser.userName}" será removido da lista: "${currentList?.title}". Deseja continuar?`,
-      [
-        {
-          text: "Cancelar",
-        },
-        {
-          text: "Confirmar",
-          onPress: () => removeColaboratorsFromCurrentList(invitedUser),
-        },
-      ]
-    );
+    const alertMsg =
+      invitedUser.userId === currentUser?.user.uid
+        ? `Você sairá da lista: "${list.title}". Deseja continuar?`
+        : `O usuário "${invitedUser.userName}" será removido da lista: "${list.title}". Deseja continuar?`;
+
+    Alert.alert("Atenção!", alertMsg, [
+      {
+        text: "Cancelar",
+      },
+      {
+        text: "Confirmar",
+        onPress: () => removeColaboratorsFromCurrentList(invitedUser, list),
+      },
+    ]);
   };
 
   const isAlreadyColaborator = (userId: string) => {

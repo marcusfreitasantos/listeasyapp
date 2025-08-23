@@ -13,21 +13,15 @@ import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
-import { InviteEntity } from "../../invitation/model/invite";
-import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 
 export const useListManagerViewModel = () => {
-  const { addColaboratorToCurrentList } = useShareListsViewModel();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
-  const { setListsLength } = useContext(GlobalListContext);
+  const { setListsLength, currentUserLists, setCurrentUserLists } =
+    useContext(GlobalListContext);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const [currentUserLists, setCurrentUserLists] = useState<
-    ListEntityType[] | []
-  >([]);
 
   const getUserLists = async () => {
     try {
