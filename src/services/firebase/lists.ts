@@ -32,7 +32,10 @@ export const getListById = async (listId: string): Promise<ListEntityType> => {
     const docSnap = await getDoc(doc(listsCollection, listId));
 
     if (docSnap.exists()) {
-      return docSnap.data() as ListEntityType;
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      } as ListEntityType;
     } else {
       throw new Error("No such document!");
     }

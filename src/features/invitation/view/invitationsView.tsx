@@ -1,19 +1,20 @@
-import { useEffect } from "react";
-import { useRouter } from "expo-router";
+import { useContext } from "react";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 import { InvitesList } from "../components/invitesList";
-import { useInvitationsViewModel } from "../viewModel/useInvitationsViewModel";
+import * as S from "./styles";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { GlobalInvitationsContext } from "@/src/context/invitationsContext";
 
 export const InvitationsView = () => {
-  const router = useRouter();
-  const { currentUserInvites, acceptInvite, loading } =
-    useInvitationsViewModel();
+  const { currentUserInvites } = useContext(GlobalInvitationsContext);
+  const { loading, acceptInvite } = useShareListsViewModel();
 
-  useEffect(() => {
-    if (!currentUserInvites.length) router.push("/lists");
-  }, [currentUserInvites]);
-
-  if (loading) return <LoadingSpinner />;
+  if (loading)
+    return (
+      <S.Container>
+        <LoadingSpinner />
+      </S.Container>
+    );
 
   return (
     <InvitesList invites={currentUserInvites} acceptInvite={acceptInvite} />

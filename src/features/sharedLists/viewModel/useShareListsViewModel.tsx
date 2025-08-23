@@ -8,8 +8,11 @@ import { useIsFocused } from "@react-navigation/native";
 import { InvitedUserEntity } from "../model/invitedUser";
 import { InviteEntity } from "../../invitation/model/invite";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { useInvitationsViewModel } from "../../invitation/viewModel/useInvitationsViewModel";
+import { updateInvite } from "@/src/services/firebase/invitations";
 
 export const useShareListsViewModel = () => {
+  const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentUser } = useContext(GlobalUserContext);
@@ -42,6 +45,7 @@ export const useShareListsViewModel = () => {
     try {
       setLoading(true);
       const listObj = await getListById(listId);
+
       if (!listObj) throw new Error("Lista inválida");
 
       const listColaborators = listObj.colaborators
@@ -119,7 +123,16 @@ export const useShareListsViewModel = () => {
         },
         {
           text: "Confirmar",
-          onPress: () => console.log(inviteObj),
+          onPress: async () => {
+            try {
+              setLoading(true);
+              await createInvitation(inviteObj);
+            } catch (error) {
+              console.log("Error sending invite: ", error);
+            } finally {
+              setLoading(false);
+            }
+          },
         },
       ]
     );
@@ -152,6 +165,38 @@ export const useShareListsViewModel = () => {
     return false;
   };
 
+  const acceptInvite = async (invite: InviteEntity, accepted: boolean) => {
+    if (!currentUser) throw new Error("Invalid user");
+
+    try {
+      setLoading(true);
+      const updatedInvite = {
+        ...invite,
+        status: accepted
+          ? "accepted"
+          : ("declined" as "pending" | "accepted" | "declined"),
+      };
+
+      await updateInvite(updatedInvite);
+
+      if (accepted) {
+        await addColaboratorToCurrentList(
+          {
+            userId: currentUser.user.uid,
+            userName: currentUser.user.displayName ?? "",
+            userEmail: currentUser.user.email ?? "",
+          },
+          invite.list.id
+        );
+      }
+    } catch (error) {
+      console.log("Error accepting invite: ", error);
+    } finally {
+      fetchUserInvites(currentUser?.user.email ?? "");
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isFocused) resetStates();
   }, [isFocused]);
@@ -165,5 +210,6 @@ export const useShareListsViewModel = () => {
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
     addColaboratorToCurrentList,
+    acceptInvite,
   };
 };

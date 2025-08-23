@@ -1,7 +1,8 @@
 import * as S from "./styles";
 import { FlatList } from "react-native-gesture-handler";
 import { InviteEntity } from "../../model/invite";
-import { Button } from "@/src/components/button";
+import { ListEmpty } from "@/src/components/listEmpty";
+import { InviteListItem } from "../inviteListItem";
 
 type InvitesListProps = {
   invites: InviteEntity[];
@@ -22,28 +23,9 @@ export const InvitesList = ({ invites, acceptInvite }: InvitesListProps) => {
       <FlatList
         data={invites}
         keyExtractor={(item, index) => item.id?.toString() ?? index.toString()}
+        ListEmptyComponent={() => <ListEmpty />}
         renderItem={({ item }) => (
-          <S.InviteItem>
-            <S.InviteInfo>
-              <S.InviteTittle numberOfLines={1}>
-                {item.referralUsername}
-              </S.InviteTittle>
-              <S.InviteListName>Lista: {item.list.name}</S.InviteListName>
-            </S.InviteInfo>
-
-            <S.InviteBtnWrapper>
-              <Button
-                btnText="Aceitar"
-                onPress={() => acceptInvite(item, true)}
-              />
-
-              <Button
-                btnType="dark"
-                btnText="Rejeitar"
-                onPress={() => acceptInvite(item, false)}
-              />
-            </S.InviteBtnWrapper>
-          </S.InviteItem>
+          <InviteListItem item={item} acceptInvite={acceptInvite} />
         )}
       />
     </S.InvitesListWrapper>

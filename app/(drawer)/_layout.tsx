@@ -16,11 +16,6 @@ export default function Layout() {
       iconName: "list" as FeatherIconName,
     },
     {
-      route: "sharedLists",
-      title: "Acesso compartilhado",
-      iconName: "user-plus" as FeatherIconName,
-    },
-    {
       route: "profile",
       title: "Perfil",
       iconName: "user" as FeatherIconName,
@@ -29,6 +24,11 @@ export default function Layout() {
       route: "subscriptions",
       title: "Planos",
       iconName: "credit-card" as FeatherIconName,
+    },
+    {
+      route: "invitations",
+      title: "Convites",
+      iconName: "file-plus" as FeatherIconName,
     },
   ];
 
