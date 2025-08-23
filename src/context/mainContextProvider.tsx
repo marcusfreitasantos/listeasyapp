@@ -3,6 +3,7 @@ import UserContextProvider from "@/src/context/userContext";
 import ListContextProvider from "@/src/context/listContext";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import SubscriptionContextProvider from "./subscriptionContext";
+import InvitationsContextProvider from "./invitationsContext";
 import Constants from "expo-constants";
 
 const MainContextProvider = ({ children }: { children: ReactNode }) => {
@@ -23,7 +24,9 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
           merchantIdentifier="merchant.identifier" // required for Apple Pay
           urlScheme={urlScheme}
         >
-          <ListContextProvider>{children}</ListContextProvider>
+          <ListContextProvider>
+            <InvitationsContextProvider>{children}</InvitationsContextProvider>
+          </ListContextProvider>
         </StripeProvider>
       </SubscriptionContextProvider>
     </UserContextProvider>

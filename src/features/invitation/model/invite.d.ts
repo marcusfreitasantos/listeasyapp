@@ -10,3 +10,8 @@ export type InviteEntity = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type InvitationsContextType = {
+  currentUserInvites: InviteEntity[] | [];
+  setCurrentUserInvites: (invites: InviteEntity[]) => void;
+};

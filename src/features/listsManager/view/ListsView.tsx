@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { useTheme } from "styled-components/native";
 import { ListCard } from "../components/listCard";
 import { FlatList } from "react-native-gesture-handler";
 import * as S from "./styles";
@@ -10,7 +9,6 @@ import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
-import { InvitesList } from "../../invitation/components/invitesList";
 
 const ListsView = () => {
   const flatListRef = useRef<FlatList>(null);
@@ -25,8 +23,6 @@ const ListsView = () => {
     setModalIsOpen,
     removeList,
     generatePdf,
-    invites,
-    handleCurrentUserInvites,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -47,49 +43,40 @@ const ListsView = () => {
           <LoadingSpinner />
         ) : (
           <>
-            {invites.length ? (
-              <InvitesList
-                invites={invites}
-                acceptInvite={handleCurrentUserInvites}
+            <InputField
+              placeholder="Pesquisar"
+              iconName="search"
+              onChangeText={(t) => setSearchTerm(t)}
+            />
+
+            <FlatList
+              ref={flatListRef}
+              data={currentUserLists.filter((list) =>
+                list.title.toLowerCase().includes(searchTerm.toLowerCase())
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <ListCard
+                  list={item}
+                  removeList={removeList}
+                  generatePdf={generatePdf}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <ListEmpty
+                  title="Nenhuma lista encontrada."
+                  text="Crie sua primeira lista com o botão abaixo."
+                />
+              )}
+            />
+            {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
+
+            <S.ListViewFooter>
+              <AddItemBtn
+                modalIsOpen={modalIsOpen}
+                onPress={() => setModalIsOpen(!modalIsOpen)}
               />
-            ) : (
-              <>
-                <InputField
-                  placeholder="Pesquisar"
-                  iconName="search"
-                  onChangeText={(t) => setSearchTerm(t)}
-                />
-
-                <FlatList
-                  ref={flatListRef}
-                  data={currentUserLists.filter((list) =>
-                    list.title.toLowerCase().includes(searchTerm.toLowerCase())
-                  )}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={({ item }) => (
-                    <ListCard
-                      list={item}
-                      removeList={removeList}
-                      generatePdf={generatePdf}
-                    />
-                  )}
-                  ListEmptyComponent={() => (
-                    <ListEmpty
-                      title="Nenhuma lista encontrada."
-                      text="Crie sua primeira lista com o botão abaixo."
-                    />
-                  )}
-                />
-                {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
-
-                <S.ListViewFooter>
-                  <AddItemBtn
-                    modalIsOpen={modalIsOpen}
-                    onPress={() => setModalIsOpen(!modalIsOpen)}
-                  />
-                </S.ListViewFooter>
-              </>
-            )}
+            </S.ListViewFooter>
           </>
         )}
       </S.ListView>

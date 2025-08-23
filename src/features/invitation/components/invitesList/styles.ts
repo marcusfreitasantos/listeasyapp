@@ -50,3 +50,9 @@ export const InviteListName = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;
+
+export const InviteBtnWrapper = styled.View`
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
+`;

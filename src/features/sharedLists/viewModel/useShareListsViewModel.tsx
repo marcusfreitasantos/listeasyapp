@@ -3,15 +3,13 @@ import { Alert } from "react-native";
 import { GlobalListContext } from "@/src/context/listContext";
 import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscriptions";
 import { SubscriptionEntity } from "../../subscriptions/model/subscription";
-import { updateListContent } from "@/src/services/firebase/lists";
+import { updateListContent, getListById } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
 import { InvitedUserEntity } from "../model/invitedUser";
-import { useInvitationViewModel } from "../../invitation/viewModel/useInvitationViewModel";
 import { InviteEntity } from "../../invitation/model/invite";
 import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useShareListsViewModel = () => {
-  const useInvitation = useInvitationViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentUser } = useContext(GlobalUserContext);
@@ -38,26 +36,27 @@ export const useShareListsViewModel = () => {
   };
 
   const addColaboratorToCurrentList = async (
-    invitedUser: InvitedUserEntity
+    invitedUser: InvitedUserEntity,
+    listId: string
   ) => {
     try {
       setLoading(true);
-      if (!currentList) throw new Error("Lista inválida");
+      const listObj = await getListById(listId);
+      if (!listObj) throw new Error("Lista inválida");
 
-      const currentListColaborators = currentList.colaborators
-        ? [...currentList.colaborators]
+      const listColaborators = listObj.colaborators
+        ? [...listObj.colaborators]
         : [];
 
-      const colaboratorsIds = currentList.colaboratorsIds ?? [];
+      const colaboratorsIds = listObj.colaboratorsIds ?? [];
 
       const updatedList = {
-        ...currentList,
+        ...listObj,
         colaboratorsIds: [...colaboratorsIds, invitedUser.userId],
-        colaborators: [...currentListColaborators, invitedUser],
+        colaborators: [...listColaborators, invitedUser],
       };
 
       await updateListContent(updatedList);
-      setCurrentList(updatedList);
     } catch (e) {
       console.log(e);
     } finally {
@@ -120,7 +119,7 @@ export const useShareListsViewModel = () => {
         },
         {
           text: "Confirmar",
-          onPress: () => useInvitation.createInvitation(inviteObj),
+          onPress: () => console.log(inviteObj),
         },
       ]
     );

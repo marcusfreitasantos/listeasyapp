@@ -13,12 +13,10 @@ import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
-import { useInvitationViewModel } from "../../invitation/viewModel/useInvitationViewModel";
 import { InviteEntity } from "../../invitation/model/invite";
 import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 
 export const useListManagerViewModel = () => {
-  const { fetchUserInvites, invites, acceptInvite } = useInvitationViewModel();
   const { addColaboratorToCurrentList } = useShareListsViewModel();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
@@ -36,7 +34,6 @@ export const useListManagerViewModel = () => {
       setLoading(true);
       if (!currentUser?.user?.uid || !currentUser?.user?.email)
         throw new Error("Usuário inválido");
-      await fetchUserInvites(currentUser.user.email);
       const response = await getListsByAuthorId(currentUser.user.uid);
       const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
       setCurrentUserLists(sharedLists.concat(response));
@@ -104,28 +101,6 @@ export const useListManagerViewModel = () => {
     }
   };
 
-  const handleCurrentUserInvites = async (invite: InviteEntity) => {
-    if (!currentUser) throw new Error("Usuário inválido");
-
-    try {
-      setLoading(true);
-      const inviteAccepted = await acceptInvite(invite);
-
-      if (inviteAccepted) {
-        await addColaboratorToCurrentList({
-          userId: currentUser.user.uid,
-          userName: currentUser.user.displayName ?? "",
-          userEmail: currentUser.user.email ?? "",
-        });
-      }
-    } catch (error) {
-      console.log("Error", error);
-    } finally {
-      fetchUserInvites(currentUser?.user.email ?? "");
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (isFocused) {
       getUserLists();
@@ -148,7 +123,5 @@ export const useListManagerViewModel = () => {
     removeList,
     getUserLists,
     generatePdf,
-    invites,
-    handleCurrentUserInvites,
   };
 };

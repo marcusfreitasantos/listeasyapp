@@ -1,26 +1,20 @@
 import * as S from "./styles";
 import { FlatList } from "react-native-gesture-handler";
-import Feather from "@expo/vector-icons/Feather";
-import { useTheme } from "styled-components/native";
 import { InviteEntity } from "../../model/invite";
 import { Button } from "@/src/components/button";
 
 type InvitesListProps = {
   invites: InviteEntity[];
-  acceptInvite: (invite: InviteEntity) => void;
+  acceptInvite: (invite: InviteEntity, accepted: boolean) => void;
 };
 
 export const InvitesList = ({ invites, acceptInvite }: InvitesListProps) => {
-  const theme = useTheme();
-
   return (
     <S.InvitesListWrapper>
       <S.InvitesListHeader>
         <S.InvitesListTitle>
           Você tem {invites.length} convite(s) pendente(s)
         </S.InvitesListTitle>
-
-        <Feather name="x" size={24} color={theme.primaryColor} />
       </S.InvitesListHeader>
 
       <S.Divisor />
@@ -37,10 +31,18 @@ export const InvitesList = ({ invites, acceptInvite }: InvitesListProps) => {
               <S.InviteListName>Lista: {item.list.name}</S.InviteListName>
             </S.InviteInfo>
 
-            <Button
-              btnText="Aceitar convite"
-              onPress={() => acceptInvite(item)}
-            />
+            <S.InviteBtnWrapper>
+              <Button
+                btnText="Aceitar"
+                onPress={() => acceptInvite(item, true)}
+              />
+
+              <Button
+                btnType="dark"
+                btnText="Rejeitar"
+                onPress={() => acceptInvite(item, false)}
+              />
+            </S.InviteBtnWrapper>
           </S.InviteItem>
         )}
       />

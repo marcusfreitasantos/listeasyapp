@@ -4,6 +4,7 @@ import firestore, {
   collection,
   where,
   getDocs,
+  getDoc,
   orderBy,
   doc,
   updateDoc,
@@ -23,6 +24,21 @@ export const insertNewList = async (listEntity: ListEntityType) => {
     return true;
   } catch (error: any) {
     throw new Error(`Error adding list: ${error}`);
+  }
+};
+
+export const getListById = async (listId: string): Promise<ListEntityType> => {
+  try {
+    const docSnap = await getDoc(doc(listsCollection, listId));
+
+    if (docSnap.exists()) {
+      return docSnap.data() as ListEntityType;
+    } else {
+      throw new Error("No such document!");
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching list by list ID: ${error}`);
   }
 };
 
