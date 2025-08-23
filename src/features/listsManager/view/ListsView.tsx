@@ -26,6 +26,7 @@ const ListsView = () => {
     removeList,
     generatePdf,
     invites,
+    handleCurrentUserInvites,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -35,8 +36,6 @@ const ListsView = () => {
   useEffect(() => {
     scrollToTop();
   }, [currentUserLists]);
-
-  if (invites.length) return <InvitesList invites={invites} />;
 
   return (
     <KeyboardAvoidingView
@@ -48,40 +47,49 @@ const ListsView = () => {
           <LoadingSpinner />
         ) : (
           <>
-            <InputField
-              placeholder="Pesquisar"
-              iconName="search"
-              onChangeText={(t) => setSearchTerm(t)}
-            />
-
-            <FlatList
-              ref={flatListRef}
-              data={currentUserLists.filter((list) =>
-                list.title.toLowerCase().includes(searchTerm.toLowerCase())
-              )}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <ListCard
-                  list={item}
-                  removeList={removeList}
-                  generatePdf={generatePdf}
-                />
-              )}
-              ListEmptyComponent={() => (
-                <ListEmpty
-                  title="Nenhuma lista encontrada."
-                  text="Crie sua primeira lista com o botão abaixo."
-                />
-              )}
-            />
-            {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
-
-            <S.ListViewFooter>
-              <AddItemBtn
-                modalIsOpen={modalIsOpen}
-                onPress={() => setModalIsOpen(!modalIsOpen)}
+            {invites.length ? (
+              <InvitesList
+                invites={invites}
+                acceptInvite={handleCurrentUserInvites}
               />
-            </S.ListViewFooter>
+            ) : (
+              <>
+                <InputField
+                  placeholder="Pesquisar"
+                  iconName="search"
+                  onChangeText={(t) => setSearchTerm(t)}
+                />
+
+                <FlatList
+                  ref={flatListRef}
+                  data={currentUserLists.filter((list) =>
+                    list.title.toLowerCase().includes(searchTerm.toLowerCase())
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => (
+                    <ListCard
+                      list={item}
+                      removeList={removeList}
+                      generatePdf={generatePdf}
+                    />
+                  )}
+                  ListEmptyComponent={() => (
+                    <ListEmpty
+                      title="Nenhuma lista encontrada."
+                      text="Crie sua primeira lista com o botão abaixo."
+                    />
+                  )}
+                />
+                {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
+
+                <S.ListViewFooter>
+                  <AddItemBtn
+                    modalIsOpen={modalIsOpen}
+                    onPress={() => setModalIsOpen(!modalIsOpen)}
+                  />
+                </S.ListViewFooter>
+              </>
+            )}
           </>
         )}
       </S.ListView>

@@ -14,9 +14,12 @@ import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import { useInvitationViewModel } from "../../invitation/viewModel/useInvitationViewModel";
+import { InviteEntity } from "../../invitation/model/invite";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 
 export const useListManagerViewModel = () => {
-  const { fetchUserInvites, invites } = useInvitationViewModel();
+  const { fetchUserInvites, invites, acceptInvite } = useInvitationViewModel();
+  const { addColaboratorToCurrentList } = useShareListsViewModel();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
   const { setListsLength } = useContext(GlobalListContext);
@@ -101,6 +104,28 @@ export const useListManagerViewModel = () => {
     }
   };
 
+  const handleCurrentUserInvites = async (invite: InviteEntity) => {
+    if (!currentUser) throw new Error("Usuário inválido");
+
+    try {
+      setLoading(true);
+      const inviteAccepted = await acceptInvite(invite);
+
+      if (inviteAccepted) {
+        await addColaboratorToCurrentList({
+          userId: currentUser.user.uid,
+          userName: currentUser.user.displayName ?? "",
+          userEmail: currentUser.user.email ?? "",
+        });
+      }
+    } catch (error) {
+      console.log("Error", error);
+    } finally {
+      fetchUserInvites(currentUser?.user.email ?? "");
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isFocused) {
       getUserLists();
@@ -124,5 +149,6 @@ export const useListManagerViewModel = () => {
     getUserLists,
     generatePdf,
     invites,
+    handleCurrentUserInvites,
   };
 };

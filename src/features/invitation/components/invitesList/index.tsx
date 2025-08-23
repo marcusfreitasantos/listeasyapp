@@ -7,16 +7,11 @@ import { Button } from "@/src/components/button";
 
 type InvitesListProps = {
   invites: InviteEntity[];
+  acceptInvite: (invite: InviteEntity) => void;
 };
 
-export const InvitesList = ({ invites }: InvitesListProps) => {
+export const InvitesList = ({ invites, acceptInvite }: InvitesListProps) => {
   const theme = useTheme();
-
-  const inviteStatusTranslation = {
-    pending: "Pendente",
-    accepted: "Aceito",
-    declined: "Rejeitado",
-  };
 
   return (
     <S.InvitesListWrapper>
@@ -44,7 +39,7 @@ export const InvitesList = ({ invites }: InvitesListProps) => {
 
             <Button
               btnText="Aceitar convite"
-              onPress={() => console.log("Aceitar convite: ", item.id)}
+              onPress={() => acceptInvite(item)}
             />
           </S.InviteItem>
         )}

@@ -3,9 +3,11 @@ import { InviteEntity } from "../model/invite";
 import {
   insertNewInvite,
   getInvitesByUserEmail,
+  updateInvite,
 } from "@/src/services/firebase/invitations";
 import { Alert } from "react-native";
-import { GlobalUserContext } from "@/src/context/userContext";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
+import { InvitedUserEntity } from "../../sharedLists/model/invitedUser";
 
 export const useInvitationViewModel = () => {
   const [invites, setInvites] = useState<InviteEntity[]>([]);
@@ -34,5 +36,19 @@ export const useInvitationViewModel = () => {
     }
   };
 
-  return { createInvitation, fetchUserInvites, invites };
+  const acceptInvite = async (invite: InviteEntity) => {
+    try {
+      const updatedInvite = {
+        ...invite,
+        status: "accepted" as "pending" | "accepted" | "declined",
+      };
+
+      await updateInvite(updatedInvite);
+      return true;
+    } catch (error) {
+      console.log("Error accepting invite: ", error);
+    }
+  };
+
+  return { createInvitation, fetchUserInvites, invites, acceptInvite };
 };

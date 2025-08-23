@@ -49,3 +49,15 @@ export const getInvitesByUserEmail = async (
     throw new Error(`Error fetching invites by userEmail: ${error}`);
   }
 };
+
+export const updateInvite = async (invite: InviteEntity) => {
+  try {
+    const listRef = doc(invitesCollection, invite.id);
+    await updateDoc(listRef, {
+      ...invite,
+      updatedAt: firestore.FieldValue.serverTimestamp(),
+    });
+  } catch (error) {
+    throw new Error(`Error updating invite: ${error}`);
+  }
+};

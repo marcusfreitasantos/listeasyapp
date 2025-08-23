@@ -165,5 +165,6 @@ export const useShareListsViewModel = () => {
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
+    addColaboratorToCurrentList,
   };
 };
