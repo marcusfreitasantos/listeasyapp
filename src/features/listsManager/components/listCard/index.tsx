@@ -13,6 +13,7 @@ import { centsToReais } from "@/src/utils/convertCurrency";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { InvitedUserEntity } from "@/src/features/sharedLists/model/invitedUser";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -32,6 +33,7 @@ export const ListCard = ({
 }: ListCardProps) => {
   const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const router = useRouter();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
@@ -39,6 +41,10 @@ export const ListCard = ({
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
   const isColaborator =
     list.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ?? false;
+
+  const essentialPlanId = __DEV__
+    ? "price_1RoCGTF7G6AyWSJCkPEopkX7"
+    : "price_1Rpk4YF7G6AyWSJCuzz6hRXV";
 
   const handleDeleteList = () => {
     Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
@@ -78,7 +84,15 @@ export const ListCard = ({
 
   const handleShareListAccess = () => {
     setCurrentList(list);
-    router.push("/sharedLists");
+    if (
+      currentSubscription &&
+      currentSubscription.stripeSubscriptionStatus === "active" &&
+      currentSubscription?.productId !== essentialPlanId
+    ) {
+      router.push("/sharedLists");
+    } else {
+      router.push("/(drawer)/subscriptions");
+    }
   };
 
   const listMenuOptions = [
