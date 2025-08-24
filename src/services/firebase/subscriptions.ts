@@ -6,6 +6,7 @@ import {
   getDocs,
   doc,
   updateDoc,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
@@ -42,7 +43,7 @@ export const getSubscriptionByUserId = async (userId: string) => {
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
         ({
           id: doc.ref.id,
           ...doc.data(),
@@ -63,7 +64,7 @@ export const getSubscriptionByUserEmail = async (userEmail: string) => {
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
         ({
           id: doc.ref.id,
           ...doc.data(),

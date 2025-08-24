@@ -8,6 +8,7 @@ import firestore, {
   orderBy,
   doc,
   updateDoc,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 
 const invitesCollection = collection(getFirestore(), "Invites");
@@ -38,7 +39,7 @@ export const getInvitesByUserEmail = async (
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<InviteEntity>) =>
         ({
           id: doc.id,
           ...doc.data(),

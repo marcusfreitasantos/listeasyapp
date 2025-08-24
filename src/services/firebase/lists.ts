@@ -8,6 +8,7 @@ import firestore, {
   orderBy,
   doc,
   updateDoc,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
 
@@ -29,7 +30,8 @@ export const insertNewList = async (listEntity: ListEntityType) => {
 
 export const getListById = async (listId: string): Promise<ListEntityType> => {
   try {
-    const docSnap = await getDoc(doc(listsCollection, listId));
+    const docSnap: FirebaseFirestoreTypes.DocumentSnapshot<ListEntityType> =
+      await getDoc(doc(listsCollection, listId));
 
     if (docSnap.exists()) {
       return {
@@ -57,7 +59,7 @@ export const getListsByAuthorId = async (
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<ListEntityType>) =>
         ({
           id: doc.id,
           ...doc.data(),
@@ -80,7 +82,7 @@ export const getListsByColaboratorId = async (
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<ListEntityType>) =>
         ({
           id: doc.id,
           ...doc.data(),
