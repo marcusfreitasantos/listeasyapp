@@ -2,7 +2,11 @@ import * as S from "./styles";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { Button } from "@/src/components/button";
 
-export const NotFoundUserCard = () => {
+type NotFoundUserCardProps = {
+  sendInvite: () => void;
+};
+
+export const NotFoundUserCard = ({ sendInvite }: NotFoundUserCardProps) => {
   return (
     <>
       <ListEmpty
@@ -11,7 +15,7 @@ export const NotFoundUserCard = () => {
       />
 
       <S.NotFoundContainer>
-        <Button onPress={() => console.log("whats")} btnText="Enviar convite" />
+        <Button onPress={() => sendInvite()} btnText="Enviar convite" />
       </S.NotFoundContainer>
     </>
   );

@@ -1,15 +1,21 @@
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { InvitedUserEntity } from "../../model/invitedUser";
+import { ListEntityType } from "@/src/features/listsManager/model/list";
 
 type FoundUserCardProps = {
+  currentList: ListEntityType;
   invitedUser: InvitedUserEntity;
   alreadyInList: boolean;
   handleAddColaborator: (invitedUser: InvitedUserEntity) => void;
-  handleRemoveColaborator: (invitedUser: InvitedUserEntity) => void;
+  handleRemoveColaborator: (
+    invitedUser: InvitedUserEntity,
+    list: ListEntityType
+  ) => void;
 };
 
 export const FoundUserCard = ({
+  currentList,
   invitedUser,
   alreadyInList,
   handleAddColaborator,
@@ -17,7 +23,7 @@ export const FoundUserCard = ({
 }: FoundUserCardProps) => {
   const handleBtnOnPress = (invitedUser: InvitedUserEntity) => {
     if (alreadyInList) {
-      handleRemoveColaborator(invitedUser);
+      handleRemoveColaborator(invitedUser, currentList);
     } else {
       handleAddColaborator(invitedUser);
     }

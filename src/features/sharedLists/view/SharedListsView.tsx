@@ -21,6 +21,8 @@ export const SharedListsView = () => {
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
+    handleInvitationToNonUser,
+    setInvitedUsereEmail,
   } = useShareListsViewModel();
   const formFields = [
     {
@@ -38,6 +40,7 @@ export const SharedListsView = () => {
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
 
   const onSubmit = (data: Record<string, string>) => {
+    setInvitedUsereEmail(data.userEmail);
     fetchUsersByEmail(data.userEmail);
   };
 
@@ -72,7 +75,7 @@ export const SharedListsView = () => {
               submitBtnText="Pesquisar"
             />
 
-            {foundUsers && (
+            {foundUsers && currentList && (
               <>
                 <S.ListTitle>Resultado da sua busca</S.ListTitle>
 
@@ -87,12 +90,15 @@ export const SharedListsView = () => {
                       }}
                       alreadyInList={isAlreadyColaborator(item.userId)}
                       handleAddColaborator={handleAddColaboratorToCurrentList}
+                      currentList={currentList}
                       handleRemoveColaborator={
                         handleRemoveColaboratorFromCurrentList
                       }
                     />
                   )}
-                  ListEmptyComponent={() => <NotFoundUserCard />}
+                  ListEmptyComponent={() => (
+                    <NotFoundUserCard sendInvite={handleInvitationToNonUser} />
+                  )}
                 />
               </>
             )}
@@ -114,6 +120,7 @@ export const SharedListsView = () => {
                       }}
                       alreadyInList={true}
                       handleAddColaborator={handleAddColaboratorToCurrentList}
+                      currentList={currentList}
                       handleRemoveColaborator={
                         handleRemoveColaboratorFromCurrentList
                       }

@@ -12,6 +12,7 @@ import { useInvitationsViewModel } from "../../invitation/viewModel/useInvitatio
 import { updateInvite } from "@/src/services/firebase/invitations";
 import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 import { ListEntityType } from "../../listsManager/model/list";
+import { Linking } from "react-native";
 
 export const useShareListsViewModel = () => {
   const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
@@ -20,6 +21,7 @@ export const useShareListsViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
+  const [invitedUserEmail, setInvitedUsereEmail] = useState("");
   const [foundUsers, setFoundUsers] = useState<SubscriptionEntity[] | null>(
     null
   );
@@ -204,6 +206,57 @@ export const useShareListsViewModel = () => {
     }
   };
 
+  const sendInviteByWhatsapp = async () => {
+    const playStoreLink =
+      "https://play.google.com/store/apps/details?id=com.listeasy.app";
+    const message = `👋 Ei! ${
+      currentUser?.user.displayName ?? currentUser?.user.email
+    } te convidou pra usar o List Easy! 📋✨
+Vamos organizar juntos a lista "${currentList?.title}"? 
+Baixe o app aqui 👉 ${playStoreLink} 🚀🛒
+Te espero lá! 😄`;
+
+    const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
+
+    try {
+      const supported = await Linking.canOpenURL(whatsappUrl);
+      if (supported) {
+        await Linking.openURL(whatsappUrl);
+      } else {
+        Alert.alert("Erro", "Whatsapp não está instalado no seu dispositivo.");
+      }
+    } catch (e) {
+      Alert.alert("Erro", "Falha ao abrir o WhatsApp: " + e);
+    }
+  };
+
+  const handleInvitationToNonUser = async () => {
+    try {
+      setLoading(true);
+      const inviteObj: InviteEntity = {
+        userEmail: invitedUserEmail,
+        referralUsername:
+          currentUser?.user.displayName ?? currentUser?.user.email ?? "",
+        list: {
+          id: currentList?.id ?? "",
+          name: currentList?.title ?? "",
+        },
+        status: "pending",
+      };
+
+      await createInvitation(inviteObj);
+      sendInviteByWhatsapp();
+    } catch (e) {
+      Alert.alert(
+        "Erro",
+        `Não foi possível gerar o convite. Tente novamente mais tarde. \n ${e}
+        )}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isFocused) resetStates();
   }, [isFocused]);
@@ -218,5 +271,7 @@ export const useShareListsViewModel = () => {
     isAlreadyColaborator,
     addColaboratorToCurrentList,
     acceptInvite,
+    handleInvitationToNonUser,
+    setInvitedUsereEmail,
   };
 };
