@@ -12,6 +12,7 @@ import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 
 export const SignUpView = () => {
   const colorScheme = useColorScheme();
@@ -82,11 +83,9 @@ export const SignUpView = () => {
             </Pressable>
           </Link>
 
-          <Link href="/+not-found">
-            <Pressable>
-              <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
-            </Pressable>
-          </Link>
+          <Pressable onPress={() => sendSupportEmail()}>
+            <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+          </Pressable>
         </S.SecondaryContentRow>
       </S.Container>
     </KeyboardAvoidingView>

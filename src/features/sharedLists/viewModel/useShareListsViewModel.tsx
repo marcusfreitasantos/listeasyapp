@@ -208,7 +208,7 @@ export const useShareListsViewModel = () => {
 
   const sendInviteByWhatsapp = async () => {
     const playStoreLink =
-      "https://play.google.com/store/apps/details?id=com.listeasy.app";
+      "https://play.google.com/store/apps/details?id=com.penpack.listeasy";
     const message = `👋 Ei! ${
       currentUser?.user.displayName ?? currentUser?.user.email
     } te convidou pra usar o List Easy! 📋✨
