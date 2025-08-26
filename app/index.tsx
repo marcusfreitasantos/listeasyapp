@@ -9,6 +9,7 @@ import { useTheme } from "styled-components/native";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
+import { useInvitationsViewModel } from "@/src/features/invitation/viewModel/useInvitationsViewModel";
 
 const SignIn = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const SignIn = () => {
     GlobalSubscriptionContext
   );
   const [initializing, setInitializing] = useState(true);
+  const { fetchUserInvites } = useInvitationsViewModel();
 
   const handleSubscriptionCheck = async (
     userData: FirebaseAuthTypes.UserCredential["user"]
@@ -27,10 +29,11 @@ const SignIn = () => {
         id: "",
         stripeCustomerId: "",
         stripeSubscriptionStatus: "inactive",
-        userId: userData.uid,
-        userName: userData.displayName ?? "",
         productId: "",
         stripeSubscriptionId: "",
+        userId: userData.uid,
+        userName: userData.displayName ?? "",
+        userEmail: userData.email ?? "",
       };
 
       const subscription: SubscriptionEntity[] = await getSubscriptionByUserId(
@@ -45,6 +48,7 @@ const SignIn = () => {
             subscription[0].stripeSubscriptionStatus ?? "inactive",
           userId: userData.uid,
           userName: userData.displayName ?? "",
+          userEmail: userData.email ?? "",
           productId: subscription[0].productId ?? "",
           stripeSubscriptionId: subscription[0].stripeSubscriptionId ?? "",
         };
@@ -68,15 +72,23 @@ const SignIn = () => {
     if (initializing) setInitializing(false);
   };
 
+  const handleUserRedirect = async () => {
+    const invites = await fetchUserInvites(currentUser?.user.email ?? "");
+    if (invites?.length) {
+      router.replace("/invitations");
+    } else {
+      router.replace("/lists");
+    }
+  };
+
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
     return subscriber;
   }, []);
 
   useEffect(() => {
-    if (currentUser && currentSubscription) {
-      router.replace("/lists");
-    }
+    if (currentUser && currentUser.user.email && currentSubscription)
+      handleUserRedirect();
   }, [currentUser, currentSubscription]);
 
   if (initializing)

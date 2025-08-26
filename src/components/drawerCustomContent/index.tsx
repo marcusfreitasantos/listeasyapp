@@ -5,6 +5,7 @@ import { DrawerItem } from "../drawerItem";
 import { FeatherIconName } from "@/@types/icons";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
 import { LoadingSpinner } from "../loadingSpinner";
+import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 
 type DrawerCustomContentProps = {
   items: {
@@ -61,6 +62,13 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                     />
                   );
                 })}
+
+              <DrawerItem
+                route=""
+                title="Ajuda"
+                iconName="help-circle"
+                onPress={sendSupportEmail}
+              />
             </S.DrawerItemGroup>
 
             <S.DrawerDivisor />

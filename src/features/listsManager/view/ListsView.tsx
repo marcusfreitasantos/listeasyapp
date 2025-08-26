@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { KeyboardAvoidingView, Platform } from "react-native";
-import { useTheme } from "styled-components/native";
 import { ListCard } from "../components/listCard";
 import { FlatList } from "react-native-gesture-handler";
 import * as S from "./styles";
@@ -10,10 +9,11 @@ import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 
 const ListsView = () => {
-  const theme = useTheme();
   const flatListRef = useRef<FlatList>(null);
+  const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
 
   const {
     loading,
@@ -62,6 +62,9 @@ const ListsView = () => {
                   list={item}
                   removeList={removeList}
                   generatePdf={generatePdf}
+                  removeCurrentUserFromSharedList={
+                    handleRemoveColaboratorFromCurrentList
+                  }
                 />
               )}
               ListEmptyComponent={() => (

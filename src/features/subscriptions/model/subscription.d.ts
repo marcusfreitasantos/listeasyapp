@@ -6,6 +6,7 @@ type SubscriptionEntity = {
   stripeSubscriptionId: string;
   userId: string;
   userName: string;
+  userEmail: string;
 };
 
 type SubscriptionContextType = {

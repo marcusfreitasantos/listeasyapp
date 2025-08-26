@@ -11,20 +11,40 @@ import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
 import { centsToReais } from "@/src/utils/convertCurrency";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
+import { GlobalUserContext } from "@/src/context/userContext";
+import { InvitedUserEntity } from "@/src/features/sharedLists/model/invitedUser";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 
 type ListCardProps = {
   list: ListEntityType;
   removeList: (listId: string) => void;
   generatePdf: (listName: string, html: string) => void;
+  removeCurrentUserFromSharedList: (
+    invitedUser: InvitedUserEntity,
+    list: ListEntityType
+  ) => void;
 };
 
-export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
+export const ListCard = ({
+  list,
+  removeList,
+  generatePdf,
+  removeCurrentUserFromSharedList,
+}: ListCardProps) => {
+  const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const router = useRouter();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
+  const isColaborator =
+    list.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ?? false;
+
+  const essentialPlanId = __DEV__
+    ? "price_1RoCGTF7G6AyWSJCkPEopkX7"
+    : "price_1Rpk4YF7G6AyWSJCuzz6hRXV";
 
   const handleDeleteList = () => {
     Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
@@ -40,13 +60,39 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
     ]);
   };
 
+  const handleRemoveCurrentUserFromSharedList = () => {
+    setCurrentList(list);
+
+    const invitedUser = {
+      userId: currentUser?.user.uid ?? "",
+      userName: currentUser?.user.displayName ?? "",
+      userEmail: currentUser?.user.email ?? "",
+    };
+
+    removeCurrentUserFromSharedList(invitedUser, list);
+  };
+
   const handlePDFExport = () => {
     const html = buildHtmlPDFTemplate(list.title, list.items, list.totalPrice);
     generatePdf(list.title, html);
   };
+
   const handleEditList = () => {
     setCurrentList(list);
     router.push(`/lists/${list.id}`);
+  };
+
+  const handleShareListAccess = () => {
+    setCurrentList(list);
+    if (
+      currentSubscription &&
+      currentSubscription.stripeSubscriptionStatus === "active" &&
+      currentSubscription?.productId !== essentialPlanId
+    ) {
+      router.push("/sharedLists");
+    } else {
+      router.push("/(drawer)/subscriptions");
+    }
   };
 
   const listMenuOptions = [
@@ -54,28 +100,45 @@ export const ListCard = ({ list, removeList, generatePdf }: ListCardProps) => {
       label: "Editar",
       iconName: "edit" as FeatherIconName,
       onPress: () => handleEditList(),
+      showOption: true,
     },
     {
-      label: "Compartilhar acesso (em breve)",
+      label: "Acesso compartilhado",
       iconName: "share-2" as FeatherIconName,
-      onPress: () => console.log("compartilhar"),
+      onPress: () => handleShareListAccess(),
+      showOption: !isColaborator,
     },
     {
       label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
+      showOption: true,
     },
     {
       label: "Excluir",
       iconName: "trash" as FeatherIconName,
       onPress: () => handleDeleteList(),
+      showOption: !isColaborator,
+    },
+    {
+      label: "Sair da lista",
+      iconName: "delete" as FeatherIconName,
+      onPress: () => handleRemoveCurrentUserFromSharedList(),
+      showOption: isColaborator,
     },
   ];
 
   return (
-    <S.ListCardWrapper onPress={() => handleEditList()}>
+    <S.ListCardWrapper
+      onPress={() => handleEditList()}
+      isColaborator={isColaborator}
+    >
       <S.ListCardHeader>
         <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
+
+        {isColaborator && (
+          <S.ListCardSubTitle>[compartilhada]</S.ListCardSubTitle>
+        )}
 
         <S.ListCardMenuBtn onPress={() => setIsMenuOpen(!isMenuOpen)}>
           <Feather

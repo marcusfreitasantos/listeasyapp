@@ -22,8 +22,13 @@ export default function Layout() {
     },
     {
       route: "subscriptions",
-      title: "Assinaturas",
+      title: "Planos",
       iconName: "credit-card" as FeatherIconName,
+    },
+    {
+      route: "invitations",
+      title: "Convites",
+      iconName: "file-plus" as FeatherIconName,
     },
   ];
 

@@ -5,6 +5,7 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import {
   insertNewList,
   getListsByAuthorId,
+  getListsByColaboratorId,
   removeListById,
 } from "@/src/services/firebase/lists";
 import { Alert } from "react-native";
@@ -16,21 +17,20 @@ import * as FileSystem from "expo-file-system";
 export const useListManagerViewModel = () => {
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
-  const { setListsLength } = useContext(GlobalListContext);
+  const { setListsLength, currentUserLists, setCurrentUserLists } =
+    useContext(GlobalListContext);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const [currentUserLists, setCurrentUserLists] = useState<
-    ListEntityType[] | []
-  >([]);
-
   const getUserLists = async () => {
     try {
       setLoading(true);
-      if (!currentUser?.user?.uid) throw new Error("Usuário inválido");
+      if (!currentUser?.user?.uid || !currentUser?.user?.email)
+        throw new Error("Usuário inválido");
       const response = await getListsByAuthorId(currentUser.user.uid);
-      setCurrentUserLists(response);
+      const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
+      setCurrentUserLists(sharedLists.concat(response));
     } catch (error) {
       Alert.alert("Oops!", `Não foi possível resgatar suas listas: ${error}`);
     } finally {

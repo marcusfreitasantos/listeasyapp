@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
-import { Alert } from "react-native";
+import { Alert, Linking } from "react-native";
 import { useRouter } from "expo-router";
 import { authUser } from "@/src/services/firebase/auth";
 

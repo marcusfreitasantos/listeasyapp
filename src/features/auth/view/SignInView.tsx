@@ -3,6 +3,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  Linking,
+  Alert,
 } from "react-native";
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
@@ -12,6 +14,7 @@ import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 
 export const SignInView = () => {
   const colorScheme = useColorScheme();
@@ -80,13 +83,11 @@ export const SignInView = () => {
                 </Pressable>
               </Link>
 
-              <Link href="/+not-found" asChild>
-                <Pressable>
-                  <S.SecondaryContentText>
-                    Precisa de ajuda?
-                  </S.SecondaryContentText>
-                </Pressable>
-              </Link>
+              <Pressable onPress={() => sendSupportEmail()}>
+                <S.SecondaryContentText>
+                  Precisa de ajuda?
+                </S.SecondaryContentText>
+              </Pressable>
             </S.SecondaryContentRow>
           </>
         )}

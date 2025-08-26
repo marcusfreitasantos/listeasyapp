@@ -4,9 +4,11 @@ import firestore, {
   collection,
   where,
   getDocs,
+  getDoc,
   orderBy,
   doc,
   updateDoc,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
 
@@ -26,6 +28,25 @@ export const insertNewList = async (listEntity: ListEntityType) => {
   }
 };
 
+export const getListById = async (listId: string): Promise<ListEntityType> => {
+  try {
+    const docSnap: FirebaseFirestoreTypes.DocumentSnapshot<ListEntityType> =
+      await getDoc(doc(listsCollection, listId));
+
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      } as ListEntityType;
+    } else {
+      throw new Error("No such document!");
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching list by list ID: ${error}`);
+  }
+};
+
 export const getListsByAuthorId = async (
   userId: string
 ): Promise<ListEntityType[]> => {
@@ -38,7 +59,7 @@ export const getListsByAuthorId = async (
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<ListEntityType>) =>
         ({
           id: doc.id,
           ...doc.data(),
@@ -47,6 +68,29 @@ export const getListsByAuthorId = async (
   } catch (error) {
     console.log(error);
     throw new Error(`Error fetching lists by authorId: ${error}`);
+  }
+};
+
+export const getListsByColaboratorId = async (
+  userId: string
+): Promise<ListEntityType[]> => {
+  try {
+    const queryCommand = query(
+      listsCollection,
+      where("colaboratorsIds", "array-contains", userId)
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<ListEntityType>) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as ListEntityType)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching lists by colaboratorsId: ${error}`);
   }
 };
 

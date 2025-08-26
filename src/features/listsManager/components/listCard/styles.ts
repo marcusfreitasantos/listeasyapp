@@ -1,11 +1,17 @@
 import styled from "styled-components/native";
 
-export const ListCardWrapper = styled.TouchableOpacity`
+type ListCardWrapperProps = {
+  isColaborator: boolean;
+};
+
+export const ListCardWrapper = styled.TouchableOpacity<ListCardWrapperProps>`
   background-color: ${({ theme }) => theme.thirdColor};
   margin-bottom: ${({ theme }) => theme.defaultSizes.xxSmall};
   padding: ${({ theme }) => theme.defaultSizes.small}
     ${({ theme }) => theme.defaultSizes.medium};
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
+  border-color: ${({ theme }) => theme.primaryColor};
+  border-width: ${(props) => (props.isColaborator ? "1px" : 0)};
 `;
 
 export const ListCardHeader = styled.View`
@@ -25,6 +31,12 @@ export const ListCardTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.medium};
+`;
+
+export const ListCardSubTitle = styled.Text`
+  color: ${({ theme }) => theme.primaryColor};
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.xSmall};
 `;
 
 export const ListCardTotalPriceWrapper = styled.View`

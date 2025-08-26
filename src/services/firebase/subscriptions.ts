@@ -6,6 +6,7 @@ import {
   getDocs,
   doc,
   updateDoc,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
@@ -15,7 +16,8 @@ const subsCollection = collection(getFirestore(), "Subscriptions");
 export const insertNewSubscription = async (
   userId: string,
   stripeCustomerId: string,
-  userName: string
+  userName: string,
+  userEmail: string
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
@@ -24,6 +26,7 @@ export const insertNewSubscription = async (
       stripeSubscriptionStatus: "inactive",
       productId: "",
       userName,
+      userEmail,
       stripeSubscriptionId: "",
     };
 
@@ -40,7 +43,28 @@ export const getSubscriptionByUserId = async (userId: string) => {
     const querySnapshot = await getDocs(queryCommand);
 
     return querySnapshot.docs.map(
-      (doc) =>
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
+        ({
+          id: doc.ref.id,
+          ...doc.data(),
+        } as SubscriptionEntity)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching subscription by userId: ${error}`);
+  }
+};
+
+export const getSubscriptionByUserEmail = async (userEmail: string) => {
+  try {
+    const queryCommand = query(
+      subsCollection,
+      where("userEmail", "==", userEmail)
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
         ({
           id: doc.ref.id,
           ...doc.data(),

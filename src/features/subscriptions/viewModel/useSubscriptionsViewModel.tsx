@@ -137,6 +137,8 @@ export const useSubscriptionsViewModel = () => {
 
               await updateSubscription(updatedSubscription);
               setCurrentSubscription(updatedSubscription);
+
+              Alert.alert("Tudo certo!", "Assinatura cancelada com sucesso.");
             } catch (error) {
               Alert.alert("Oops!", "Não foi possível cancelar sua assinatura!");
               console.log(error);
@@ -198,7 +200,12 @@ export const useSubscriptionsViewModel = () => {
       try {
         setLoading(true);
         const response = await getProductsFromStripe();
-        if (isMounted) setProducts(response);
+        const sortedProducts = response.sort(
+          (a: ProductEntity, b: ProductEntity) => {
+            return b.amount - a.amount;
+          }
+        );
+        if (isMounted) setProducts(sortedProducts);
       } catch (error) {
         console.log(error);
       } finally {

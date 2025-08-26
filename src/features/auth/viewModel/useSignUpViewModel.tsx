@@ -23,13 +23,15 @@ export const useSignUpViewModel = () => {
   const handleInsertNewSubscription = async (
     userId: string,
     stripeCustomerId: string,
-    userName: string
+    userName: string,
+    userEmail: string
   ) => {
     try {
       const newSubscriber = await insertNewSubscription(
         userId,
         stripeCustomerId,
-        userName
+        userName,
+        userEmail
       );
       return newSubscriber;
     } catch (error: any) {
@@ -57,7 +59,8 @@ export const useSignUpViewModel = () => {
           await handleInsertNewSubscription(
             registeredUser.user.uid,
             newStripeCustomer.stripeCustomerId,
-            displayName
+            displayName,
+            email
           );
         }
       }
