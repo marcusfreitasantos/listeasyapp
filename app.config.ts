@@ -10,11 +10,6 @@ const config: ExpoConfig = {
   icon: "./assets/icon.png",
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
-  splash: {
-    image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: bgColor,
-  },
   ios: {
     supportsTablet: true,
   },
@@ -83,6 +78,15 @@ const config: ExpoConfig = {
       {
         merchantIdentifier: "merchant.com.listeasy",
         enableGooglePay: true,
+      },
+    ],
+    [
+      "expo-splash-screen",
+      {
+        image: "./assets/splash-icon.png",
+        imageWidth: 200,
+        resizeMode: "contain",
+        backgroundColor: bgColor,
       },
     ],
   ],
