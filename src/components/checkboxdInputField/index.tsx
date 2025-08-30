@@ -19,12 +19,16 @@ export const CheckboxInputField = ({
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
   const handleCheck = () => {
-    setIsChecked(!isChecked);
+    //setIsChecked(!isChecked);
     handleCheckItem(!isChecked);
   };
 
   return (
-    <S.CheckBoxItemWrapper onPress={handleCheck}>
+    <S.CheckBoxItemWrapper
+      onPress={handleCheck}
+      onPressIn={(e) => e.stopPropagation()}
+      hitSlop={20}
+    >
       <S.CheckBoxItem size={iconSize}>
         {isChecked && (
           <Feather size={iconSize} color={theme.primaryColor} name="check" />

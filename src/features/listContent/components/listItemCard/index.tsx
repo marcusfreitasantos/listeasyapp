@@ -65,6 +65,8 @@ export const ListItemCard = ({
             color={theme.primaryColor}
             name="edit"
             onPress={() => handleEditItem()}
+            onPressIn={(e) => e.stopPropagation()}
+            hitSlop={20}
           />
 
           <Feather
@@ -72,6 +74,8 @@ export const ListItemCard = ({
             color={theme.primaryColor}
             name="trash"
             onPress={() => handleRemoveItemFromList()}
+            onPressIn={(e) => e.stopPropagation()}
+            hitSlop={20}
           />
         </S.ListItemIconsRow>
       </S.ListItemHeader>
