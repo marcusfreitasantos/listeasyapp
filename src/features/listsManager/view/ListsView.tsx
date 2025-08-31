@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
+import { KeyboardAvoidingView, Platform, RefreshControl } from "react-native";
 import { ListCard } from "../components/listCard";
 import { FlatList } from "react-native-gesture-handler";
 import * as S from "./styles";
@@ -25,6 +25,7 @@ const ListsView = () => {
     setModalIsOpen,
     removeList,
     generatePdf,
+    getUserLists,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -52,6 +53,12 @@ const ListsView = () => {
             />
 
             <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={loading}
+                  onRefresh={() => getUserLists()}
+                />
+              }
               ref={flatListRef}
               data={currentUserLists.filter((list) =>
                 list.title.toLowerCase().includes(searchTerm.toLowerCase())
