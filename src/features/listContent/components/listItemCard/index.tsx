@@ -56,18 +56,11 @@ export const ListItemCard = ({
             isItemChecked={listItem.checked ?? false}
             handleCheckItem={(isChecked: boolean) => handleCheckItem(isChecked)}
           />
-          <S.ListItemName>{listItem.name}</S.ListItemName>
+          <S.ListItemName numberOfLines={2}>{listItem.name}</S.ListItemName>
         </S.ListItemNameWrapper>
 
         <S.ListItemIconsRow>
-          <Feather
-            size={iconSize}
-            color={theme.primaryColor}
-            name="edit"
-            onPress={() => handleEditItem()}
-            onPressIn={(e) => e.stopPropagation()}
-            hitSlop={20}
-          />
+          <Feather size={iconSize} color={theme.primaryColor} name="edit" />
 
           <Feather
             size={iconSize}
@@ -75,7 +68,7 @@ export const ListItemCard = ({
             name="trash"
             onPress={() => handleRemoveItemFromList()}
             onPressIn={(e) => e.stopPropagation()}
-            hitSlop={20}
+            hitSlop={60}
           />
         </S.ListItemIconsRow>
       </S.ListItemHeader>
