@@ -51,6 +51,30 @@ export const getInvitesByUserEmail = async (
   }
 };
 
+export const getInvitesSentByCurrentUser = async (
+  userId: string
+): Promise<InviteEntity[]> => {
+  try {
+    const queryCommand = query(
+      invitesCollection,
+      where("referralUserId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<InviteEntity>) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as InviteEntity)
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching invites by userEmail: ${error}`);
+  }
+};
+
 export const updateInvite = async (invite: InviteEntity) => {
   try {
     const listRef = doc(invitesCollection, invite.id);
@@ -60,5 +84,13 @@ export const updateInvite = async (invite: InviteEntity) => {
     });
   } catch (error) {
     throw new Error(`Error updating invite: ${error}`);
+  }
+};
+
+export const removeInviteById = async (inviteId: string) => {
+  try {
+    await invitesCollection.doc(inviteId).delete();
+  } catch (error) {
+    throw new Error(`Error removing invite: ${error}`);
   }
 };

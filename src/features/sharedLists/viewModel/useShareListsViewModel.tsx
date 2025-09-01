@@ -114,6 +114,7 @@ export const useShareListsViewModel = () => {
       userEmail: invitedUser.userEmail,
       referralUsername:
         currentUser?.user.displayName ?? currentUser?.user.email ?? "",
+      referralUserId: currentUser?.user.uid ?? "",
       list: {
         id: currentList?.id ?? "",
         name: currentList?.title ?? "",
@@ -237,6 +238,7 @@ Te espero lá! 😄`;
         userEmail: invitedUserEmail,
         referralUsername:
           currentUser?.user.displayName ?? currentUser?.user.email ?? "",
+        referralUserId: currentUser?.user.uid ?? "",
         list: {
           id: currentList?.id ?? "",
           name: currentList?.title ?? "",
