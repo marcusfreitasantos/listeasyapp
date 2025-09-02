@@ -9,6 +9,7 @@ import firestore, {
   doc,
   updateDoc,
   FirebaseFirestoreTypes,
+  serverTimestamp,
 } from "@react-native-firebase/firestore";
 
 const invitesCollection = collection(getFirestore(), "Invites");
@@ -17,8 +18,8 @@ export const insertNewInvite = async (invite: InviteEntity) => {
   try {
     const inviteObj = {
       ...invite,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
     await invitesCollection.add(inviteObj);
     return true;
@@ -80,7 +81,7 @@ export const updateInvite = async (invite: InviteEntity) => {
     const listRef = doc(invitesCollection, invite.id);
     await updateDoc(listRef, {
       ...invite,
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
   } catch (error) {
     throw new Error(`Error updating invite: ${error}`);

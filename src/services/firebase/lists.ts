@@ -9,6 +9,7 @@ import firestore, {
   doc,
   updateDoc,
   FirebaseFirestoreTypes,
+  serverTimestamp,
 } from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
 
@@ -18,8 +19,8 @@ export const insertNewList = async (listEntity: ListEntityType) => {
   try {
     const listObj = {
       ...listEntity,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
     await listsCollection.add(listObj);
     return true;
@@ -99,7 +100,7 @@ export const updateListContent = async (currentList: ListEntityType) => {
     const listRef = doc(listsCollection, currentList.id);
     await updateDoc(listRef, {
       ...currentList,
-      updatedAt: firestore.FieldValue.serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
   } catch (error) {
     throw new Error(`Error updating list: ${error}`);

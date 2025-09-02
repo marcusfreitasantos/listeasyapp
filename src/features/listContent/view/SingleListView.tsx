@@ -33,7 +33,7 @@ export const SingleListView = () => {
     handleAddNewItem,
     showItemsFilter,
     setShowItemsFilter,
-    filterItemsByStatus,
+    setCurrentStatus,
     currentItems,
   } = useListContentViewModel();
 
@@ -93,9 +93,7 @@ export const SingleListView = () => {
             </S.SearchFormWrapper>
           </S.SearchFormContainer>
 
-          {showItemsFilter && (
-            <ItemsFilter filterMethod={filterItemsByStatus} />
-          )}
+          {showItemsFilter && <ItemsFilter filterMethod={setCurrentStatus} />}
 
           <FlatList
             data={currentItems.filter((item) =>
