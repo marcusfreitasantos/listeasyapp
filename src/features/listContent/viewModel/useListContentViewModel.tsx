@@ -28,8 +28,6 @@ export const useListContentViewModel = () => {
     setLoading(false);
     setCurrentItem(null);
     setRenameModalIsOpen(false);
-    setCurrentItems(currentList?.items ?? []);
-    setSearchTerm("");
     setShowItemsFilter(false);
   };
 
