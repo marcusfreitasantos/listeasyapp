@@ -1,12 +1,12 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.0.2";
+const runtimeVersion = "4.0.3";
 const bgColor = "#222222";
 
 const config: ExpoConfig = {
   name: "List Easy",
   slug: "listeasy",
   version: runtimeVersion,
-  orientation: "portrait",
+  orientation: "default",
   icon: "./assets/icon.png",
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
