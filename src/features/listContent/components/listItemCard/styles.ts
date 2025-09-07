@@ -35,6 +35,7 @@ export const ListItemName = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: bold;
+  width: 70%;
 `;
 
 export const ListInfoRow = styled.View`

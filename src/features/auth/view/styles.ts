@@ -17,7 +17,8 @@ export const SecondaryContentRow = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 12px;
+  gap: ${({ theme }) => theme.defaultSizes.xSmall};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.medium};
 `;
 
 export const MainContentText = styled.Text`

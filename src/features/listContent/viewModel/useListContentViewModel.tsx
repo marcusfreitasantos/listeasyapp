@@ -10,6 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
+  const [currentStatus, setCurrentStatus] = useState<string[]>([]);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,9 +29,6 @@ export const useListContentViewModel = () => {
     setLoading(false);
     setCurrentItem(null);
     setRenameModalIsOpen(false);
-    setCurrentItems(currentList?.items ?? []);
-    setSearchTerm("");
-    setShowItemsFilter(false);
   };
 
   const updateListItems = async (listItems: ListItemType) => {
@@ -137,15 +135,15 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const filterItemsByStatus = (status: string[]) => {
+  const filterItemsByStatus = () => {
     const items = currentList?.items ?? [];
 
-    if (status.length === 0 || status.length === 2) {
+    if (currentStatus.length === 0 || currentStatus.length === 2) {
       setCurrentItems(items);
       return;
     }
 
-    const showChecked = status.includes("Marcado");
+    const showChecked = currentStatus.includes("Marcado");
 
     setCurrentItems(
       items.filter((item: ListItemType) => item.checked === showChecked)
@@ -171,8 +169,10 @@ export const useListContentViewModel = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    if (currentList) setCurrentItems(currentList?.items);
-  }, [currentList?.items]);
+    if (currentList) {
+      filterItemsByStatus();
+    }
+  }, [currentList?.items, currentStatus]);
 
   return {
     updateListItems,
@@ -193,6 +193,6 @@ export const useListContentViewModel = () => {
     currentItems,
     showItemsFilter,
     setShowItemsFilter,
-    filterItemsByStatus,
+    setCurrentStatus,
   };
 };

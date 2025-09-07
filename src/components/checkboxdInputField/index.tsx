@@ -1,7 +1,6 @@
 import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 import Feather from "@expo/vector-icons/Feather";
-import { useState } from "react";
 
 type CheckboxInputFieldProps = {
   isItemChecked: boolean;
@@ -14,19 +13,21 @@ export const CheckboxInputField = ({
   checkBoxLabel,
   handleCheckItem,
 }: CheckboxInputFieldProps) => {
-  const [isChecked, setIsChecked] = useState(isItemChecked);
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
   const handleCheck = () => {
-    setIsChecked(!isChecked);
-    handleCheckItem(!isChecked);
+    handleCheckItem(!isItemChecked);
   };
 
   return (
-    <S.CheckBoxItemWrapper onPress={handleCheck}>
+    <S.CheckBoxItemWrapper
+      onPress={handleCheck}
+      onPressIn={(e) => e.stopPropagation()}
+      hitSlop={40}
+    >
       <S.CheckBoxItem size={iconSize}>
-        {isChecked && (
+        {isItemChecked && (
           <Feather size={iconSize} color={theme.primaryColor} name="check" />
         )}
       </S.CheckBoxItem>

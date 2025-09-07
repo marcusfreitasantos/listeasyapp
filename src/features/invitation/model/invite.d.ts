@@ -2,6 +2,7 @@ export type InviteEntity = {
   id?: string;
   userEmail: string;
   referralUsername: string;
+  referralUserId: string;
   list: {
     id: string;
     name: string;

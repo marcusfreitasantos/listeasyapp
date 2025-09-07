@@ -36,7 +36,7 @@ export const AddListItemModal = ({
         : "",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
-        required: true,
+        required: false,
       },
     },
     {
@@ -46,7 +46,7 @@ export const AddListItemModal = ({
       defaultValue: currentItem ? currentItem.quantity.toString() : "",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
-        required: true,
+        required: false,
       },
     },
     {

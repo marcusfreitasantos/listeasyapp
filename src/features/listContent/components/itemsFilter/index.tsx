@@ -39,7 +39,7 @@ export const ItemsFilter = ({ filterMethod }: ItemsFilterProps) => {
           <CheckboxInputField
             key={item.label}
             isItemChecked={selectedOptions.includes(item.label)}
-            handleCheckItem={(checked) => handleCheck(item.label)}
+            handleCheckItem={() => handleCheck(item.label)}
             checkBoxLabel={item.label}
           />
         );
