@@ -41,7 +41,7 @@ export const InviteListItem = ({
 
         <Button
           btnType="dark"
-          btnText="Rejeitar"
+          btnText={isSentInvite ? "Remover" : "Rejeitar"}
           onPress={() => handleReject()}
         />
       </S.InviteBtnWrapper>

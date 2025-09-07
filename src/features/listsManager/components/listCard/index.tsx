@@ -73,8 +73,20 @@ export const ListCard = ({
   };
 
   const handlePDFExport = () => {
-    const html = buildHtmlPDFTemplate(list.title, list.items, list.totalPrice);
-    generatePdf(list.title, html);
+    if (
+      currentSubscription &&
+      currentSubscription.stripeSubscriptionStatus === "active" &&
+      currentSubscription?.productId !== essentialPlanId
+    ) {
+      const html = buildHtmlPDFTemplate(
+        list.title,
+        list.items,
+        list.totalPrice
+      );
+      generatePdf(list.title, html);
+    } else {
+      router.push("/(drawer)/subscriptions");
+    }
   };
 
   const handleEditList = () => {
