@@ -103,8 +103,16 @@ const config: ExpoConfig = {
     stripeApiPublicKeyTest: process.env.STRIPE_API_PUBLIC_KEY_TEST,
     stripeApiPublicKeyProd: process.env.STRIPE_API_PUBLIC_KEY_PROD,
   },
-
   owner: "marcusfreitas",
+  updates: {
+    enabled: true,
+    fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/021d95ea-9341-4a16-bed5-85eeacc48547",
+    requestHeaders: {
+      "runtime-version": runtimeVersion,
+      "channel-name": "production",
+    },
+  },
   runtimeVersion: {
     policy: "appVersion",
   },
