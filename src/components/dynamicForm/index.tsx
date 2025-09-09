@@ -64,18 +64,16 @@ export const DynamicForm = ({
 
     if (errorType === "required") {
       errorMsg = "Campo obrigatório!";
-    } else if (fieldName === "firstName" || fieldName === "lastName") {
-      if (errorType === "maxLength") {
-        errorMsg = "Número de caracteres excedido.";
-      } else {
-        errorMsg = "Este campo precisa ter no mínimo 3 caracteres";
-      }
+    } else if (errorType === "maxLength") {
+      errorMsg = "Número de caracteres excedido.";
+    } else if (errorType === "minLength") {
+      errorMsg = "Este campo precisa ter no mínimo 3 caracteres";
     } else if (fieldName === "password") {
       if (errorType === "minLength") {
         errorMsg = "Este campo precisa ter no mínimo 8 caracteres";
       }
     } else {
-      errorMsg = "";
+      errorMsg = "Erro desconhecido!";
     }
 
     return errorMsg;

@@ -30,7 +30,6 @@ export const SignUpView = () => {
       placeholder: "Seu nome e sobrenome",
       validationRules: {
         required: true,
-        maxLength: 20,
         minLength: 3,
       },
     },
