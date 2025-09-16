@@ -30,3 +30,6 @@ google-services.json
 
 #Firebase config file
 firebase.config.ts
+
+# Google ADMOB app-ads.txt
+app-ads.txt
