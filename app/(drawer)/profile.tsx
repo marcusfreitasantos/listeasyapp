@@ -1,4 +1,4 @@
-import { ProfileView } from "@/src/features/profile/view";
+import { ProfileView } from "@/src/features/profile/view/ProfileView";
 
 const Profile = () => {
   return <ProfileView />;
