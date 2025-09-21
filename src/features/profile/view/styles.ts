@@ -29,7 +29,7 @@ export const ContentSubText = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
 `;
 
-export const UserInfoAvatarWrapper = styled.View`
+export const UserInfoAvatarWrapper = styled.TouchableOpacity`
   margin: ${({ theme }) => theme.defaultSizes.medium} 0;
   justify-content: center;
   align-items: center;

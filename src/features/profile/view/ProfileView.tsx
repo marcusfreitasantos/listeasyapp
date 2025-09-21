@@ -37,7 +37,7 @@ export const ProfileView = () => {
 
   const handlePickImage = async () => {
     const pickedImgURI = await pickImage();
-    setLocalPhotoUrl(pickedImgURI ?? null);
+    if (pickedImgURI) setLocalPhotoUrl(pickedImgURI ?? null);
   };
 
   const confirmResetPassword = () => {
@@ -67,7 +67,7 @@ export const ProfileView = () => {
           <LoadingSpinner />
         ) : (
           <>
-            <S.UserInfoAvatarWrapper>
+            <S.UserInfoAvatarWrapper onPress={handlePickImage}>
               <S.UserInfoAvatarImgWrapper>
                 {localPhotoUrl ? (
                   <S.UserInfoAvatarImage source={{ uri: localPhotoUrl }} />
@@ -78,9 +78,7 @@ export const ProfileView = () => {
                 )}
               </S.UserInfoAvatarImgWrapper>
 
-              <Pressable onPress={handlePickImage}>
-                <S.ContentText>Alterar imagem</S.ContentText>
-              </Pressable>
+              <S.ContentText>Alterar imagem</S.ContentText>
               <S.ContentSubText>
                 Tamanho máximo: {fileMaxSize}kb
               </S.ContentSubText>

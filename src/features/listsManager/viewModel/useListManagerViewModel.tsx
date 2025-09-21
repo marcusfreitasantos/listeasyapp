@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { ListEntityType } from "../model/list";
 import { GlobalListContext } from "@/src/context/listContext";
 import { GlobalUserContext } from "@/src/context/userContext";
 import {
