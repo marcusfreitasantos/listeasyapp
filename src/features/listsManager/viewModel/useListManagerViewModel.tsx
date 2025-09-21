@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import { ListEntityType } from "../model/list";
 import { GlobalListContext } from "@/src/context/listContext";
 import { GlobalUserContext } from "@/src/context/userContext";
 import {
@@ -80,7 +79,7 @@ export const useListManagerViewModel = () => {
       const pdfName = `${file.uri.slice(
         0,
         file.uri.lastIndexOf("/") + 1
-      )}lista_${listName.toLowerCase().replaceAll(" ", "_")}.pdf`;
+      )}lista_${listName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "")}.pdf`;
 
       await FileSystem.moveAsync({
         from: file.uri,

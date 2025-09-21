@@ -1,8 +1,8 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import { updateUserData, updateUserEmail } from "@/src/services/firebase/auth";
+import { updateUserData } from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 
 export const useUpdateProfileViewModel = () => {

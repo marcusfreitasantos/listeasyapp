@@ -27,6 +27,7 @@ export const ListName = styled.Text`
   color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
+  flex: 1;
 `;
 
 export const ListViewFooter = styled.View`

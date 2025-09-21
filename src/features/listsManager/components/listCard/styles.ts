@@ -31,6 +31,7 @@ export const ListCardTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.medium};
+  flex: 1;
 `;
 
 export const ListCardSubTitle = styled.Text`
