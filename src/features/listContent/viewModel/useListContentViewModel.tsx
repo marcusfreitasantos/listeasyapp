@@ -123,8 +123,6 @@ export const useListContentViewModel = () => {
 
   const handleAddNewItem = () => {
     const showAd =
-      (!currentSubscription ||
-        currentSubscription.stripeSubscriptionStatus !== "active") &&
       currentList &&
       currentList.items.length &&
       currentList.items.length % 5 === 0;

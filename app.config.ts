@@ -47,8 +47,6 @@ const config: ExpoConfig = {
         android: {
           enableProguardInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
-          extraProguardRules:
-            "-dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivity$g -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Args -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter$Error -dontwarn com.stripe.android.pushProvisioning.PushProvisioningActivityStarter -dontwarn com.stripe.android.pushProvisioning.PushProvisioningEphemeralKeyProvider",
         },
       },
     ],
@@ -74,13 +72,6 @@ const config: ExpoConfig = {
       },
     ],
     [
-      "@stripe/stripe-react-native",
-      {
-        merchantIdentifier: "merchant.com.listeasy",
-        enableGooglePay: true,
-      },
-    ],
-    [
       "expo-splash-screen",
       {
         image: "./assets/splash-icon.png",
@@ -100,8 +91,6 @@ const config: ExpoConfig = {
     eas: {
       projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
     },
-    stripeApiPublicKeyTest: process.env.STRIPE_API_PUBLIC_KEY_TEST,
-    stripeApiPublicKeyProd: process.env.STRIPE_API_PUBLIC_KEY_PROD,
   },
   owner: "marcusfreitas",
   updates: {

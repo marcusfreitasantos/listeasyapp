@@ -2,42 +2,9 @@ import { useState } from "react";
 import { registerUser } from "@/src/services/firebase/auth";
 import { Alert } from "react-native";
 import { router } from "expo-router";
-import { createCustomerOnStripe } from "@/src/services/stripe/customer";
-import { insertNewSubscription } from "@/src/services/firebase/subscriptions";
 
 export const useSignUpViewModel = () => {
   const [loading, setLoading] = useState(false);
-
-  const handleStripeCustomerCreation = async (
-    userEmail: string,
-    userName: string
-  ) => {
-    try {
-      const stripeCustomer = await createCustomerOnStripe(userEmail, userName);
-      return stripeCustomer;
-    } catch (error: any) {
-      throw new Error(`Error creating Stripe customer: ${error.message}`);
-    }
-  };
-
-  const handleInsertNewSubscription = async (
-    userId: string,
-    stripeCustomerId: string,
-    userName: string,
-    userEmail: string
-  ) => {
-    try {
-      const newSubscriber = await insertNewSubscription(
-        userId,
-        stripeCustomerId,
-        userName,
-        userEmail
-      );
-      return newSubscriber;
-    } catch (error: any) {
-      throw new Error(`Error inserting new subscriber: ${error.message}`);
-    }
-  };
 
   const handleSignUp = async (
     email: string,
@@ -50,27 +17,15 @@ export const useSignUpViewModel = () => {
       const registeredUser = await registerUser(email, password, displayName);
 
       if (registeredUser.user.uid) {
-        const newStripeCustomer = await handleStripeCustomerCreation(
-          email,
-          displayName
-        );
-
-        if (newStripeCustomer.stripeCustomerId) {
-          await handleInsertNewSubscription(
-            registeredUser.user.uid,
-            newStripeCustomer.stripeCustomerId,
-            displayName,
-            email
-          );
-        }
+        Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
+          {
+            text: "Fazer login",
+            onPress: () => router.push("/"),
+          },
+        ]);
       }
 
-      Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
-        {
-          text: "Fazer login",
-          onPress: () => router.push("/"),
-        },
-      ]);
+      throw new Error("Não foi possível criar a conta.");
     } catch (error: any) {
       console.log("useSignUpViewModel", error);
       Alert.alert("Oops! Algo deu errado:", `${error}`);

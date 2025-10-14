@@ -75,7 +75,6 @@ export const ListCard = ({
   const handlePDFExport = () => {
     if (
       currentSubscription &&
-      currentSubscription.stripeSubscriptionStatus === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       const html = buildHtmlPDFTemplate(
@@ -98,7 +97,6 @@ export const ListCard = ({
     setCurrentList(list);
     if (
       currentSubscription &&
-      currentSubscription.stripeSubscriptionStatus === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       router.push("/sharedLists");
