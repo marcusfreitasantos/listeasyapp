@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   FirebaseFirestoreTypes,
+  addDoc,
 } from "@react-native-firebase/firestore";
 
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
@@ -15,22 +16,18 @@ const subsCollection = collection(getFirestore(), "Subscriptions");
 
 export const insertNewSubscription = async (
   userId: string,
-  stripeCustomerId: string,
   userName: string,
   userEmail: string
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
       userId,
-      stripeCustomerId,
-      stripeSubscriptionStatus: "inactive",
       productId: "",
       userName,
       userEmail,
-      stripeSubscriptionId: "",
     };
 
-    await subsCollection.add(subscriberData);
+    await addDoc(subsCollection, subscriberData);
     return true;
   } catch (error: any) {
     throw new Error(`Error inserting new subscrition: ${error}`);

@@ -1,5 +1,5 @@
 import { InviteEntity } from "@/src/features/invitation/model/invite";
-import firestore, {
+import {
   getFirestore,
   query,
   collection,
@@ -10,6 +10,7 @@ import firestore, {
   updateDoc,
   FirebaseFirestoreTypes,
   serverTimestamp,
+  addDoc,
 } from "@react-native-firebase/firestore";
 
 const invitesCollection = collection(getFirestore(), "Invites");
@@ -21,7 +22,7 @@ export const insertNewInvite = async (invite: InviteEntity) => {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-    await invitesCollection.add(inviteObj);
+    await addDoc(invitesCollection, inviteObj);
     return true;
   } catch (error: any) {
     throw new Error(`Error adding invite: ${error}`);

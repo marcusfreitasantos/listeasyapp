@@ -21,10 +21,7 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
-  const isCurrentPlan =
-    currentUserPlan === productData.priceId &&
-    currentSubscription?.stripeSubscriptionStatus === "active";
-
+  const isCurrentPlan = currentUserPlan === productData.priceId;
   return (
     <S.ProductCard>
       <S.ProductHeader>

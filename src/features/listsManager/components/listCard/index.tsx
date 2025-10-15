@@ -75,7 +75,6 @@ export const ListCard = ({
   const handlePDFExport = () => {
     if (
       currentSubscription &&
-      currentSubscription.stripeSubscriptionStatus === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       const html = buildHtmlPDFTemplate(
@@ -98,7 +97,6 @@ export const ListCard = ({
     setCurrentList(list);
     if (
       currentSubscription &&
-      currentSubscription.stripeSubscriptionStatus === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       router.push("/sharedLists");
@@ -118,13 +116,13 @@ export const ListCard = ({
       label: "Acesso compartilhado",
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
-      showOption: !isColaborator,
+      showOption: false,
     },
     {
       label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
-      showOption: true,
+      showOption: false,
     },
     {
       label: "Excluir",

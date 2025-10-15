@@ -1,4 +1,4 @@
-import firestore, {
+import {
   getFirestore,
   query,
   collection,
@@ -10,6 +10,7 @@ import firestore, {
   updateDoc,
   FirebaseFirestoreTypes,
   serverTimestamp,
+  addDoc,
 } from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
 
@@ -22,7 +23,7 @@ export const insertNewList = async (listEntity: ListEntityType) => {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
-    await listsCollection.add(listObj);
+    await addDoc(listsCollection, listObj);
     return true;
   } catch (error: any) {
     throw new Error(`Error adding list: ${error}`);

@@ -1,6 +1,6 @@
 {
   "name": "listeasy",
-  "version": "4.0.3",
+  "version": "4.0.5",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -21,7 +21,6 @@
     "@react-navigation/drawer": "^7.5.3",
     "@react-navigation/native": "^7.1.6",
     "@react-navigation/native-stack": "^7.3.10",
-    "@stripe/stripe-react-native": "^0.50.1",
     "axios": "^1.12.2",
     "expo": "^53.0.12",
     "expo-application": "~6.1.4",
