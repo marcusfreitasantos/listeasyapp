@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   FirebaseFirestoreTypes,
+  addDoc,
 } from "@react-native-firebase/firestore";
 
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
@@ -26,7 +27,7 @@ export const insertNewSubscription = async (
       userEmail,
     };
 
-    await subsCollection.add(subscriberData);
+    await addDoc(subsCollection, subscriberData);
     return true;
   } catch (error: any) {
     throw new Error(`Error inserting new subscrition: ${error}`);

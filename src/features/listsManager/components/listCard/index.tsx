@@ -116,13 +116,13 @@ export const ListCard = ({
       label: "Acesso compartilhado",
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
-      showOption: !isColaborator,
+      showOption: false,
     },
     {
       label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
-      showOption: true,
+      showOption: false,
     },
     {
       label: "Excluir",
