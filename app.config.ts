@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.0.5";
+const runtimeVersion = "4.1.0";
 const bgColor = "#222222";
 
 const config: ExpoConfig = {
@@ -47,6 +47,7 @@ const config: ExpoConfig = {
         android: {
           enableProguardInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
+          kotlinVersion: "2.1.20",
         },
       },
     ],
@@ -80,6 +81,7 @@ const config: ExpoConfig = {
         backgroundColor: bgColor,
       },
     ],
+    "expo-iap",
   ],
   experiments: {
     typedRoutes: true,
