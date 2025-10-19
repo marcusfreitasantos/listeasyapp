@@ -15,7 +15,7 @@ const SubscriptionsView = () => {
         <LoadingSpinner />
       ) : (
         <FlatList
-          keyExtractor={(item) => item.priceId}
+          keyExtractor={(item) => item.productId}
           ListEmptyComponent={() => <ListEmpty />}
           data={products.reverse()}
           renderItem={({ item }) => (

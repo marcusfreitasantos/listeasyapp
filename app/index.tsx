@@ -42,9 +42,8 @@ const SignIn = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser && currentUser.user.email && currentSubscription)
-      handleUserRedirect();
-  }, [currentUser, currentSubscription]);
+    if (currentUser && currentUser.user.email) handleUserRedirect();
+  }, [currentUser]);
 
   if (initializing)
     return (
@@ -54,7 +53,7 @@ const SignIn = () => {
       />
     );
 
-  if (!currentUser || !currentSubscription) {
+  if (!currentUser) {
     return <SignInView />;
   }
 
