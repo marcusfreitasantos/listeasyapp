@@ -4,6 +4,7 @@ type SubscriptionEntity = {
   userId: string;
   userName: string;
   userEmail: string;
+  status: "active" | "inactive";
 };
 
 type SubscriptionContextType = {
