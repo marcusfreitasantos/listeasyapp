@@ -16,15 +16,18 @@ const subsCollection = collection(getFirestore(), "Subscriptions");
 
 export const insertNewSubscription = async (
   userId: string,
+  productId: string,
   userName: string,
-  userEmail: string
+  userEmail: string,
+  status: "active" | "inactive"
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
       userId,
-      productId: "",
+      productId,
       userName,
       userEmail,
+      status,
     };
 
     await addDoc(subsCollection, subscriberData);

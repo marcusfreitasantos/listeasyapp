@@ -7,6 +7,7 @@ import { ActivityIndicator } from "react-native";
 import { useTheme } from "styled-components/native";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useInvitationsViewModel } from "@/src/features/invitation/viewModel/useInvitationsViewModel";
+import { getSubscriptionByUserId } from "@/src/services/firebase/subscriptions";
 
 const SignIn = () => {
   const router = useRouter();
@@ -18,6 +19,15 @@ const SignIn = () => {
   const [initializing, setInitializing] = useState(true);
   const { fetchUserInvites } = useInvitationsViewModel();
 
+  const fetchCurrentUserSubscriptions = async () => {
+    if (!currentUser?.user.uid) return;
+
+    try {
+      return await getSubscriptionByUserId(currentUser?.user.uid);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleAuthStateChanged = async (user: any) => {
     if (user) {
       setCurrentUser({
@@ -29,6 +39,13 @@ const SignIn = () => {
 
   const handleUserRedirect = async () => {
     const invites = await fetchUserInvites(currentUser?.user.email ?? "");
+    const subscriptions = await fetchCurrentUserSubscriptions();
+
+    if (subscriptions.length) setCurrentSubscription(subscriptions[0]);
+
+    console.log("subs", subscriptions);
+
+    console.log(subscriptions);
     if (invites?.length) {
       router.replace("/invitations");
     } else {
