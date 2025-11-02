@@ -2,15 +2,13 @@ import { Alert, Linking, Platform } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import { ProductEntity } from "../model/product";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
-import {
-  updateSubscription,
-  insertNewSubscription,
-} from "@/src/services/firebase/subscriptions";
-import { useIAP, ErrorCode } from "expo-iap";
+import { insertNewSubscription } from "@/src/services/firebase/subscriptions";
+import { useIAP, ErrorCode, PurchaseAndroid } from "expo-iap";
 import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
+import { validatePurchaseToken } from "@/src/services/playBilling/purchase";
 
 export const useSubscriptionsViewModel = () => {
   const [products, setProducts] = useState<ProductEntity[]>([]);
@@ -20,7 +18,11 @@ export const useSubscriptionsViewModel = () => {
   );
   const [loading, setLoading] = useState(false);
 
-  const insertSubscriptionInFirebase = async (productId: string) => {
+  const insertSubscriptionInFirebase = async (
+    productId: string,
+    purchaseId: string,
+    purchaseToken: string
+  ) => {
     try {
       if (!productId || !currentUser?.user.email)
         throw new Error("Invalid Subscription.");
@@ -30,6 +32,9 @@ export const useSubscriptionsViewModel = () => {
         userName: currentUser.user.displayName ?? currentUser?.user.email,
         userEmail: currentUser.user.email,
         status: "active" as "active" | "inactive",
+        platform: Platform.OS,
+        purchaseId,
+        purchaseToken,
       };
 
       await insertNewSubscription(
@@ -37,66 +42,60 @@ export const useSubscriptionsViewModel = () => {
         newSubscription.productId,
         newSubscription.userName,
         newSubscription.userEmail,
-        newSubscription.status
+        newSubscription.status,
+        newSubscription.platform,
+        newSubscription.purchaseId,
+        newSubscription.purchaseToken
       );
 
       setCurrentSubscription(newSubscription);
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const updateSubscriptionInFirebase = async (productId: string) => {
-    try {
-      if (!currentSubscription || !currentSubscription.id)
-        throw new Error("Invalid Subscription.");
-      const updatedSubscription = {
-        ...currentSubscription,
-        productId,
-      };
-
-      await updateSubscription(updatedSubscription);
-      setCurrentSubscription(updatedSubscription);
-    } catch (error) {
-      console.log(error);
+    } finally {
+      setLoading(false                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  );
     }
   };
 
   const showSuccessMessage = (productId: string) => {
     Alert.alert(
-      "Thank You!",
-      `Premium subscription ${productId} activated successfully.`
+      "Maravilha!",
+      `Seu plano ${productId} foi ativado com sucesso.`
     );
   };
 
-  const handlePurchaseUpdate = async (purchase: any) => {
+  const handlePurchaseUpdate = async (purchase: PurchaseAndroid) => {
     try {
       setLoading(true);
-      console.log("Processing purchase:", purchase);
 
-      const purchaseId = purchase.id;
+      if (!purchase.purchaseToken)
+        throw new Error("Invalid purchase. Token not generated.");
 
-      const validationResult = { isValid: true }; //await handleValidateReceipt(purchase);
+      const validationResult = await validatePurchaseToken(
+        purchase.purchaseToken
+      );
 
       if (validationResult.isValid) {
         await finishTransaction({
           purchase,
         });
 
-        await insertSubscriptionInFirebase(purchase.productId);
+        await insertSubscriptionInFirebase(
+          purchase.productId,
+          purchase.id,
+          purchase.purchaseToken
+        );
 
-        // Show success message
         showSuccessMessage(purchase.productId);
       } else {
         Alert.alert(
-          "Validation Error",
-          "Purchase could not be validated. Please contact support."
+          "Oops!",
+          "Sua compra não pôde ser concluída. Tente novamente ou entre em contato com o suporte."
         );
+        throw new Error("Purchase was not validated");
       }
     } catch (error) {
       console.error("Error handling purchase:", error);
-      Alert.alert("Error", "Failed to process purchase.");
-    } finally {
+      Alert.alert("Oops", "Seu pagamento não foi processado.");
       setLoading(false);
     }
   };
@@ -110,7 +109,6 @@ export const useSubscriptionsViewModel = () => {
     validateReceipt,
   } = useIAP({
     onPurchaseSuccess: async (purchase) => {
-      console.log("Purchase successful:", purchase);
       await handlePurchaseUpdate(purchase);
     },
     onPurchaseError: (error) => {
@@ -122,8 +120,8 @@ export const useSubscriptionsViewModel = () => {
       }
 
       Alert.alert(
-        "Purchase Error",
-        "Failed to complete purchase. Please try again."
+        "Oops!",
+        "Não foi possível completar a sua compra. Tente novamente."
       );
       console.error("Purchase error:", error);
     },
@@ -133,8 +131,8 @@ export const useSubscriptionsViewModel = () => {
   const handlePurchaseSubscription = async (subscriptionId: string) => {
     if (!connected) {
       Alert.alert(
-        "Not Connected",
-        "Store connection unavailable. Please try again later."
+        "Sem conexão!",
+        "A conexão com a loja não foi estabelecida. Tente novamente mais tarde."
       );
       return;
     }

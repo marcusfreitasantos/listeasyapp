@@ -1,3 +1,5 @@
+import { PlatformOSType } from "react-native";
+
 type SubscriptionEntity = {
   id?: string;
   productId: string;
@@ -5,6 +7,9 @@ type SubscriptionEntity = {
   userName: string;
   userEmail: string;
   status: "active" | "inactive";
+  platform: PlatformOSType;
+  purchaseId: string;
+  purchaseToken: string;
 };
 
 type SubscriptionContextType = {

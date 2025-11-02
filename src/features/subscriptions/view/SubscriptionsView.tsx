@@ -24,7 +24,7 @@ const SubscriptionsView = () => {
               handleSubscription={() =>
                 handlePurchaseSubscription(item.productId)
               }
-              currentUserPlan={currentSubscription?.productId}
+              currentSubscription={currentSubscription}
             />
           )}
         />
