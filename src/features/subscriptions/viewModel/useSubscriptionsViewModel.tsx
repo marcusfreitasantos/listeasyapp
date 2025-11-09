@@ -2,7 +2,10 @@ import { Alert, Linking, Platform } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import { ProductEntity } from "../model/product";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
-import { insertNewSubscription } from "@/src/services/firebase/subscriptions";
+import {
+  insertNewSubscription,
+  switchSubscription,
+} from "@/src/services/firebase/subscriptions";
 import { useIAP, ErrorCode, PurchaseAndroid } from "expo-iap";
 import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
@@ -17,6 +20,110 @@ export const useSubscriptionsViewModel = () => {
     GlobalSubscriptionContext
   );
   const [loading, setLoading] = useState(false);
+  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
+
+  const {
+    connected,
+    fetchProducts,
+    subscriptions,
+    requestPurchase,
+    finishTransaction,
+  } = useIAP({
+    onPurchaseSuccess: async (purchase) => {
+      await handlePurchaseUpdate(purchase);
+    },
+
+    onPurchaseError: (error) => {
+      setLoading(false);
+
+      if (error.code === ErrorCode.UserCancelled) {
+        return;
+      }
+
+      Alert.alert(
+        "Oops!",
+        "Não foi possível completar a sua compra. Tente novamente."
+      );
+      console.error("Purchase error:", error);
+    },
+  });
+
+  const showSuccessMessage = (productId: string) => {
+    Alert.alert(
+      "Maravilha!",
+      `Seu plano ${productId} foi ativado com sucesso.`
+    );
+    setLoading(false);
+  };
+
+  const updateSubscriptionInFirebase = async (
+    productId: string,
+    purchaseId: string,
+    purchaseToken: string
+  ) => {
+    try {
+      if (!productId || !currentSubscription?.purchaseToken)
+        throw new Error("Invalid Subscription.");
+      const newSubscription = {
+        ...currentSubscription,
+        productId,
+        purchaseId,
+        purchaseToken,
+      };
+
+      await switchSubscription(newSubscription);
+
+      setCurrentSubscription(newSubscription);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAndroidSubscriptionSwitch = async (newSubscriptionId: string) => {
+    try {
+      setLoading(true);
+
+      if (!currentSubscription?.purchaseToken) {
+        throw new Error("No active subscription found");
+      }
+
+      const newSubscription = subscriptions.find(
+        (sub) => sub.id === newSubscriptionId
+      );
+      if (!newSubscription) {
+        throw new Error("New subscription product not found");
+      }
+
+      if ("subscriptionOfferDetailsAndroid" in newSubscription) {
+        const subscriptionOffers = (
+          newSubscription.subscriptionOfferDetailsAndroid ?? []
+        ).map((offer) => ({
+          sku: newSubscription.id,
+          offerToken: offer.offerToken,
+        }));
+
+        await requestPurchase({
+          request: {
+            ios: {
+              sku: newSubscriptionId,
+            },
+            android: {
+              skus: [newSubscriptionId],
+              subscriptionOffers,
+              purchaseTokenAndroid: currentSubscription.purchaseToken,
+              replacementModeAndroid: 1,
+            },
+          },
+          type: "subs",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
 
   const insertSubscriptionInFirebase = async (
     productId: string,
@@ -37,7 +144,7 @@ export const useSubscriptionsViewModel = () => {
         purchaseToken,
       };
 
-      await insertNewSubscription(
+      const insertedSubscription = await insertNewSubscription(
         newSubscription.userId,
         newSubscription.productId,
         newSubscription.userName,
@@ -48,19 +155,12 @@ export const useSubscriptionsViewModel = () => {
         newSubscription.purchaseToken
       );
 
-      setCurrentSubscription(newSubscription);
+      setCurrentSubscription({ id: insertedSubscription, ...newSubscription });
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  );
+      setLoading(false);
     }
-  };
-
-  const showSuccessMessage = (productId: string) => {
-    Alert.alert(
-      "Maravilha!",
-      `Seu plano ${productId} foi ativado com sucesso.`
-    );
   };
 
   const handlePurchaseUpdate = async (purchase: PurchaseAndroid) => {
@@ -79,11 +179,22 @@ export const useSubscriptionsViewModel = () => {
           purchase,
         });
 
-        await insertSubscriptionInFirebase(
-          purchase.productId,
-          purchase.id,
-          purchase.purchaseToken
-        );
+        if (
+          currentSubscription?.status === "active" &&
+          currentSubscription.productId !== purchase.productId
+        ) {
+          await updateSubscriptionInFirebase(
+            purchase.productId,
+            purchase.id,
+            purchase.purchaseToken
+          );
+        } else {
+          await insertSubscriptionInFirebase(
+            purchase.productId,
+            purchase.id,
+            purchase.purchaseToken
+          );
+        }
 
         showSuccessMessage(purchase.productId);
       } else {
@@ -100,34 +211,6 @@ export const useSubscriptionsViewModel = () => {
     }
   };
 
-  const {
-    connected,
-    fetchProducts,
-    subscriptions,
-    requestPurchase,
-    finishTransaction,
-    validateReceipt,
-  } = useIAP({
-    onPurchaseSuccess: async (purchase) => {
-      await handlePurchaseUpdate(purchase);
-    },
-    onPurchaseError: (error) => {
-      setLoading(false);
-
-      // Don't show error for user cancellation
-      if (error.code === ErrorCode.UserCancelled) {
-        return;
-      }
-
-      Alert.alert(
-        "Oops!",
-        "Não foi possível completar a sua compra. Tente novamente."
-      );
-      console.error("Purchase error:", error);
-    },
-  });
-  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
-
   const handlePurchaseSubscription = async (subscriptionId: string) => {
     if (!connected) {
       Alert.alert(
@@ -137,41 +220,48 @@ export const useSubscriptionsViewModel = () => {
       return;
     }
 
-    if (currentSubscription?.status === "active") {
+    if (
+      currentSubscription?.status === "active" &&
+      currentSubscription.productId === subscriptionId
+    ) {
       handleCancelSubscription();
       return;
-    }
+    } else if (
+      currentSubscription?.status === "active" &&
+      currentSubscription.productId !== subscriptionId
+    ) {
+      handleAndroidSubscriptionSwitch(subscriptionId);
+      return;
+    } else {
+      try {
+        setLoading(true);
 
-    try {
-      setLoading(true);
+        const subscription = subscriptions.find((s) => s.id === subscriptionId);
 
-      const subscription = subscriptions.find((s) => s.id === subscriptionId);
-
-      if (subscription && "subscriptionOfferDetailsAndroid" in subscription) {
-        const subscriptionOffers =
-          subscription?.subscriptionOfferDetailsAndroid?.map((offer) => ({
-            sku: subscriptionId,
-            offerToken: offer.offerToken,
-          })) || [{ sku: subscriptionId, offerToken: "" }];
-
-        await requestPurchase({
-          request: {
-            ios: {
+        if (subscription && "subscriptionOfferDetailsAndroid" in subscription) {
+          const subscriptionOffers =
+            subscription?.subscriptionOfferDetailsAndroid?.map((offer) => ({
               sku: subscriptionId,
+              offerToken: offer.offerToken,
+            })) || [{ sku: subscriptionId, offerToken: "" }];
+
+          await requestPurchase({
+            request: {
+              ios: {
+                sku: subscriptionId,
+              },
+              android: {
+                skus: [subscriptionId],
+                subscriptionOffers,
+              },
             },
-            android: {
-              skus: [subscriptionId],
-              subscriptionOffers,
-            },
-          },
-          type: "subs",
-        });
+            type: "subs",
+          });
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Subscription request failed:", error);
       }
-    } catch (error) {
-      setLoading(false);
-      console.error("Subscription request failed:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -240,5 +330,6 @@ export const useSubscriptionsViewModel = () => {
     loading,
     currentSubscription,
     handlePurchaseSubscription,
+    handleAndroidSubscriptionSwitch,
   };
 };

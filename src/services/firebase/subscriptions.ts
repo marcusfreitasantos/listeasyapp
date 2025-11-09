@@ -6,6 +6,8 @@ import {
   getDocs,
   FirebaseFirestoreTypes,
   addDoc,
+  doc,
+  updateDoc,
 } from "@react-native-firebase/firestore";
 
 import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscription";
@@ -35,10 +37,23 @@ export const insertNewSubscription = async (
       purchaseToken,
     };
 
-    await addDoc(subsCollection, subscriberData);
-    return true;
+    const subscriptionInserted = await addDoc(subsCollection, subscriberData);
+    return subscriptionInserted._documentPath._parts[1];
   } catch (error: any) {
     throw new Error(`Error inserting new subscrition: ${error}`);
+  }
+};
+
+export const switchSubscription = async (
+  currentSubscription: SubscriptionEntity
+) => {
+  try {
+    const listRef = doc(subsCollection, currentSubscription.id);
+    await updateDoc(listRef, {
+      ...currentSubscription,
+    });
+  } catch (error) {
+    throw new Error(`Error updating subscription: ${error}`);
   }
 };
 

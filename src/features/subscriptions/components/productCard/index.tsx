@@ -9,7 +9,7 @@ import { SubscriptionEntity } from "../../model/subscription";
 type ProductCardProps = {
   productData: ProductEntity;
   currentSubscription?: SubscriptionEntity | null;
-  handleSubscription: (isCurrentPlan: boolean, priceId: string) => void;
+  handleSubscription: (subscriptionId: string) => void;
 };
 
 export const ProductCard = ({
@@ -51,7 +51,7 @@ export const ProductCard = ({
       <Button
         btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
         btnType={isCurrentPlan ? "dark" : "light"}
-        onPress={() => handleSubscription(isCurrentPlan, productData.productId)}
+        onPress={() => handleSubscription(productData.productId)}
       />
     </S.ProductCard>
   );
