@@ -122,7 +122,7 @@ export const ListCard = ({
       label: "Exportar em PDF",
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
-      showOption: false,
+      showOption: true,
     },
     {
       label: "Excluir",

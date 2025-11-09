@@ -8,20 +8,21 @@ import { SubscriptionEntity } from "../../model/subscription";
 
 type ProductCardProps = {
   productData: ProductEntity;
-  currentUserPlan?: string;
-  currentSubscription: SubscriptionEntity | null;
-  handleSubscription: (isCurrentPlan: boolean, priceId: string) => void;
+  currentSubscription?: SubscriptionEntity | null;
+  handleSubscription: (subscriptionId: string) => void;
 };
 
 export const ProductCard = ({
   productData,
-  currentSubscription,
   handleSubscription,
-  currentUserPlan,
+  currentSubscription,
 }: ProductCardProps) => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
-  const isCurrentPlan = currentUserPlan === productData.priceId;
+  const isCurrentPlan =
+    currentSubscription?.status === "active" &&
+    currentSubscription?.productId === productData.productId;
+
   return (
     <S.ProductCard>
       <S.ProductHeader>
@@ -50,7 +51,7 @@ export const ProductCard = ({
       <Button
         btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
         btnType={isCurrentPlan ? "dark" : "light"}
-        onPress={() => handleSubscription(isCurrentPlan, productData.priceId)}
+        onPress={() => handleSubscription(productData.productId)}
       />
     </S.ProductCard>
   );

@@ -33,11 +33,13 @@ export const Header = () => {
 
   return (
     <S.HeaderWrapper>
-      <BannerAd
-        ref={bannerRef}
-        unitId={adUnitId}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-      />
+      {(!currentSubscription || currentSubscription.status !== "active") && (
+        <BannerAd
+          ref={bannerRef}
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      )}
 
       <S.HeaderContainer>
         {currentUser && (

@@ -1,0 +1,22 @@
+type PurchaseGooglePlay = {
+  __typename: string;
+  autoRenewingAndroid: boolean;
+  currentPlanId: string | null;
+  dataAndroid: string;
+  developerPayloadAndroid: string;
+  id: string;
+  ids: string[];
+  isAcknowledgedAndroid: boolean;
+  isAutoRenewing: boolean;
+  obfuscatedAccountIdAndroid: string;
+  obfuscatedProfileIdAndroid: string;
+  packageNameAndroid: string;
+  platform: string;
+  productId: string;
+  purchaseState: string;
+  purchaseToken: string;
+  quantity: number;
+  signatureAndroid: string;
+  transactionDate: number;
+  transactionId: string;
+};

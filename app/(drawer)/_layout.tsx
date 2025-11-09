@@ -25,6 +25,11 @@ export default function Layout() {
       title: "Convites",
       iconName: "file-plus" as FeatherIconName,
     },
+    {
+      route: "subscriptions",
+      title: "Planos",
+      iconName: "credit-card" as FeatherIconName,
+    },
   ];
 
   return (
