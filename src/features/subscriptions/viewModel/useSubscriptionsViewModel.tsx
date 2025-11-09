@@ -66,6 +66,7 @@ export const useSubscriptionsViewModel = () => {
         throw new Error("Invalid Subscription.");
       const newSubscription = {
         ...currentSubscription,
+        status: "active" as "active" | "inactive",
         productId,
         purchaseId,
         purchaseToken,
@@ -180,8 +181,8 @@ export const useSubscriptionsViewModel = () => {
         });
 
         if (
-          currentSubscription?.status === "active" &&
-          currentSubscription.productId !== purchase.productId
+          currentSubscription &&
+          currentSubscription?.productId !== purchase.productId
         ) {
           await updateSubscriptionInFirebase(
             purchase.productId,
