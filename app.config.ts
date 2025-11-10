@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.1.0";
+const runtimeVersion = "4.1.1";
 const bgColor = "#222222";
 
 const config: ExpoConfig = {
