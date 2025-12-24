@@ -30,8 +30,12 @@ google-services.json
 google-services.plist
 
 
-#Firebase config file
+# Firebase config file
 firebase.config.ts
 
 # Google ADMOB app-ads.txt
 app-ads.txt
+
+# Native builds
+/ios
+/android

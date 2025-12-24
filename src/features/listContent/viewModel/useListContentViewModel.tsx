@@ -6,6 +6,7 @@ import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useIsFocused } from "@react-navigation/native";
+import { Platform } from "react-native";
 
 export const useListContentViewModel = () => {
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -18,8 +19,12 @@ export const useListContentViewModel = () => {
   const [currentItem, setCurrentItem] = useState<ListItemType | null>(null);
   const [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
   const [showItemsFilter, setShowItemsFilter] = useState(false);
+  const admobPubId =
+    Platform.OS === "android"
+      ? "ca-app-pub-8430347978354434/6035864738"
+      : "ca-app-pub-8430347978354434/6152293969";
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
-    __DEV__ ? TestIds.INTERSTITIAL : "ca-app-pub-8430347978354434/6035864738"
+    __DEV__ ? TestIds.INTERSTITIAL : admobPubId
   );
 
   const isFocused = useIsFocused();

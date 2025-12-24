@@ -332,5 +332,6 @@ export const useSubscriptionsViewModel = () => {
     currentSubscription,
     handlePurchaseSubscription,
     handleAndroidSubscriptionSwitch,
+    currentPlatform: Platform.OS,
   };
 };
