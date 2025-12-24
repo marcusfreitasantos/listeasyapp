@@ -1,17 +1,29 @@
 import { ExpoConfig } from "@expo/config";
-const runtimeVersion = "4.1.1";
+const appVersion = "4.1.1";
 const bgColor = "#222222";
 
 const config: ExpoConfig = {
   name: "List Easy",
   slug: "listeasy",
-  version: runtimeVersion,
-  orientation: "default",
+  version: appVersion,
+  runtimeVersion: {
+    policy: "appVersion",
+  },
   icon: "./assets/icon.png",
   scheme: "listeasy",
   userInterfaceStyle: "automatic",
   ios: {
     supportsTablet: true,
+
+    bundleIdentifier: "com.penpack.listeasy",
+    googleServicesFile: process.env.GOOGLE_SERVICES_FILE_IOS,
+    infoPlist: {
+      NSPhotoLibraryUsageDescription:
+        "O List Easy precisa acessar sua galeria para armazenar sua foto de perfil",
+      NSCameraUsageDescription:
+        "O List Easy precisa acessar sua câmera para armazenar sua foto de perfil",
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
   android: {
     userInterfaceStyle: "automatic",
@@ -22,7 +34,7 @@ const config: ExpoConfig = {
       backgroundColor: bgColor,
     },
     icon: "./assets/icon.png",
-    googleServicesFile: process.env.GOOGLE_SERVICES_FILE,
+    googleServicesFile: process.env.GOOGLE_SERVICES_FILE_ANDROID,
   },
   web: {
     bundler: "metro",
@@ -44,6 +56,9 @@ const config: ExpoConfig = {
     [
       "expo-build-properties",
       {
+        ios: {
+          useFrameworks: "static",
+        },
         android: {
           enableProguardInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
@@ -99,13 +114,6 @@ const config: ExpoConfig = {
     enabled: true,
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/021d95ea-9341-4a16-bed5-85eeacc48547",
-    requestHeaders: {
-      "runtime-version": runtimeVersion,
-      "channel-name": "production",
-    },
-  },
-  runtimeVersion: {
-    policy: "appVersion",
   },
 };
 
