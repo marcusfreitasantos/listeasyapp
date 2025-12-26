@@ -25,8 +25,7 @@ export const useListManagerViewModel = () => {
   const getUserLists = async () => {
     try {
       setLoading(true);
-      if (!currentUser?.user?.uid || !currentUser?.user?.email)
-        throw new Error("Usuário inválido");
+      if (!currentUser?.user?.uid) throw new Error("Usuário inválido");
       const response = await getListsByAuthorId(currentUser.user.uid);
       const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
       setCurrentUserLists(sharedLists.concat(response));

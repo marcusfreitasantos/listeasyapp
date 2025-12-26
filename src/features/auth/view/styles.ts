@@ -15,6 +15,15 @@ export const MainContent = styled.View`
 
 export const SecondaryContentRow = styled.View`
   justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: ${({ theme }) => theme.defaultSizes.xSmall};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.medium};
+`;
+
+export const SecondaryContentColumn = styled.View`
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   gap: ${({ theme }) => theme.defaultSizes.xSmall};

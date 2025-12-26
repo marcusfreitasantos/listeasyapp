@@ -15,11 +15,12 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
+import { Button } from "@/src/components/button";
 
 export const SignInView = () => {
   const colorScheme = useColorScheme();
   const theme = useTheme();
-  const { loading, handleSignIn } = useSignInViewModel();
+  const { loading, handleSignIn, handleAnonymousSignIn } = useSignInViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
     handleSignIn(data.email, data.password);
@@ -65,30 +66,38 @@ export const SignInView = () => {
                 submitBtnText="Entrar"
               />
 
-              <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
-                <Pressable>
-                  <S.SecondaryContentText>
-                    Recuperar senha
-                  </S.SecondaryContentText>
-                </Pressable>
-              </Link>
+              <S.SecondaryContentRow>
+                <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
+                  <Pressable>
+                    <S.SecondaryContentText>
+                      Recuperar senha
+                    </S.SecondaryContentText>
+                  </Pressable>
+                </Link>
+
+                <Link href="/signup" asChild style={{ marginTop: 20 }}>
+                  <Pressable>
+                    <S.SecondaryContentText>
+                      Não tem uma conta? Crie aqui.
+                    </S.SecondaryContentText>
+                  </Pressable>
+                </Link>
+              </S.SecondaryContentRow>
             </S.MainContent>
 
-            <S.SecondaryContentRow>
-              <Link href="/signup" asChild dismissTo>
-                <Pressable>
-                  <S.SecondaryContentText>
-                    Não tem uma conta? Crie aqui.
-                  </S.SecondaryContentText>
-                </Pressable>
-              </Link>
+            <S.SecondaryContentColumn>
+              <Button
+                btnText="Continuar sem cadastro"
+                btnType="dark"
+                onPress={handleAnonymousSignIn}
+              />
 
               <Pressable onPress={() => sendSupportEmail()}>
                 <S.SecondaryContentText>
                   Precisa de ajuda?
                 </S.SecondaryContentText>
               </Pressable>
-            </S.SecondaryContentRow>
+            </S.SecondaryContentColumn>
           </>
         )}
       </S.Container>

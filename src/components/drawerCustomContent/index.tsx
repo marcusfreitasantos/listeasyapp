@@ -31,7 +31,9 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 <S.DrawerUserInfoAvatarWrapper>
                   {!currentUser?.user.photoURL ? (
                     <S.DrawerUserInfoAvatarDefaultContent>
-                      {currentUser?.user.displayName?.split("")[0]}
+                      {currentUser?.user.isAnonymous
+                        ? "C"
+                        : currentUser?.user.displayName?.split("")[0]}
                     </S.DrawerUserInfoAvatarDefaultContent>
                   ) : (
                     <S.DrawerUserInfoAvatarImage
@@ -41,12 +43,16 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 </S.DrawerUserInfoAvatarWrapper>
 
                 <S.DrawerUserInfoTitle numberOfLines={1}>
-                  {currentUser?.user.displayName ?? currentUser?.user.email}
+                  {currentUser?.user.isAnonymous
+                    ? "Convidado"
+                    : currentUser?.user.displayName ?? currentUser?.user.email}
                 </S.DrawerUserInfoTitle>
 
-                <S.DrawerUserInfoText numberOfLines={1}>
-                  {currentUser?.user.email}
-                </S.DrawerUserInfoText>
+                {currentUser?.user.email && (
+                  <S.DrawerUserInfoText numberOfLines={1}>
+                    {currentUser?.user.email}
+                  </S.DrawerUserInfoText>
+                )}
               </S.DrawerUserInfo>
 
               <S.DrawerDivisor />

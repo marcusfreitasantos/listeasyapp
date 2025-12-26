@@ -7,6 +7,7 @@ import {
   signOut,
   sendPasswordResetEmail,
   updateEmail,
+  signInAnonymously,
 } from "@react-native-firebase/auth";
 
 export const registerUser = async (
@@ -114,5 +115,14 @@ export const userLogout = async () => {
     return response;
   } catch (error) {
     throw new Error(`Não foi possível fazer logout. ${error}`);
+  }
+};
+
+export const authUserAnonimously = async () => {
+  try {
+    const response = await signInAnonymously(getAuth());
+    return response;
+  } catch (error) {
+    throw new Error(`Não foi possível acessar sem cadastro. ${error}`);
   }
 };

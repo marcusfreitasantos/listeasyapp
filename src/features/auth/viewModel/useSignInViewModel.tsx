@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
-import { Alert, Linking } from "react-native";
+import { Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { authUser } from "@/src/services/firebase/auth";
+import { authUser, authUserAnonimously } from "@/src/services/firebase/auth";
 
 export const useSignInViewModel = () => {
   const router = useRouter();
@@ -24,8 +24,25 @@ export const useSignInViewModel = () => {
     }
   };
 
+  const handleAnonymousSignIn = async () => {
+    setLoading(true);
+
+    try {
+      const response = await authUserAnonimously();
+      console.log(response);
+      setCurrentUser(response);
+
+      router.push("/lists");
+    } catch (error: any) {
+      Alert.alert("Oops! Algo deu errado:", `${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     handleSignIn,
+    handleAnonymousSignIn,
   };
 };
