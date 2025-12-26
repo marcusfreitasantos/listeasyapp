@@ -18,9 +18,11 @@ export const Header = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const { listsLength } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
-  const adUnitId = __DEV__
-    ? TestIds.ADAPTIVE_BANNER
-    : "ca-app-pub-8430347978354434/3994109034";
+  const admobPubId =
+    Platform.OS === "android"
+      ? "ca-app-pub-8430347978354434/3994109034"
+      : "ca-app-pub-8430347978354434/4815161567";
+  const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : admobPubId;
   const bannerRef = useRef<BannerAd>(null);
 
   useForeground(() => {

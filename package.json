@@ -1,11 +1,11 @@
 {
   "name": "listeasy",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },

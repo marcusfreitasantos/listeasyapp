@@ -42,9 +42,7 @@ export const ListCard = ({
   const isColaborator =
     list.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ?? false;
 
-  const essentialPlanId = __DEV__
-    ? "price_1RoCGTF7G6AyWSJCkPEopkX7"
-    : "price_1Rpk4YF7G6AyWSJCuzz6hRXV";
+  const essentialPlanId = "plan_essencial";
 
   const handleDeleteList = () => {
     Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
@@ -74,7 +72,7 @@ export const ListCard = ({
 
   const handlePDFExport = () => {
     if (
-      currentSubscription &&
+      currentSubscription?.status === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       const html = buildHtmlPDFTemplate(
@@ -96,7 +94,7 @@ export const ListCard = ({
   const handleShareListAccess = () => {
     setCurrentList(list);
     if (
-      currentSubscription &&
+      currentSubscription?.status === "active" &&
       currentSubscription?.productId !== essentialPlanId
     ) {
       router.push("/sharedLists");
@@ -116,7 +114,7 @@ export const ListCard = ({
       label: "Acesso compartilhado",
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
-      showOption: false,
+      showOption: true,
     },
     {
       label: "Exportar em PDF",

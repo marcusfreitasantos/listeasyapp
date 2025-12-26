@@ -16,16 +16,15 @@ export const useSignUpViewModel = () => {
     try {
       const registeredUser = await registerUser(email, password, displayName);
 
-      if (registeredUser.user.uid) {
-        Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
-          {
-            text: "Fazer login",
-            onPress: () => router.push("/"),
-          },
-        ]);
+      if (!registeredUser.user.uid) {
+        throw new Error("Não foi possível criar a conta.");
       }
-
-      throw new Error("Não foi possível criar a conta.");
+      Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
+        {
+          text: "Fazer login",
+          onPress: () => router.push("/"),
+        },
+      ]);
     } catch (error: any) {
       console.log("useSignUpViewModel", error);
       Alert.alert("Oops! Algo deu errado:", `${error}`);

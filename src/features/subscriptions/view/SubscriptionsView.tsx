@@ -6,8 +6,18 @@ import { FlatList } from "react-native-gesture-handler";
 import { ListEmpty } from "@/src/components/listEmpty";
 
 const SubscriptionsView = () => {
-  const { products, loading, currentSubscription, handlePurchaseSubscription } =
-    useSubscriptionsViewModel();
+  const {
+    currentPlatform,
+    products,
+    loading,
+    currentSubscription,
+    handlePurchaseSubscription,
+  } = useSubscriptionsViewModel();
+
+  const subscriptionMsg =
+    currentSubscription?.platform === currentPlatform
+      ? ""
+      : `Gerencie a sua assinatura em um dispositivo ${currentSubscription?.platform}. Ou entre em contato com o suporte.`;
 
   return (
     <S.SubscriptionsViewContainer>
@@ -16,7 +26,7 @@ const SubscriptionsView = () => {
       ) : (
         <FlatList
           keyExtractor={(item) => item.productId}
-          ListEmptyComponent={() => <ListEmpty />}
+          ListEmptyComponent={() => <ListEmpty text={subscriptionMsg} />}
           data={products.reverse()}
           renderItem={({ item }) => (
             <ProductCard
