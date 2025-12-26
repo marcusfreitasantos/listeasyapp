@@ -33,6 +33,7 @@ export const InputField = ({
       )}
       <S.InputField
         {...rest}
+        autoCapitalize="none"
         secureTextEntry={secureText}
         placeholderTextColor={
           colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor

@@ -8,10 +8,8 @@ import { router, useLocalSearchParams } from "expo-router";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 export const useSignUpViewModel = () => {
-  const routeParams = useLocalSearchParams();
+  const { isAnonymous } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
-
-  console.log("routeParams", routeParams);
 
   const handleSignUp = async (
     email: string,
@@ -23,7 +21,7 @@ export const useSignUpViewModel = () => {
     try {
       let registeredUser: FirebaseAuthTypes.UserCredential | null;
 
-      if (routeParams.isAnonymous) {
+      if (isAnonymous) {
         registeredUser = await registerAnonymousUser(
           email,
           password,
@@ -52,5 +50,6 @@ export const useSignUpViewModel = () => {
   return {
     loading,
     handleSignUp,
+    isAnonymous,
   };
 };

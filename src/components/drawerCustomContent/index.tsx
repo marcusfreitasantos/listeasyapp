@@ -93,7 +93,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                   }}
                 />
                 <S.DrawerUserInfoText>
-                  Para liberar todas as funcionalidades do List Easy.
+                  E destrave todas as funcionalidades do List Easy.
                 </S.DrawerUserInfoText>
               </>
             )}
