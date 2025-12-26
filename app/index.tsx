@@ -13,9 +13,7 @@ const SignIn = () => {
   const router = useRouter();
   const theme = useTheme();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
-  const { currentSubscription, setCurrentSubscription } = useContext(
-    GlobalSubscriptionContext
-  );
+  const { setCurrentSubscription } = useContext(GlobalSubscriptionContext);
   const [initializing, setInitializing] = useState(true);
   const { fetchUserInvites } = useInvitationsViewModel();
 
@@ -44,8 +42,6 @@ const SignIn = () => {
     if (subscriptions.length) setCurrentSubscription(subscriptions[0]);
 
     console.log("subs", subscriptions);
-
-    console.log(subscriptions);
     if (invites?.length) {
       router.replace("/invitations");
     } else {
@@ -59,7 +55,7 @@ const SignIn = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser && currentUser.user.email) handleUserRedirect();
+    if (currentUser && currentUser.user.uid) handleUserRedirect();
   }, [currentUser]);
 
   if (initializing)

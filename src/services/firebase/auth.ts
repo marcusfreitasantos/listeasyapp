@@ -1,4 +1,4 @@
-import {
+import auth, {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   signOut,
   sendPasswordResetEmail,
   updateEmail,
+  signInAnonymously,
 } from "@react-native-firebase/auth";
 
 export const registerUser = async (
@@ -114,5 +115,41 @@ export const userLogout = async () => {
     return response;
   } catch (error) {
     throw new Error(`Não foi possível fazer logout. ${error}`);
+  }
+};
+
+export const authUserAnonimously = async () => {
+  try {
+    const response = await signInAnonymously(getAuth());
+    return response;
+  } catch (error) {
+    throw new Error(`Não foi possível acessar sem cadastro. ${error}`);
+  }
+};
+
+export const registerAnonymousUser = async (
+  userEmail: string,
+  userPass: string,
+  displayName: string
+): Promise<FirebaseAuthTypes.UserCredential | null> => {
+  const user = auth().currentUser;
+  if (!user) return null;
+
+  const credential = auth.EmailAuthProvider.credential(userEmail, userPass);
+
+  await user.linkWithCredential(credential);
+
+  await user.updateProfile({
+    displayName,
+  });
+
+  const updatedUser = auth().currentUser;
+
+  if (updatedUser) {
+    return {
+      user: updatedUser,
+    };
+  } else {
+    return null;
   }
 };

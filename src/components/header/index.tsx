@@ -49,7 +49,9 @@ export const Header = () => {
             <S.HeaderUserInfoAvatarWrapper>
               {!currentUser.user.photoURL ? (
                 <S.HeaderUserInfoAvatarDefaultContent>
-                  {currentUser?.user.displayName?.split("")[0]}
+                  {currentUser.user.isAnonymous
+                    ? "C"
+                    : currentUser?.user.displayName?.split("")[0]}
                 </S.HeaderUserInfoAvatarDefaultContent>
               ) : (
                 <S.HeaderUserInfoAvatarImage

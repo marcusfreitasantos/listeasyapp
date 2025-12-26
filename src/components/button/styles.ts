@@ -2,6 +2,7 @@ import styled from "styled-components/native";
 
 type ButtonWrapperProps = {
   type: "dark" | "light";
+  btnStyle?: "solid" | "outline";
 };
 
 export const ButtonWrapper = styled.TouchableOpacity<ButtonWrapperProps>`
@@ -14,6 +15,11 @@ export const ButtonWrapper = styled.TouchableOpacity<ButtonWrapperProps>`
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
   justify-content: center;
   align-items: center;
+  border-color: ${(props) =>
+    props.type === "dark"
+      ? props.theme.primaryColor
+      : props.theme.secondaryColor};
+  border-width: ${(props) => (props.btnStyle === "outline" ? "1px" : "0")};
 `;
 
 export const ButtonText = styled.Text<ButtonWrapperProps>`

@@ -17,7 +17,7 @@ import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 export const SignUpView = () => {
   const colorScheme = useColorScheme();
   const theme = useTheme();
-  const { loading, handleSignUp } = useSignUpViewModel();
+  const { loading, handleSignUp, isAnonymous } = useSignUpViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
     handleSignUp(data.email, data.password, data.displayName);
@@ -74,10 +74,10 @@ export const SignUpView = () => {
         </S.MainContent>
 
         <S.SecondaryContentRow>
-          <Link href="/" asChild dismissTo>
+          <Link href={isAnonymous ? "/lists" : "/"} asChild dismissTo>
             <Pressable>
               <S.SecondaryContentText>
-                Já tem conta? Faça login.
+                {isAnonymous ? "Voltar" : "Já tem conta? Faça login."}
               </S.SecondaryContentText>
             </Pressable>
           </Link>

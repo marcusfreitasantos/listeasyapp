@@ -6,6 +6,8 @@ import { FeatherIconName } from "@/@types/icons";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
 import { LoadingSpinner } from "../loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
+import { Button } from "../button";
+import { router } from "expo-router";
 
 type DrawerCustomContentProps = {
   items: {
@@ -31,7 +33,9 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 <S.DrawerUserInfoAvatarWrapper>
                   {!currentUser?.user.photoURL ? (
                     <S.DrawerUserInfoAvatarDefaultContent>
-                      {currentUser?.user.displayName?.split("")[0]}
+                      {currentUser?.user.isAnonymous
+                        ? "C"
+                        : currentUser?.user.displayName?.split("")[0]}
                     </S.DrawerUserInfoAvatarDefaultContent>
                   ) : (
                     <S.DrawerUserInfoAvatarImage
@@ -41,12 +45,16 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 </S.DrawerUserInfoAvatarWrapper>
 
                 <S.DrawerUserInfoTitle numberOfLines={1}>
-                  {currentUser?.user.displayName ?? currentUser?.user.email}
+                  {currentUser?.user.isAnonymous
+                    ? "Convidado"
+                    : currentUser?.user.displayName ?? currentUser?.user.email}
                 </S.DrawerUserInfoTitle>
 
-                <S.DrawerUserInfoText numberOfLines={1}>
-                  {currentUser?.user.email}
-                </S.DrawerUserInfoText>
+                {currentUser?.user.email && (
+                  <S.DrawerUserInfoText numberOfLines={1}>
+                    {currentUser?.user.email}
+                  </S.DrawerUserInfoText>
+                )}
               </S.DrawerUserInfo>
 
               <S.DrawerDivisor />
@@ -70,6 +78,25 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 onPress={sendSupportEmail}
               />
             </S.DrawerItemGroup>
+
+            {currentUser?.user.isAnonymous && (
+              <>
+                <Button
+                  btnText="Crie sua conta agora"
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/signup",
+                      params: {
+                        isAnonymous: "true",
+                      },
+                    });
+                  }}
+                />
+                <S.DrawerUserInfoText>
+                  E destrave todas as funcionalidades do List Easy.
+                </S.DrawerUserInfoText>
+              </>
+            )}
 
             <S.DrawerDivisor />
 
