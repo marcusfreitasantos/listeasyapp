@@ -35,7 +35,7 @@ export default function Layout() {
       route: "subscriptions",
       title: "Planos",
       iconName: "credit-card" as FeatherIconName,
-      showItem: true,
+      showItem: !currentUser?.user.isAnonymous,
     },
   ];
 

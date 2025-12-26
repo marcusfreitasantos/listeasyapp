@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { registerUser } from "@/src/services/firebase/auth";
+import {
+  registerUser,
+  registerAnonymousUser,
+} from "@/src/services/firebase/auth";
 import { Alert } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 export const useSignUpViewModel = () => {
+  const routeParams = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
+
+  console.log("routeParams", routeParams);
 
   const handleSignUp = async (
     email: string,
@@ -14,9 +21,19 @@ export const useSignUpViewModel = () => {
     setLoading(true);
 
     try {
-      const registeredUser = await registerUser(email, password, displayName);
+      let registeredUser: FirebaseAuthTypes.UserCredential | null;
 
-      if (!registeredUser.user.uid) {
+      if (routeParams.isAnonymous) {
+        registeredUser = await registerAnonymousUser(
+          email,
+          password,
+          displayName
+        );
+      } else {
+        registeredUser = await registerUser(email, password, displayName);
+      }
+
+      if (!registeredUser?.user.uid) {
         throw new Error("Não foi possível criar a conta.");
       }
       Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
@@ -26,7 +43,6 @@ export const useSignUpViewModel = () => {
         },
       ]);
     } catch (error: any) {
-      console.log("useSignUpViewModel", error);
       Alert.alert("Oops! Algo deu errado:", `${error}`);
     } finally {
       setLoading(false);

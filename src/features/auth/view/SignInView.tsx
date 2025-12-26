@@ -89,6 +89,7 @@ export const SignInView = () => {
               <Button
                 btnText="Continuar sem cadastro"
                 btnType="dark"
+                btnStyle="outline"
                 onPress={handleAnonymousSignIn}
               />
 

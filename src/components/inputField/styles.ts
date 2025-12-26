@@ -22,5 +22,5 @@ export const InputField = styled.TextInput`
   padding: ${({ theme }) => theme.defaultSizes.xxSmall};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.primaryColor};
 `;

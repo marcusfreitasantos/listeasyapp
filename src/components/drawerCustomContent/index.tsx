@@ -6,6 +6,8 @@ import { FeatherIconName } from "@/@types/icons";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
 import { LoadingSpinner } from "../loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
+import { Button } from "../button";
+import { router } from "expo-router";
 
 type DrawerCustomContentProps = {
   items: {
@@ -76,6 +78,25 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 onPress={sendSupportEmail}
               />
             </S.DrawerItemGroup>
+
+            {currentUser?.user.isAnonymous && (
+              <>
+                <Button
+                  btnText="Crie sua conta agora"
+                  onPress={() => {
+                    router.replace({
+                      pathname: "/signup",
+                      params: {
+                        isAnonymous: "true",
+                      },
+                    });
+                  }}
+                />
+                <S.DrawerUserInfoText>
+                  Para liberar todas as funcionalidades do List Easy.
+                </S.DrawerUserInfoText>
+              </>
+            )}
 
             <S.DrawerDivisor />
 
