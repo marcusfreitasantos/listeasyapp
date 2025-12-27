@@ -3,15 +3,23 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 
 type ModalAddListProps = {
+  title: string;
+  inputPlaceHolder: string;
+  submitBtnText: string;
   onSubmit: (listName: string) => void;
 };
 
-export const ModalAddList = ({ onSubmit }: ModalAddListProps) => {
+export const ModalAddList = ({
+  title,
+  inputPlaceHolder,
+  submitBtnText,
+  onSubmit,
+}: ModalAddListProps) => {
   const formFields = [
     {
       fieldName: "listName",
       iconName: "list" as FeatherIconName,
-      placeholder: "Nome da lista",
+      placeholder: inputPlaceHolder,
       validationRules: {
         required: true,
       },
@@ -21,10 +29,10 @@ export const ModalAddList = ({ onSubmit }: ModalAddListProps) => {
   return (
     <S.ModalWrapper>
       <DynamicForm
-        formTitle="Nova lista"
+        formTitle={title}
         formFields={formFields}
         handleFormData={(formData: any) => onSubmit(formData.listName)}
-        submitBtnText="Criar"
+        submitBtnText={submitBtnText}
       />
     </S.ModalWrapper>
   );

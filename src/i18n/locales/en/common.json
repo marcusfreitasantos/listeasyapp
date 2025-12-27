@@ -56,5 +56,8 @@
   "cancel": "Cancel",
   "continue": "Continue",
   "warning": "Warning!",
-  "remove_invite_for_user": "The invite for '{{email_address}}' will be removed."
+  "remove_invite_for_user": "The invite for '{{email_address}}' will be removed.",
+  "new_list": "New list",
+  "list_name": "List name",
+  "create": "Create"
 }

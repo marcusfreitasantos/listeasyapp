@@ -83,7 +83,14 @@ const ListsView = () => {
                 />
               )}
             />
-            {modalIsOpen && <ModalAddList onSubmit={createNewList} />}
+            {modalIsOpen && (
+              <ModalAddList
+                onSubmit={createNewList}
+                title={t("new_list")}
+                inputPlaceHolder={t("list_name")}
+                submitBtnText={t("create")}
+              />
+            )}
 
             <S.ListViewFooter>
               <AddItemBtn
