@@ -16,10 +16,10 @@ import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { Button } from "@/src/components/button";
-import { useTranslations } from "@/src/hooks/useTranslations";
+import { useTranslation } from "react-i18next";
 
 export const SignInView = () => {
-  const { i18n } = useTranslations();
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const { loading, handleSignIn, handleAnonymousSignIn } = useSignInViewModel();
@@ -32,7 +32,7 @@ export const SignInView = () => {
     {
       fieldName: "email",
       iconName: "mail" as FeatherIconName,
-      placeholder: i18n.t("email"),
+      placeholder: t("email"),
       validationRules: {
         required: true,
       },
@@ -40,7 +40,7 @@ export const SignInView = () => {
     {
       fieldName: "password",
       iconName: "lock" as FeatherIconName,
-      placeholder: i18n.t("password"),
+      placeholder: t("password"),
       validationRules: {
         required: true,
         minLength: 8,
@@ -62,17 +62,17 @@ export const SignInView = () => {
           <>
             <S.MainContent>
               <DynamicForm
-                formTitle={i18n.t("login_to_account")}
+                formTitle={t("login_to_account")}
                 formFields={formFields}
                 handleFormData={(formData: any) => onSubmit(formData)}
-                submitBtnText={i18n.t("login")}
+                submitBtnText={t("login")}
               />
 
               <S.SecondaryContentRow>
                 <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
                   <Pressable>
                     <S.SecondaryContentText>
-                      {i18n.t("recover_password")}
+                      {t("recover_password")}
                     </S.SecondaryContentText>
                   </Pressable>
                 </Link>
@@ -80,7 +80,7 @@ export const SignInView = () => {
                 <Link href="/signup" asChild style={{ marginTop: 20 }}>
                   <Pressable>
                     <S.SecondaryContentText>
-                      {i18n.t("no_account")}
+                      {t("no_account")}
                     </S.SecondaryContentText>
                   </Pressable>
                 </Link>
@@ -89,7 +89,7 @@ export const SignInView = () => {
 
             <S.SecondaryContentColumn>
               <Button
-                btnText={i18n.t("continue_without_register")}
+                btnText={t("continue_without_register")}
                 btnType="dark"
                 btnStyle="outline"
                 onPress={handleAnonymousSignIn}
@@ -97,7 +97,7 @@ export const SignInView = () => {
 
               <Pressable onPress={() => sendSupportEmail()}>
                 <S.SecondaryContentText>
-                  {i18n.t("need_help")}
+                  {t("need_help")}
                 </S.SecondaryContentText>
               </Pressable>
             </S.SecondaryContentColumn>

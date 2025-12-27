@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome",
+  "login_to_account": "Login to your account",
+  "login": "Login",
+  "email": "E-mail",
+  "password": "Password",
+  "recover_password": "Recover password",
+  "no_account": "No account? Register now.",
+  "continue_without_register": "Continue without register",
+  "need_help": "Need help?"
+}
