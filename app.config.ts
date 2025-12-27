@@ -49,6 +49,15 @@ const config: ExpoConfig = {
   platforms: ["android", "ios"],
   plugins: [
     [
+      "expo-localization",
+      {
+        supportedLocales: {
+          ios: ["en", "pt-BR"],
+          android: ["en", "pt-BR"],
+        },
+      },
+    ],
+    [
       "react-native-google-mobile-ads",
       {
         androidAppId: "ca-app-pub-8430347978354434~3537975748",

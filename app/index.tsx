@@ -8,8 +8,10 @@ import { useTheme } from "styled-components/native";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useInvitationsViewModel } from "@/src/features/invitation/viewModel/useInvitationsViewModel";
 import { getSubscriptionByUserId } from "@/src/services/firebase/subscriptions";
+import { useTranslations } from "@/src/hooks/useTranslations";
 
 const SignIn = () => {
+  const { i18n } = useTranslations();
   const router = useRouter();
   const theme = useTheme();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
@@ -50,6 +52,7 @@ const SignIn = () => {
   };
 
   useEffect(() => {
+    console.log("translations___", i18n.t("welcome"));
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
     return subscriber;
   }, []);

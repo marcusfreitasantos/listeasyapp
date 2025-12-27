@@ -35,6 +35,7 @@
     "expo-iap": "^3.1.17",
     "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.7",
+    "expo-localization": "~16.1.6",
     "expo-modules-core": "~2.5.0",
     "expo-print": "~14.1.4",
     "expo-router": "~5.1.10",
