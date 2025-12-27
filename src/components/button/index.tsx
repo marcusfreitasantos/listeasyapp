@@ -2,7 +2,7 @@ import * as S from "./styles";
 import { TouchableOpacityProps } from "react-native";
 
 type ButtonProps = {
-  btnText?: string;
+  btnText: string;
   btnType?: "dark" | "light";
   btnStyle?: "solid" | "outline";
 } & TouchableOpacityProps;
@@ -15,7 +15,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <S.ButtonWrapper {...rest} type={btnType} btnStyle={btnStyle}>
-      <S.ButtonText type={btnType}>{btnText ? btnText : "Enviar"}</S.ButtonText>
+      <S.ButtonText type={btnType}>{btnText}</S.ButtonText>
     </S.ButtonWrapper>
   );
 };

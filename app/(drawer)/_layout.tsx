@@ -6,8 +6,10 @@ import { DrawerCustomContent } from "@/src/components/drawerCustomContent";
 import { FeatherIconName } from "@/@types/icons";
 import { useContext } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
+import { useTranslation } from "react-i18next";
 
 export default function Layout() {
+  const { t } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
   const windowWidth = Dimensions.get("window").width;
   const drawerWidth = (windowWidth * 80) / 100;
@@ -15,25 +17,25 @@ export default function Layout() {
   const drawerItems = [
     {
       route: "lists",
-      title: "Minhas listas",
+      title: t("my_lists"),
       iconName: "list" as FeatherIconName,
       showItem: true,
     },
     {
       route: "profile",
-      title: "Perfil",
+      title: t("profile"),
       iconName: "user" as FeatherIconName,
       showItem: !currentUser?.user.isAnonymous,
     },
     {
       route: "invitations",
-      title: "Convites",
+      title: t("invitations"),
       iconName: "file-plus" as FeatherIconName,
       showItem: !currentUser?.user.isAnonymous,
     },
     {
       route: "subscriptions",
-      title: "Planos",
+      title: t("subscriptions"),
       iconName: "credit-card" as FeatherIconName,
       showItem: !currentUser?.user.isAnonymous,
     },

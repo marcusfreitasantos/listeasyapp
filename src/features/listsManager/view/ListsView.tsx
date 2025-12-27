@@ -10,8 +10,10 @@ import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
+import { useTranslation } from "react-i18next";
 
 const ListsView = () => {
+  const { t } = useTranslation();
   const flatListRef = useRef<FlatList>(null);
   const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
 
@@ -47,7 +49,7 @@ const ListsView = () => {
         ) : (
           <>
             <InputField
-              placeholder="Pesquisar"
+              placeholder={t("search")}
               iconName="search"
               onChangeText={(t) => setSearchTerm(t)}
             />
@@ -76,8 +78,8 @@ const ListsView = () => {
               )}
               ListEmptyComponent={() => (
                 <ListEmpty
-                  title="Nenhuma lista encontrada."
-                  text="Crie sua primeira lista com o botão abaixo."
+                  title={t("no_lists_found")}
+                  text={t("create_your_first_list")}
                 />
               )}
             />

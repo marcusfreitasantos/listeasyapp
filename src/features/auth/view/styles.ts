@@ -44,3 +44,8 @@ export const SecondaryContentText = styled.Text`
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
 `;
+
+export const HorizontalBtnIcon = styled.TouchableOpacity`
+  flex-direction: row;
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
+`;

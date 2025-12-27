@@ -3,8 +3,10 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { authUser, authUserAnonimously } from "@/src/services/firebase/auth";
+import { useTranslation } from "react-i18next";
 
 export const useSignInViewModel = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ export const useSignInViewModel = () => {
 
       router.push("/lists");
     } catch (error: any) {
-      Alert.alert("Oops! Algo deu errado:", `${error}`);
+      Alert.alert(t("something_wrong"), `${error}`);
     } finally {
       setLoading(false);
     }
@@ -34,7 +36,7 @@ export const useSignInViewModel = () => {
 
       router.push("/lists");
     } catch (error: any) {
-      Alert.alert("Oops! Algo deu errado:", `${error}`);
+      Alert.alert(t("something_wrong"), `${error}`);
     } finally {
       setLoading(false);
     }

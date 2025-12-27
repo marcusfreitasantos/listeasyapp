@@ -72,7 +72,7 @@ export const SignInView = () => {
                 <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
                   <Pressable>
                     <S.SecondaryContentText>
-                      {t("recover_password")}
+                      {t("reset_password")}
                     </S.SecondaryContentText>
                   </Pressable>
                 </Link>

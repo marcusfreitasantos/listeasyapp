@@ -6,8 +6,10 @@ import {
 import { Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { useTranslation } from "react-i18next";
 
 export const useSignUpViewModel = () => {
+  const { t } = useTranslation();
   const { isAnonymous } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
 
@@ -32,16 +34,16 @@ export const useSignUpViewModel = () => {
       }
 
       if (!registeredUser?.user.uid) {
-        throw new Error("Não foi possível criar a conta.");
+        throw new Error(t("unable_to_create_account"));
       }
-      Alert.alert("Maravilha!", "Sua conta foi criada com sucesso.", [
+      Alert.alert(t("great"), t("account_created"), [
         {
-          text: "Fazer login",
+          text: t("login"),
           onPress: () => router.push("/"),
         },
       ]);
     } catch (error: any) {
-      Alert.alert("Oops! Algo deu errado:", `${error}`);
+      Alert.alert(t("something_wrong"), `${error}`);
     } finally {
       setLoading(false);
     }

@@ -8,14 +8,18 @@ import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
 import { useResetPasswordViewModel } from "../viewModel/useResetPasswordViewModel";
-import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { useTranslation } from "react-i18next";
+import Feather from "@expo/vector-icons/Feather";
+import { useTheme } from "styled-components/native";
 
 export const ResetPasswordView = () => {
-  const colorScheme = useColorScheme();
   const theme = useTheme();
+  const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
+  const { t } = useTranslation();
+  const colorScheme = useColorScheme();
   const { loading, handlePasswordReset } = useResetPasswordViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
@@ -26,7 +30,7 @@ export const ResetPasswordView = () => {
     {
       fieldName: "email",
       iconName: "mail" as FeatherIconName,
-      placeholder: "Email",
+      placeholder: t("email"),
       validationRules: {
         required: true,
       },
@@ -46,19 +50,24 @@ export const ResetPasswordView = () => {
             <LoadingSpinner />
           ) : (
             <DynamicForm
-              formTitle="Informe o e-mail para redefinir sua senha."
+              formTitle={t("enter_your_email_to_reset_password")}
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Enviar"
+              submitBtnText={t("send")}
             />
           )}
         </S.MainContent>
 
         <S.SecondaryContentRow>
           <Link href="/" asChild dismissTo>
-            <Pressable>
-              <S.SecondaryContentText>Voltar</S.SecondaryContentText>
-            </Pressable>
+            <S.HorizontalBtnIcon>
+              <Feather
+                name="arrow-left"
+                color={theme.primaryColor}
+                size={iconSize}
+              />
+              <S.SecondaryContentText>{t("back")}</S.SecondaryContentText>
+            </S.HorizontalBtnIcon>
           </Link>
         </S.SecondaryContentRow>
       </S.Container>

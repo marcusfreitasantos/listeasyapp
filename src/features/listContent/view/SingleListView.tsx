@@ -13,8 +13,10 @@ import { useRouter } from "expo-router";
 import { ListTotalPrice } from "../components/listTotalPrice";
 import { RenameListModal } from "../components/renameListModal";
 import { ItemsFilter } from "../components/itemsFilter";
+import { useTranslation } from "react-i18next";
 
 export const SingleListView = () => {
+  const { t } = useTranslation();
   const {
     currentList,
     searchTerm,
@@ -39,6 +41,7 @@ export const SingleListView = () => {
 
   const router = useRouter();
   const theme = useTheme();
+  const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
   if (!currentList) return null;
 
@@ -51,7 +54,7 @@ export const SingleListView = () => {
           <S.ListViewHeader>
             <S.ListViewHeaderGroup>
               <Feather
-                size={24}
+                size={iconSize}
                 name="arrow-left"
                 color={theme.primaryColor}
                 onPress={() => router.push("/lists")}
@@ -61,7 +64,7 @@ export const SingleListView = () => {
             </S.ListViewHeaderGroup>
 
             <Feather
-              size={24}
+              size={iconSize}
               name="edit"
               color={theme.primaryColor}
               onPress={() => setRenameModalIsOpen(!renameModalIsOpen)}
@@ -77,14 +80,14 @@ export const SingleListView = () => {
 
           <S.SearchFormContainer>
             <Feather
-              size={24}
+              size={iconSize}
               name="sliders"
               color={theme.primaryColor}
               onPress={() => setShowItemsFilter(!showItemsFilter)}
             />
             <S.SearchFormWrapper>
               <InputField
-                placeholder="Pesquisar item"
+                placeholder={t("search_item")}
                 iconName="search"
                 value={searchTerm}
                 onChangeText={(t) => setSearchTerm(t)}
@@ -110,9 +113,7 @@ export const SingleListView = () => {
                 setCurrentItem={setCurrentItem}
               />
             )}
-            ListEmptyComponent={() => (
-              <ListEmpty title="Nenhum item encontrado." />
-            )}
+            ListEmptyComponent={() => <ListEmpty title={t("no_items_found")} />}
           />
 
           {modalIsOpen && (

@@ -12,8 +12,10 @@ import {
   TestIds,
   useForeground,
 } from "react-native-google-mobile-ads";
+import { useTranslation } from "react-i18next";
 
 export const Header = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const { currentUser } = useContext(GlobalUserContext);
   const { listsLength } = useContext(GlobalListContext);
@@ -50,7 +52,7 @@ export const Header = () => {
               {!currentUser.user.photoURL ? (
                 <S.HeaderUserInfoAvatarDefaultContent>
                   {currentUser.user.isAnonymous
-                    ? "C"
+                    ? t("guest").split("")[0]
                     : currentUser?.user.displayName?.split("")[0]}
                 </S.HeaderUserInfoAvatarDefaultContent>
               ) : (
@@ -67,7 +69,7 @@ export const Header = () => {
         )}
 
         <S.HeaderUserInfoTextRow>
-          <S.HeaderUserInfoText>Minhas listas: </S.HeaderUserInfoText>
+          <S.HeaderUserInfoText>{t("my_lists")}: </S.HeaderUserInfoText>
           <S.HeaderUserInfoTextBold>{listsLength}</S.HeaderUserInfoTextBold>
         </S.HeaderUserInfoTextRow>
       </S.HeaderContainer>

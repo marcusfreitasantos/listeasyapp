@@ -3,7 +3,6 @@ import { Link } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { FeatherIconName } from "@/@types/icons";
-import { Pressable } from "react-native";
 
 type DrawerItemProps = {
   route: string;

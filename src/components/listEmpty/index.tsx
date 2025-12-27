@@ -1,14 +1,14 @@
 import * as S from "./styles";
 
 type ListEmptyProps = {
-  title?: string;
+  title: string;
   text?: string;
 };
 
 export const ListEmpty = ({ title, text }: ListEmptyProps) => {
   return (
     <S.Container>
-      <S.ListEmptyTitle>{title ?? "Nada encontrado."}</S.ListEmptyTitle>
+      <S.ListEmptyTitle>{title}</S.ListEmptyTitle>
 
       {text && <S.ListEmptyText>{text}</S.ListEmptyText>}
     </S.Container>
