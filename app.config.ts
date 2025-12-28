@@ -15,7 +15,6 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   ios: {
     supportsTablet: true,
-
     bundleIdentifier: "com.penpack.listeasy",
     googleServicesFile: isLocal
       ? "./google-services.plist"
@@ -173,6 +172,7 @@ const config: ExpoConfig = {
     eas: {
       projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
     },
+    listEasyApiKey: process.env.LIST_EASY_API_KEY,
   },
   owner: "marcusfreitas",
   updates: {

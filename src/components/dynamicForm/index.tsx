@@ -100,6 +100,7 @@ export const DynamicForm = ({
           return (
             <S.FormField key={item.fieldName}>
               <Controller
+                rules={item.validationRules}
                 control={control}
                 name={item.fieldName as string}
                 render={({ field: { onChange, value } }) => (

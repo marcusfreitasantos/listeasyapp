@@ -1,8 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { GlobalListContext } from "@/src/context/listContext";
-import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscriptions";
-import { SubscriptionEntity } from "../../subscriptions/model/subscription";
 import { updateListContent, getListById } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
 import { InvitedUserEntity } from "../model/invitedUser";
@@ -13,8 +11,11 @@ import { updateInvite } from "@/src/services/firebase/invitations";
 import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
+import { getUserByEmail } from "@/src/services/firebase/auth";
+import { useTranslation } from "react-i18next";
 
 export const useShareListsViewModel = () => {
+  const { t } = useTranslation();
   const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
   const { getUserLists } = useListManagerViewModel();
   const isFocused = useIsFocused();
@@ -22,22 +23,25 @@ export const useShareListsViewModel = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
   const [invitedUserEmail, setInvitedUsereEmail] = useState("");
-  const [foundUsers, setFoundUsers] = useState<SubscriptionEntity[] | null>(
-    null
-  );
+  const [foundUser, setFoundUser] = useState<{
+    displayName: string;
+    email: string;
+    uid: string;
+  } | null>(null);
 
   const resetStates = () => {
     setLoading(false);
-    setFoundUsers(null);
+    setFoundUser(null);
   };
 
   const fetchUsersByEmail = async (userEmail: string) => {
     try {
       setLoading(true);
-      const response = await getSubscriptionByUserEmail(userEmail);
-      setFoundUsers(response);
+      const response = await getUserByEmail(userEmail);
+      setFoundUser(response);
     } catch (error) {
-      console.log("Nothing found");
+      console.log(error);
+      setFoundUser(null);
     } finally {
       setLoading(false);
     }
@@ -51,7 +55,7 @@ export const useShareListsViewModel = () => {
       setLoading(true);
       const listObj = await getListById(listId);
 
-      if (!listObj) throw new Error("Lista inválida");
+      if (!listObj) throw new Error(t("invalid_list"));
 
       const listColaborators = listObj.colaborators
         ? [...listObj.colaborators]
@@ -79,7 +83,7 @@ export const useShareListsViewModel = () => {
   ) => {
     try {
       setLoading(true);
-      if (!listToUpdate) throw new Error("Lista inválida");
+      if (!listToUpdate) throw new Error(t("invalid_list"));
 
       const currentListColaborators = listToUpdate.colaborators
         ? [...listToUpdate.colaborators]
@@ -123,14 +127,14 @@ export const useShareListsViewModel = () => {
     };
 
     Alert.alert(
-      "Atenção!",
+      t("warning"),
       `O usuário "${invitedUser.userName}" receberá um convite para ter acesso à lista: "${currentList?.title}". Deseja continuar?`,
       [
         {
-          text: "Cancelar",
+          text: t("cancel"),
         },
         {
-          text: "Confirmar",
+          text: t("confirm"),
           onPress: async () => {
             try {
               setLoading(true);
@@ -176,7 +180,7 @@ export const useShareListsViewModel = () => {
   };
 
   const acceptInvite = async (invite: InviteEntity, accepted: boolean) => {
-    if (!currentUser) throw new Error("Invalid user");
+    if (!currentUser) throw new Error(t("invalid_user"));
 
     try {
       setLoading(true);
@@ -267,7 +271,7 @@ Te espero lá! 😄`;
     currentList,
     loading,
     fetchUsersByEmail,
-    foundUsers,
+    foundUser,
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,

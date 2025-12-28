@@ -9,6 +9,10 @@ import auth, {
   updateEmail,
   signInAnonymously,
 } from "@react-native-firebase/auth";
+import axios from "axios";
+import Constants from "expo-constants";
+
+const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 
 export const registerUser = async (
   userEmail: string,
@@ -40,6 +44,8 @@ export const registerUser = async (
         "A senha é muito fraca. Precisa ter no mínimo 6 caracteres."
       );
     }
+
+    console.log(error);
 
     throw new Error("Erro desconhecido.");
   }
@@ -152,4 +158,19 @@ export const registerAnonymousUser = async (
   } else {
     return null;
   }
+};
+
+export const getUserByEmail = async (email: string) => {
+  if (!listEasyApiKey) throw new Error("No API KEY found.");
+
+  const userData = await axios.get(
+    `https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app/?user_email=${email}`,
+    {
+      headers: {
+        "x-api-key": listEasyApiKey,
+      },
+    }
+  );
+
+  return userData.data;
 };

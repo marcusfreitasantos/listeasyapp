@@ -117,7 +117,7 @@ export const ListCard = ({
       showOption: true,
     },
     {
-      label: t("shared_access"),
+      label: t("share_access"),
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
       showOption: true,

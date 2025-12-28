@@ -19,7 +19,7 @@ export const SharedListsView = () => {
     currentList,
     loading,
     fetchUsersByEmail,
-    foundUsers,
+    foundUser,
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
@@ -76,31 +76,27 @@ export const SharedListsView = () => {
               submitBtnText={t("search")}
             />
 
-            {foundUsers && currentList && (
+            {currentList && (
               <>
                 <S.ListTitle>{t("search_results")}</S.ListTitle>
 
-                <FlatList
-                  data={foundUsers}
-                  renderItem={({ item }) => (
-                    <FoundUserCard
-                      invitedUser={{
-                        userId: item.userId,
-                        userEmail: item.userEmail,
-                        userName: item.userName,
-                      }}
-                      alreadyInList={isAlreadyColaborator(item.userId)}
-                      handleAddColaborator={handleAddColaboratorToCurrentList}
-                      currentList={currentList}
-                      handleRemoveColaborator={
-                        handleRemoveColaboratorFromCurrentList
-                      }
-                    />
-                  )}
-                  ListEmptyComponent={() => (
-                    <NotFoundUserCard sendInvite={handleInvitationToNonUser} />
-                  )}
-                />
+                {foundUser ? (
+                  <FoundUserCard
+                    invitedUser={{
+                      userId: foundUser.uid,
+                      userEmail: foundUser.email,
+                      userName: foundUser.displayName,
+                    }}
+                    alreadyInList={isAlreadyColaborator(foundUser.uid)}
+                    handleAddColaborator={handleAddColaboratorToCurrentList}
+                    currentList={currentList}
+                    handleRemoveColaborator={
+                      handleRemoveColaboratorFromCurrentList
+                    }
+                  />
+                ) : (
+                  <NotFoundUserCard sendInvite={handleInvitationToNonUser} />
+                )}
               </>
             )}
 
@@ -128,7 +124,7 @@ export const SharedListsView = () => {
                     />
                   )}
                   ListEmptyComponent={() => (
-                    <ListEmpty text={t("no_colaborators")} />
+                    <ListEmpty title={t("no_colaborators")} />
                   )}
                 />
               </>

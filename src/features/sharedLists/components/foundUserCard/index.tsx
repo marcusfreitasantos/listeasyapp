@@ -2,6 +2,7 @@ import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { InvitedUserEntity } from "../../model/invitedUser";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
+import { useTranslation } from "react-i18next";
 
 type FoundUserCardProps = {
   currentList: ListEntityType;
@@ -21,6 +22,7 @@ export const FoundUserCard = ({
   handleAddColaborator,
   handleRemoveColaborator,
 }: FoundUserCardProps) => {
+  const { t } = useTranslation();
   const handleBtnOnPress = (invitedUser: InvitedUserEntity) => {
     if (alreadyInList) {
       handleRemoveColaborator(invitedUser, currentList);
@@ -41,7 +43,7 @@ export const FoundUserCard = ({
       </S.FoundUserCardRow>
 
       <Button
-        btnText={alreadyInList ? "Remover" : "Add"}
+        btnText={alreadyInList ? t("delete") : "Add"}
         onPress={() => handleBtnOnPress(invitedUser)}
       />
     </S.FoundUserCardWrapper>
