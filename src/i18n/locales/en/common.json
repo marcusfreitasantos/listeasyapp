@@ -59,5 +59,19 @@
   "remove_invite_for_user": "The invite for '{{email_address}}' will be removed.",
   "new_list": "New list",
   "list_name": "List name",
-  "create": "Create"
+  "create": "Create",
+  "item_name": "Item name",
+  "price": "Price",
+  "quantity": "Quantity",
+  "notes": "Notes",
+  "edit": "Edit",
+  "new_item": "New item",
+  "item": "item",
+  "item_plural": "items",
+  "update": "Update",
+  "checked": "Checked",
+  "unchecked": "Unchecked",
+  "item_will_be_removed": "The item '{{item_name}}' will be removed.",
+  "new_name": "New name",
+  "invalid_list": "Invalid list"
 }

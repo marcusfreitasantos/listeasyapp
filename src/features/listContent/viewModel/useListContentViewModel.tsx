@@ -4,15 +4,15 @@ import { updateListContent } from "@/src/services/firebase/lists";
 import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
-import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useIsFocused } from "@react-navigation/native";
 import { Platform } from "react-native";
+import { useTranslation } from "react-i18next";
 
 export const useListContentViewModel = () => {
+  const { t } = useTranslation();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
   const [currentStatus, setCurrentStatus] = useState<string[]>([]);
-  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ export const useListContentViewModel = () => {
   const updateListItems = async (listItems: ListItemType) => {
     try {
       setLoading(true);
-      if (!currentList) throw new Error("Lista inválida");
+      if (!currentList) throw new Error(t("invalid_list"));
 
       const updatedItems = [...currentList.items, listItems];
 
@@ -61,7 +61,7 @@ export const useListContentViewModel = () => {
   const updateListName = async (listName: string) => {
     try {
       setLoading(true);
-      if (!currentList) throw new Error("Lista inválida");
+      if (!currentList) throw new Error(t("invalid_list"));
 
       const updatedList = {
         ...currentList,
@@ -81,7 +81,7 @@ export const useListContentViewModel = () => {
     if (modalIsOpen) setLoading(true);
 
     try {
-      if (!currentList) throw new Error("Lista inválida");
+      if (!currentList) throw new Error(t("invalid_list"));
 
       const updatedItems = currentList.items.map((item) =>
         item.id === updatedItem.id ? updatedItem : item
@@ -105,7 +105,7 @@ export const useListContentViewModel = () => {
   const removeItemFromList = async (itemToRemoveId: string) => {
     try {
       setLoading(true);
-      if (!currentList) throw new Error("Lista inválida");
+      if (!currentList) throw new Error(t("invalid_list"));
 
       const itemsUpdated = currentList?.items.filter(
         (item) => item.id !== itemToRemoveId
@@ -146,7 +146,7 @@ export const useListContentViewModel = () => {
       return;
     }
 
-    const showChecked = currentStatus.includes("Marcado");
+    const showChecked = currentStatus.includes("checked");
 
     setCurrentItems(
       items.filter((item: ListItemType) => item.checked === showChecked)
