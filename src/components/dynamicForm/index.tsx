@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { KeyboardTypeOptions } from "react-native";
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
@@ -7,21 +7,23 @@ import { InputField } from "@/src/components/inputField";
 import { FeatherIconName } from "@/@types/icons";
 import { useTranslation } from "react-i18next";
 
+export type DynamicFormFiedls = {
+  fieldName: string;
+  iconName: FeatherIconName;
+  defaultValue?: string;
+  placeholder: string;
+  keyboardType?: KeyboardTypeOptions;
+  validationRules: {
+    required: boolean;
+    maxLength?: number;
+    minLength?: number;
+  };
+};
+
 type DynamicFormProps = {
   formTitle?: string;
   submitBtnText: string;
-  formFields: {
-    fieldName: string;
-    iconName: FeatherIconName;
-    defaultValue?: string;
-    placeholder: string;
-    keyboardType?: KeyboardTypeOptions;
-    validationRules: {
-      required: boolean;
-      maxLength?: number;
-      minLength?: number;
-    };
-  }[];
+  formFields: DynamicFormFiedls[];
   handleFormData: (data: Record<string, string>) => void;
 };
 
@@ -32,10 +34,14 @@ export const DynamicForm = ({
   handleFormData,
 }: DynamicFormProps) => {
   const { t } = useTranslation();
-  const formDefaultValues = formFields.reduce((acc, field) => {
-    acc[field.fieldName] = field.defaultValue ?? "";
-    return acc;
-  }, {} as Record<string, string>);
+  const formDefaultValues = useMemo(
+    () =>
+      formFields.reduce((acc, field) => {
+        acc[field.fieldName] = field.defaultValue ?? "";
+        return acc;
+      }, {} as Record<string, string>),
+    [formFields]
+  );
 
   const {
     control,
@@ -83,7 +89,7 @@ export const DynamicForm = ({
 
   useEffect(() => {
     reset(formDefaultValues);
-  }, []);
+  }, [formDefaultValues, reset]);
 
   return (
     <S.FormWrapper>
@@ -98,7 +104,6 @@ export const DynamicForm = ({
                 name={item.fieldName as string}
                 render={({ field: { onChange, value } }) => (
                   <InputField
-                    {...register(item.fieldName, item.validationRules)}
                     iconName={item.iconName}
                     placeholder={item.placeholder}
                     value={

@@ -39,7 +39,7 @@
   "at_least_count_characters": "This field must contain at least {{count}} characters.",
   "unknown_error": "Unknown error",
   "nothing_found": "Nothing found",
-  "success": "Success",
+  "success": "Success!",
   "password_reset_email_sent": "The password reset email has been sent.",
   "confirm": "Confirm",
   "something_wrong": "Oops! Something went wrong!",
@@ -80,5 +80,11 @@
   "shared_access": "Shared access",
   "pdf_export": "PDF export",
   "quit_list": "Quit list",
-  "shared": "shared"
+  "shared": "shared",
+  "image": "Image",
+  "max_size": "Max size",
+  "file_not_sent": "File not sent!",
+  "file_max_size_warning": "The file must have {{file_size}} at max.",
+  "invalid_user": "Invalid user",
+  "profile_updated": "Profile updated."
 }

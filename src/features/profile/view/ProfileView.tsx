@@ -4,31 +4,25 @@ import * as S from "./styles";
 import { KeyboardAvoidingView, Platform, Pressable, Alert } from "react-native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { useTheme } from "styled-components/native";
-import { FeatherIconName } from "@/@types/icons";
-import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 import { useUpdateProfileViewModel } from "../viewModel/useUpdateProfile";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
+import { useTranslation } from "react-i18next";
 
 export const ProfileView = () => {
+  const { t } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
   const theme = useTheme();
-  const { handlePasswordReset } = useResetPasswordViewModel();
-  const { loading, handleUpdate, pickImage, fileMaxSize } =
-    useUpdateProfileViewModel();
+  const {
+    loading,
+    handleUpdate,
+    pickImage,
+    fileMaxSize,
+    formFields,
+    confirmResetPassword,
+  } = useUpdateProfileViewModel();
   const [localPhotoUrl, setLocalPhotoUrl] = useState(
     currentUser?.user.photoURL ?? null
   );
-
-  const formFields = [
-    {
-      fieldName: "displayName",
-      iconName: "user" as FeatherIconName,
-      placeholder: currentUser?.user.displayName ?? "Seu nome",
-      validationRules: {
-        required: false,
-      },
-    },
-  ];
 
   const onSubmit = (data: Record<string, string>) => {
     const newName = data.displayName ?? currentUser?.user.displayName;
@@ -40,29 +34,13 @@ export const ProfileView = () => {
     if (pickedImgURI) setLocalPhotoUrl(pickedImgURI ?? null);
   };
 
-  const confirmResetPassword = () => {
-    Alert.alert(
-      "Atenção!",
-      "Um link para recuperação de senha será enviado para o seu e-mail.",
-      [
-        {
-          text: "Cancelar",
-        },
-        {
-          text: "Continuar",
-          onPress: () => handlePasswordReset(currentUser?.user.email ?? ""),
-        },
-      ]
-    );
-  };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
       <S.Container>
-        <S.ContentTitle>Atualizar perfil</S.ContentTitle>
+        <S.ContentTitle>{`${t("update")} ${t("profile")}`}</S.ContentTitle>
         {loading ? (
           <LoadingSpinner />
         ) : (
@@ -78,23 +56,25 @@ export const ProfileView = () => {
                 )}
               </S.UserInfoAvatarImgWrapper>
 
-              <S.ContentText>Alterar imagem</S.ContentText>
+              <S.ContentText>{`${t("update")} ${t("image")}`}</S.ContentText>
               <S.ContentSubText>
-                Tamanho máximo: {fileMaxSize}kb
+                {t("max_size")}: {fileMaxSize}kb
               </S.ContentSubText>
             </S.UserInfoAvatarWrapper>
 
-            <DynamicForm
-              formFields={formFields}
-              handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Enviar"
-            />
+            {formFields.length > 0 && (
+              <DynamicForm
+                formFields={formFields}
+                handleFormData={(formData: any) => onSubmit(formData)}
+                submitBtnText={t("send")}
+              />
+            )}
           </>
         )}
 
         {!loading && (
           <Pressable onPress={confirmResetPassword}>
-            <S.ContentText>Redefinir senha?</S.ContentText>
+            <S.ContentText>{t("reset_password")}?</S.ContentText>
           </Pressable>
         )}
       </S.Container>
