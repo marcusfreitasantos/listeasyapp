@@ -32,6 +32,7 @@ export const useShareListsViewModel = () => {
   const resetStates = () => {
     setLoading(false);
     setFoundUser(null);
+    setInvitedUsereEmail("");
   };
 
   const fetchUsersByEmail = async (userEmail: string) => {
@@ -40,7 +41,7 @@ export const useShareListsViewModel = () => {
       const response = await getUserByEmail(userEmail);
       setFoundUser(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setFoundUser(null);
     } finally {
       setLoading(false);
@@ -279,5 +280,6 @@ Te espero lá! 😄`;
     acceptInvite,
     handleInvitationToNonUser,
     setInvitedUsereEmail,
+    invitedUserEmail,
   };
 };

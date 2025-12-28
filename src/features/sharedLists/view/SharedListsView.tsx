@@ -25,7 +25,9 @@ export const SharedListsView = () => {
     isAlreadyColaborator,
     handleInvitationToNonUser,
     setInvitedUsereEmail,
+    invitedUserEmail,
   } = useShareListsViewModel();
+
   const formFields = [
     {
       fieldName: "userEmail",
@@ -76,7 +78,7 @@ export const SharedListsView = () => {
               submitBtnText={t("search")}
             />
 
-            {currentList && (
+            {currentList && invitedUserEmail && (
               <>
                 <S.ListTitle>{t("search_results")}</S.ListTitle>
 
