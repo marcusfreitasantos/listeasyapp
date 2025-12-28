@@ -69,9 +69,16 @@
   "item": "item",
   "item_plural": "items",
   "update": "Update",
+  "updated_at": "Updated at",
   "checked": "Checked",
   "unchecked": "Unchecked",
   "item_will_be_removed": "The item '{{item_name}}' will be removed.",
   "new_name": "New name",
-  "invalid_list": "Invalid list"
+  "invalid_list": "Invalid list",
+  "list_will_be_deleted": "The list '{{list_name}}' will be deleted.",
+  "delete": "Delete",
+  "shared_access": "Shared access",
+  "pdf_export": "PDF export",
+  "quit_list": "Quit list",
+  "shared": "shared"
 }
