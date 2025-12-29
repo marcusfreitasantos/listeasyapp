@@ -97,5 +97,16 @@
   "error": "Error",
   "whatsapp_not_found": "WhatsApp is not installed on your device.",
   "failed_opening_whatsapp": "Failed to open WhatsApp",
-  "whatsapp_invite_msg": "👋 Hey! {{user_name}} invited you to use List Easy! 📋✨ Let's organize the list '{{list_name}}' together? Download the app here 👉 {{url}} 🚀🛒 See you there! 😄"
+  "whatsapp_invite_msg": "👋 Hey! {{user_name}} invited you to use List Easy! 📋✨ Let's organize the list '{{list_name}}' together? Download the app here 👉 {{url}} 🚀🛒 See you there! 😄",
+  "subscription_manage_warning": "Manage your subscription on a {{platform}} device. Or contact support.",
+  "subscription_activated": "Your {{product_id}} plan has been successfully activated.",
+  "invalid_subscription": "Invalid subscription",
+  "no_active_subscriptions": "No active subscriptions",
+  "new_subs_product_not_found": "New subscription product not found",
+  "invalid_purchase_token": "Invalid purchase. Token not generated.",
+  "purchase_error_msg": "Your purchase could not be completed. Please try again or contact support.",
+  "purchase_not_valid": "Purchase was not validated",
+  "no_internet_connection": "No internet conection",
+  "no_store_connection": "No store conection",
+  "no_store_connection_msg": "The connection to the store could not be established. Please try again later."
 }

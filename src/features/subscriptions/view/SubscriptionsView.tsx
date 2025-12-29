@@ -7,17 +7,12 @@ import { ListEmpty } from "@/src/components/listEmpty";
 
 const SubscriptionsView = () => {
   const {
-    currentPlatform,
     products,
     loading,
     currentSubscription,
     handlePurchaseSubscription,
+    subscriptionManageWarning,
   } = useSubscriptionsViewModel();
-
-  const subscriptionMsg =
-    currentSubscription?.platform === currentPlatform
-      ? ""
-      : `Gerencie a sua assinatura em um dispositivo ${currentSubscription?.platform}. Ou entre em contato com o suporte.`;
 
   return (
     <S.SubscriptionsViewContainer>
@@ -26,7 +21,9 @@ const SubscriptionsView = () => {
       ) : (
         <FlatList
           keyExtractor={(item) => item.productId}
-          ListEmptyComponent={() => <ListEmpty title={subscriptionMsg} />}
+          ListEmptyComponent={() => (
+            <ListEmpty title={subscriptionManageWarning} />
+          )}
           data={products.reverse()}
           renderItem={({ item }) => (
             <ProductCard

@@ -110,7 +110,7 @@ export const useUpdateProfileViewModel = () => {
           fieldName: "displayName",
           iconName: "user" as FeatherIconName,
           placeholder: t("name_lastname"),
-          defaultValue: currentUser?.user.displayName ?? "my eggs",
+          defaultValue: currentUser?.user.displayName ?? "",
           validationRules: {
             required: false,
           },

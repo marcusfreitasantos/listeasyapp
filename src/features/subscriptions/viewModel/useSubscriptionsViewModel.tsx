@@ -12,8 +12,10 @@ import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
 import { validatePurchaseToken } from "@/src/services/playBilling/purchase";
+import { useTranslation } from "react-i18next";
 
 export const useSubscriptionsViewModel = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const { currentUser } = useContext(GlobalUserContext);
   const { currentSubscription, setCurrentSubscription } = useContext(
@@ -21,6 +23,13 @@ export const useSubscriptionsViewModel = () => {
   );
   const [loading, setLoading] = useState(false);
   const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
+
+  const subscriptionManageWarning =
+    currentSubscription?.platform === Platform.OS
+      ? ""
+      : t("subscription_manage_warning", {
+          platform: currentSubscription?.platform,
+        });
 
   const {
     connected,
@@ -40,18 +49,14 @@ export const useSubscriptionsViewModel = () => {
         return;
       }
 
-      Alert.alert(
-        "Oops!",
-        "Não foi possível completar a sua compra. Tente novamente."
-      );
-      console.error("Purchase error:", error);
+      Alert.alert(t("something_wrong"), error.responseCode?.toString());
     },
   });
 
   const showSuccessMessage = (productId: string) => {
     Alert.alert(
-      "Maravilha!",
-      `Seu plano ${productId} foi ativado com sucesso.`
+      t("great"),
+      t("subscription_activated", { product_id: productId })
     );
     setLoading(false);
   };
@@ -63,7 +68,7 @@ export const useSubscriptionsViewModel = () => {
   ) => {
     try {
       if (!productId || !currentSubscription?.purchaseToken)
-        throw new Error("Invalid Subscription.");
+        throw new Error(t("invalid_subscription"));
       const newSubscription = {
         ...currentSubscription,
         status: "active" as "active" | "inactive",
@@ -87,14 +92,14 @@ export const useSubscriptionsViewModel = () => {
       setLoading(true);
 
       if (!currentSubscription?.purchaseToken) {
-        throw new Error("No active subscription found");
+        throw new Error(t("no_active_subscriptions"));
       }
 
       const newSubscription = subscriptions.find(
         (sub) => sub.id === newSubscriptionId
       );
       if (!newSubscription) {
-        throw new Error("New subscription product not found");
+        throw new Error(t("new_subs_product_not_found"));
       }
 
       if ("subscriptionOfferDetailsAndroid" in newSubscription) {
@@ -133,7 +138,7 @@ export const useSubscriptionsViewModel = () => {
   ) => {
     try {
       if (!productId || !currentUser?.user.email)
-        throw new Error("Invalid Subscription.");
+        throw new Error(t("invalid_subscription"));
       const newSubscription = {
         userId: currentUser.user.uid,
         productId,
@@ -168,8 +173,7 @@ export const useSubscriptionsViewModel = () => {
     try {
       setLoading(true);
 
-      if (!purchase.purchaseToken)
-        throw new Error("Invalid purchase. Token not generated.");
+      if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
 
       const validationResult = await validatePurchaseToken(
         purchase.purchaseToken
@@ -199,25 +203,17 @@ export const useSubscriptionsViewModel = () => {
 
         showSuccessMessage(purchase.productId);
       } else {
-        Alert.alert(
-          "Oops!",
-          "Sua compra não pôde ser concluída. Tente novamente ou entre em contato com o suporte."
-        );
-        throw new Error("Purchase was not validated");
+        throw new Error(t("purchase_not_valid"));
       }
     } catch (error) {
-      console.error("Error handling purchase:", error);
-      Alert.alert("Oops", "Seu pagamento não foi processado.");
+      Alert.alert(t("error"), `${error}`);
       setLoading(false);
     }
   };
 
   const handlePurchaseSubscription = async (subscriptionId: string) => {
     if (!connected) {
-      Alert.alert(
-        "Sem conexão!",
-        "A conexão com a loja não foi estabelecida. Tente novamente mais tarde."
-      );
+      Alert.alert(t("no_store_connection"), t("no_store_connection_msg"));
       return;
     }
 
@@ -317,12 +313,16 @@ export const useSubscriptionsViewModel = () => {
         }
       });
 
-      setProducts(
-        sortProductsByAmount(
-          fetchedProducts.filter((product) => product !== undefined),
-          "asc"
-        )
-      );
+      if (subscriptionManageWarning) {
+        setProducts(
+          sortProductsByAmount(
+            fetchedProducts.filter((product) => product !== undefined),
+            "asc"
+          )
+        );
+      } else {
+        setProducts([]);
+      }
     }
   }, [subscriptions]);
 
@@ -332,6 +332,6 @@ export const useSubscriptionsViewModel = () => {
     currentSubscription,
     handlePurchaseSubscription,
     handleAndroidSubscriptionSwitch,
-    currentPlatform: Platform.OS,
+    subscriptionManageWarning,
   };
 };
