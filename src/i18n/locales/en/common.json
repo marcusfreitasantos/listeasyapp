@@ -110,5 +110,18 @@
   "no_store_connection": "No store conection",
   "no_store_connection_msg": "The connection to the store could not be established. Please try again later.",
   "support_email_subject": "[List Easy] I need support!",
-  "email_not_opened": "The email could not be opened."
+  "email_not_opened": "The email could not be opened.",
+  "services": {
+    "firebase_auth": {
+      "email_already_exist": "A user with this email address already exists!",
+      "invalid_email": "Invalid e-mail address!",
+      "weak_password": "The password is too weak. It needs to be at least 8 characters long.",
+      "wrong_credentials": "We were unable to log in. Incorrect email or password.",
+      "data_not_updated": "We were unable to update your information.",
+      "user_not_found": "User not found",
+      "reset_email_not_sent": "We were unable to send the reset e-mail.",
+      "logout_error": "We were unable to log out.",
+      "anonymous_login_error": "Access was not possible without registration."
+    }
+  }
 }

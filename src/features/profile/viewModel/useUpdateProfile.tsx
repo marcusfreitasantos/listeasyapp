@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import { updateUserData } from "@/src/services/firebase/auth";
+import { updateUserProfile } from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 import { FeatherIconName } from "@/@types/icons";
@@ -69,7 +69,11 @@ export const useUpdateProfileViewModel = () => {
         photoURL = (await handleImageUpload(localPhotoURL)) ?? null;
       }
 
-      const response = await updateUserData(currentUser, displayName, photoURL);
+      const response = await updateUserProfile(
+        currentUser.user,
+        displayName,
+        photoURL
+      );
 
       if (response) {
         Alert.alert(t("success"), t("profile_updated"), [

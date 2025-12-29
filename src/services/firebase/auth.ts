@@ -1,8 +1,7 @@
 import auth, {
-  getAuth,
+  FirebaseAuthTypes,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  FirebaseAuthTypes,
   updateProfile,
   signOut,
   sendPasswordResetEmail,
@@ -12,165 +11,178 @@ import auth, {
 import axios from "axios";
 import Constants from "expo-constants";
 
+/**
+ * Never use hooks (useTranslation) in service files.
+ * Pass translated messages from the UI instead.
+ */
+
+const firebaseAuth = auth();
+
 const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 
+/* -------------------------------------------------------------------------- */
+/*                              Error Handling                                */
+/* -------------------------------------------------------------------------- */
+
+const firebaseErrorMap: Record<string, string> = {
+  "auth/email-already-in-use": "services.firebase_auth.email_already_exist",
+  "auth/invalid-email": "services.firebase_auth.invalid_email",
+  "auth/weak-password": "services.firebase_auth.weak_password",
+  "auth/user-not-found": "services.firebase_auth.user_not_found",
+};
+
+const resolveFirebaseError = (error: unknown, fallbackKey: string): string => {
+  if (typeof error === "object" && error !== null && "code" in error) {
+    const code = (error as { code?: string }).code;
+    if (code && firebaseErrorMap[code]) {
+      return firebaseErrorMap[code];
+    }
+  }
+  return fallbackKey;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                   Auth                                     */
+/* -------------------------------------------------------------------------- */
+
 export const registerUser = async (
-  userEmail: string,
-  userPass: string,
-  displayName: string
-) => {
+  email: string,
+  password: string,
+  displayName?: string
+): Promise<FirebaseAuthTypes.UserCredential> => {
   try {
-    const response: FirebaseAuthTypes.UserCredential =
-      await createUserWithEmailAndPassword(getAuth(), userEmail, userPass);
+    const credential = await createUserWithEmailAndPassword(
+      firebaseAuth,
+      email,
+      password
+    );
 
     if (displayName) {
-      await updateProfile(response.user, {
-        displayName: displayName || "",
-      });
+      await updateProfile(credential.user, { displayName });
     }
 
-    return response;
-  } catch (error: any) {
-    if (error.code === "auth/email-already-in-use") {
-      throw new Error("Já existe um usuário com este e-mail!");
-    }
-
-    if (error.code === "auth/invalid-email") {
-      throw new Error("Endereço e e-mail inválido!");
-    }
-
-    if (error.code === "auth/weak-password") {
-      throw new Error(
-        "A senha é muito fraca. Precisa ter no mínimo 6 caracteres."
-      );
-    }
-
-    console.log(error);
-
-    throw new Error("Erro desconhecido.");
-  }
-};
-
-export const authUser = async (userEmail: string, userPass: string) => {
-  try {
-    const response = await signInWithEmailAndPassword(
-      getAuth(),
-      userEmail,
-      userPass
-    );
-
-    return response;
+    return credential;
   } catch (error) {
-    throw new Error(
-      `Não foi possível fazer login. E-mail ou senha incorretos.`
-    );
+    throw new Error(resolveFirebaseError(error, "unknown_error"));
   }
 };
 
-export const updateUserData = async (
-  userObj: FirebaseAuthTypes.UserCredential,
-  displayName: string,
-  photoURL: string | null
-) => {
+export const loginUser = async (
+  email: string,
+  password: string
+): Promise<FirebaseAuthTypes.UserCredential> => {
   try {
-    await updateProfile(userObj.user, {
-      displayName: displayName || "",
-      photoURL: photoURL || "",
+    return await signInWithEmailAndPassword(firebaseAuth, email, password);
+  } catch {
+    throw new Error("services.firebase_auth.wrong_credentials");
+  }
+};
+
+export const logoutUser = async (): Promise<void> => {
+  try {
+    await signOut(firebaseAuth);
+  } catch {
+    throw new Error("services.firebase_auth.logout_error");
+  }
+};
+
+export const loginAnonymously =
+  async (): Promise<FirebaseAuthTypes.UserCredential> => {
+    try {
+      return await signInAnonymously(firebaseAuth);
+    } catch {
+      throw new Error("services.firebase_auth.anonymous_login_error");
+    }
+  };
+
+/* -------------------------------------------------------------------------- */
+/*                              User Management                                */
+/* -------------------------------------------------------------------------- */
+
+export const updateUserProfile = async (
+  user: FirebaseAuthTypes.User,
+  displayName?: string,
+  photoURL?: string | null
+): Promise<FirebaseAuthTypes.User | null> => {
+  try {
+    await updateProfile(user, {
+      displayName,
+      photoURL: photoURL ?? undefined,
     });
 
-    const userUpdated = getAuth().currentUser;
-
-    return userUpdated;
-  } catch (error: any) {
-    console.log(error);
-    throw new Error("Não foi possível atualizar seus dados.");
+    return firebaseAuth.currentUser;
+  } catch {
+    throw new Error("services.firebase_auth.data_not_updated");
   }
 };
 
-export const updateUserEmail = async (
-  userObj: FirebaseAuthTypes.UserCredential,
+export const updateUserEmailAddress = async (
+  user: FirebaseAuthTypes.User,
   email: string
-) => {
+): Promise<FirebaseAuthTypes.User | null> => {
   try {
-    await updateEmail(userObj.user, email);
-    const userUpdated = getAuth().currentUser;
-    return userUpdated;
-  } catch (error: any) {
-    console.log(error);
-    throw new Error("Não foi possível atualizar seu e-mail.");
+    await updateEmail(user, email);
+    return firebaseAuth.currentUser;
+  } catch {
+    throw new Error("services.firebase_auth.data_not_updated");
   }
 };
 
-export const resetPassword = async (userEmail: string) => {
+export const resetUserPassword = async (email: string): Promise<void> => {
   try {
-    await sendPasswordResetEmail(getAuth(), userEmail);
-  } catch (error: any) {
-    if (error.code === "auth/user-not-found") {
-      throw new Error("Usuário não encontrado com este e-mail.");
-    }
-    if (error.code === "auth/invalid-email") {
-      throw new Error("Endereço de e-mail inválido.");
-    }
-    throw new Error("Não foi possível enviar o e-mail de recuperação.");
-  }
-};
-
-export const userLogout = async () => {
-  try {
-    const response = await signOut(getAuth());
-    return response;
+    await sendPasswordResetEmail(firebaseAuth, email);
   } catch (error) {
-    throw new Error(`Não foi possível fazer logout. ${error}`);
+    throw new Error(
+      resolveFirebaseError(error, "services.firebase_auth.reset_email_not_sent")
+    );
   }
 };
 
-export const authUserAnonimously = async () => {
-  try {
-    const response = await signInAnonymously(getAuth());
-    return response;
-  } catch (error) {
-    throw new Error(`Não foi possível acessar sem cadastro. ${error}`);
-  }
-};
+/* -------------------------------------------------------------------------- */
+/*                       Anonymous → Email Registration                         */
+/* -------------------------------------------------------------------------- */
 
-export const registerAnonymousUser = async (
-  userEmail: string,
-  userPass: string,
-  displayName: string
-): Promise<FirebaseAuthTypes.UserCredential | null> => {
-  const user = auth().currentUser;
-  if (!user) return null;
+export const convertAnonymousUser = async (
+  email: string,
+  password: string,
+  displayName?: string
+): Promise<FirebaseAuthTypes.User | null> => {
+  const user = firebaseAuth.currentUser;
+  if (!user || !user.isAnonymous) return null;
 
-  const credential = auth.EmailAuthProvider.credential(userEmail, userPass);
+  const credential = auth.EmailAuthProvider.credential(email, password);
 
   await user.linkWithCredential(credential);
 
-  await user.updateProfile({
-    displayName,
-  });
-
-  const updatedUser = auth().currentUser;
-
-  if (updatedUser) {
-    return {
-      user: updatedUser,
-    };
-  } else {
-    return null;
+  if (displayName) {
+    await updateProfile(user, { displayName });
   }
+
+  return firebaseAuth.currentUser;
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                Backend API                                  */
+/* -------------------------------------------------------------------------- */
+
 export const getUserByEmail = async (email: string) => {
-  if (!listEasyApiKey) throw new Error("No API KEY found.");
+  if (!listEasyApiKey) {
+    throw new Error("No API key found");
+  }
 
-  const userData = await axios.get(
-    `https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app/?user_email=${email}`,
-    {
-      headers: {
-        "x-api-key": listEasyApiKey,
-      },
-    }
-  );
+  try {
+    const response = await axios.get(
+      "https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app/",
+      {
+        params: { user_email: email },
+        headers: {
+          "x-api-key": listEasyApiKey,
+        },
+      }
+    );
 
-  return userData.data;
+    return response.data;
+  } catch {
+    throw new Error("services.firebase_auth.user_fetch_error");
+  }
 };

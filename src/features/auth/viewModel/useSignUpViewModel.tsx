@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   registerUser,
-  registerAnonymousUser,
+  convertAnonymousUser,
 } from "@/src/services/firebase/auth";
 import { Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -21,19 +21,20 @@ export const useSignUpViewModel = () => {
     setLoading(true);
 
     try {
-      let registeredUser: FirebaseAuthTypes.UserCredential | null;
+      let registeredUser: FirebaseAuthTypes.UserCredential["user"] | null;
 
       if (isAnonymous) {
-        registeredUser = await registerAnonymousUser(
+        registeredUser = await convertAnonymousUser(
           email,
           password,
           displayName
         );
       } else {
-        registeredUser = await registerUser(email, password, displayName);
+        registeredUser = (await registerUser(email, password, displayName))
+          .user;
       }
 
-      if (!registeredUser?.user.uid) {
+      if (!registeredUser?.uid) {
         throw new Error(t("unable_to_create_account"));
       }
       Alert.alert(t("great"), t("account_created"), [

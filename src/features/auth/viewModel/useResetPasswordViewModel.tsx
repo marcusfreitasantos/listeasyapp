@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { resetPassword } from "@/src/services/firebase/auth";
+import { resetUserPassword } from "@/src/services/firebase/auth";
 import { useTranslation } from "react-i18next";
 
 export const useResetPasswordViewModel = () => {
@@ -13,7 +13,7 @@ export const useResetPasswordViewModel = () => {
     setLoading(true);
 
     try {
-      await resetPassword(email);
+      await resetUserPassword(email);
       Alert.alert(t("success"), t("password_reset_email_sent"), [
         {
           text: t("confirm"),
