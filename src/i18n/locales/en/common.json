@@ -88,5 +88,14 @@
   "invalid_user": "Invalid user",
   "profile_updated": "Profile updated.",
   "user_not_found": "User not found",
-  "send_whatsapp_invite": "Send invite by Whatsapp?"
+  "send_whatsapp_invite": "Send invite by Whatsapp?",
+  "user_invitation_warning": "The user {{user_name}} will receive an invite to get access to the list: {{list_name}}.",
+  "quit_list_warning": "You will be removed from the list: {{list_name}}. Proceed anyway?",
+  "error_accept_invite": "Error accepting invite",
+  "remove_user_from_list_warning": "The user {{user_name}} will be removed from the list: {{list_name}}. Proceed anyway?",
+  "error_creating_invite": "We were unable to generate the invitation. Please try again later.",
+  "error": "Error",
+  "whatsapp_not_found": "WhatsApp is not installed on your device.",
+  "failed_opening_whatsapp": "Failed to open WhatsApp",
+  "whatsapp_invite_msg": "👋 Hey! {{user_name}} invited you to use List Easy! 📋✨ Let's organize the list '{{list_name}}' together? Download the app here 👉 {{url}} 🚀🛒 See you there! 😄"
 }

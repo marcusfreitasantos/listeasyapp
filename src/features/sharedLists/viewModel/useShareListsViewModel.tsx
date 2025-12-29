@@ -129,7 +129,10 @@ export const useShareListsViewModel = () => {
 
     Alert.alert(
       t("warning"),
-      `O usuário "${invitedUser.userName}" receberá um convite para ter acesso à lista: "${currentList?.title}". Deseja continuar?`,
+      t("user_invitation_warning", {
+        user_name: invitedUser.userName,
+        list_name: currentList?.title,
+      }),
       [
         {
           text: t("cancel"),
@@ -157,15 +160,18 @@ export const useShareListsViewModel = () => {
   ) => {
     const alertMsg =
       invitedUser.userId === currentUser?.user.uid
-        ? `Você sairá da lista: "${list.title}". Deseja continuar?`
-        : `O usuário "${invitedUser.userName}" será removido da lista: "${list.title}". Deseja continuar?`;
+        ? t("quit_list_warning", { list_name: list.title })
+        : t("remove_user_from_list_warning", {
+            user_name: invitedUser.userName,
+            list_name: list.title,
+          });
 
-    Alert.alert("Atenção!", alertMsg, [
+    Alert.alert(t("warning"), alertMsg, [
       {
-        text: "Cancelar",
+        text: t("cancel"),
       },
       {
-        text: "Confirmar",
+        text: t("confirm"),
         onPress: () => removeColaboratorsFromCurrentList(invitedUser, list),
       },
     ]);
@@ -204,8 +210,8 @@ export const useShareListsViewModel = () => {
           invite.list.id
         );
       }
-    } catch (error) {
-      console.log("Error accepting invite: ", error);
+    } catch (e) {
+      Alert.alert(t("error"), `${t("error_accept_invite")}. \n ${e}`);
     } finally {
       fetchUserInvites(currentUser?.user.email ?? "");
       setLoading(false);
@@ -215,12 +221,12 @@ export const useShareListsViewModel = () => {
   const sendInviteByWhatsapp = async () => {
     const playStoreLink =
       "https://play.google.com/store/apps/details?id=com.penpack.listeasy";
-    const message = `👋 Ei! ${
-      currentUser?.user.displayName ?? currentUser?.user.email
-    } te convidou pra usar o List Easy! 📋✨
-Vamos organizar juntos a lista "${currentList?.title}"? 
-Baixe o app aqui 👉 ${playStoreLink} 🚀🛒
-Te espero lá! 😄`;
+
+    const message = t("whatsapp_invite_msg", {
+      user_name: currentUser?.user.displayName ?? currentUser?.user.email,
+      list_name: currentList?.title,
+      url: playStoreLink,
+    });
 
     const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
 
@@ -229,10 +235,10 @@ Te espero lá! 😄`;
       if (supported) {
         await Linking.openURL(whatsappUrl);
       } else {
-        Alert.alert("Erro", "Whatsapp não está instalado no seu dispositivo.");
+        Alert.alert(t("error"), t("whatsapp_not_found"));
       }
     } catch (e) {
-      Alert.alert("Erro", "Falha ao abrir o WhatsApp: " + e);
+      Alert.alert(t("error"), `${t("failed_opening_whatsapp")}. \n ${e}`);
     }
   };
 
@@ -255,8 +261,8 @@ Te espero lá! 😄`;
       sendInviteByWhatsapp();
     } catch (e) {
       Alert.alert(
-        "Erro",
-        `Não foi possível gerar o convite. Tente novamente mais tarde. \n ${e}
+        t("error"),
+        `${t("error_creating_invite")}. \n ${e}
         )}`
       );
     } finally {
