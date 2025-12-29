@@ -108,5 +108,7 @@
   "purchase_not_valid": "Purchase was not validated",
   "no_internet_connection": "No internet conection",
   "no_store_connection": "No store conection",
-  "no_store_connection_msg": "The connection to the store could not be established. Please try again later."
+  "no_store_connection_msg": "The connection to the store could not be established. Please try again later.",
+  "support_email_subject": "[List Easy] I need support!",
+  "email_not_opened": "The email could not be opened."
 }
