@@ -32,7 +32,7 @@ export const ListCard = ({
   generatePdf,
   removeCurrentUserFromSharedList,
 }: ListCardProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
@@ -176,7 +176,7 @@ export const ListCard = ({
           </S.ListCardTotalPriceWrapper>
 
           <S.ListCardTotalPriceTextRegular>
-            {t("updated_at")}: {getFormattedDate(list.updatedAt)}
+            {t("updated_at")}: {getFormattedDate(list.updatedAt, i18n.language)}
           </S.ListCardTotalPriceTextRegular>
         </S.ListCardInfoWrapper>
       )}
