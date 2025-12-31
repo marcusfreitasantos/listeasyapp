@@ -111,6 +111,8 @@
   "no_store_connection_msg": "The connection to the store could not be established. Please try again later.",
   "support_email_subject": "[List Easy] I need support!",
   "email_not_opened": "The email could not be opened.",
+  "current": "current",
+  "subscribe": "subscribe",
   "services": {
     "firebase_auth": {
       "email_already_exist": "A user with this email address already exists!",

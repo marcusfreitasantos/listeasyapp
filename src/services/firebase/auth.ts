@@ -11,11 +11,6 @@ import auth, {
 import axios from "axios";
 import Constants from "expo-constants";
 
-/**
- * Never use hooks (useTranslation) in service files.
- * Pass translated messages from the UI instead.
- */
-
 const firebaseAuth = auth();
 
 const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;

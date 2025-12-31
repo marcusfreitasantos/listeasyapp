@@ -27,7 +27,7 @@ export const SecondaryContentColumn = styled.View`
   align-items: center;
   width: 100%;
   gap: ${({ theme }) => theme.defaultSizes.xSmall};
-  padding-bottom: ${({ theme }) => theme.defaultSizes.medium};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.large};
 `;
 
 export const MainContentText = styled.Text`
