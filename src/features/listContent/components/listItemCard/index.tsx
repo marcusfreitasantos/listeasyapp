@@ -5,6 +5,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { centsToReais } from "@/src/utils/convertCurrency";
 import { CheckboxInputField } from "@/src/components/checkboxdInputField";
+import { useTranslation } from "react-i18next";
 
 type ListItemCardProps = {
   listItem: ListItemType;
@@ -23,19 +24,24 @@ export const ListItemCard = ({
   updateItemInList,
   setCurrentItem,
 }: ListItemCardProps) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
   const handleRemoveItemFromList = () => {
-    Alert.alert("Atenção!", `O item '${listItem.name}' será removido.`, [
-      {
-        text: "Cancelar",
-      },
-      {
-        text: "Confirmar",
-        onPress: () => removeItemFromList(itemId),
-      },
-    ]);
+    Alert.alert(
+      t("warning"),
+      t("item_will_be_removed", { item_name: listItem.name }),
+      [
+        {
+          text: t("cancel"),
+        },
+        {
+          text: t("confirm"),
+          onPress: () => removeItemFromList(itemId),
+        },
+      ]
+    );
   };
 
   const handleEditItem = () => {
@@ -75,9 +81,11 @@ export const ListItemCard = ({
 
       <S.ListInfoRow>
         <S.ListItemPrice>
-          Preço: R${centsToReais(listItem.price).toFixed(2)}
+          {t("price")}: {centsToReais(listItem.price).toFixed(2)}
         </S.ListItemPrice>
-        <S.ListItemQnt>Quantidade: {listItem.quantity}</S.ListItemQnt>
+        <S.ListItemQnt>
+          {t("quantity")}: {listItem.quantity}
+        </S.ListItemQnt>
       </S.ListInfoRow>
     </S.ListItemWrapper>
   );

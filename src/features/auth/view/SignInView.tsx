@@ -16,8 +16,10 @@ import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { Button } from "@/src/components/button";
+import { useTranslation } from "react-i18next";
 
 export const SignInView = () => {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const { loading, handleSignIn, handleAnonymousSignIn } = useSignInViewModel();
@@ -30,7 +32,7 @@ export const SignInView = () => {
     {
       fieldName: "email",
       iconName: "mail" as FeatherIconName,
-      placeholder: "Email",
+      placeholder: t("email"),
       validationRules: {
         required: true,
       },
@@ -38,7 +40,7 @@ export const SignInView = () => {
     {
       fieldName: "password",
       iconName: "lock" as FeatherIconName,
-      placeholder: "Senha",
+      placeholder: t("password"),
       validationRules: {
         required: true,
         minLength: 8,
@@ -60,17 +62,17 @@ export const SignInView = () => {
           <>
             <S.MainContent>
               <DynamicForm
-                formTitle="Entre na sua conta"
+                formTitle={t("login_to_account")}
                 formFields={formFields}
                 handleFormData={(formData: any) => onSubmit(formData)}
-                submitBtnText="Entrar"
+                submitBtnText={t("login")}
               />
 
               <S.SecondaryContentRow>
                 <Link href="/resetPassword" asChild style={{ marginTop: 20 }}>
                   <Pressable>
                     <S.SecondaryContentText>
-                      Recuperar senha
+                      {t("reset_password")}
                     </S.SecondaryContentText>
                   </Pressable>
                 </Link>
@@ -78,7 +80,7 @@ export const SignInView = () => {
                 <Link href="/signup" asChild style={{ marginTop: 20 }}>
                   <Pressable>
                     <S.SecondaryContentText>
-                      Não tem uma conta? Crie aqui.
+                      {t("no_account")}
                     </S.SecondaryContentText>
                   </Pressable>
                 </Link>
@@ -87,15 +89,22 @@ export const SignInView = () => {
 
             <S.SecondaryContentColumn>
               <Button
-                btnText="Continuar sem cadastro"
+                btnText={t("continue_without_register")}
                 btnType="dark"
                 btnStyle="outline"
                 onPress={handleAnonymousSignIn}
               />
 
-              <Pressable onPress={() => sendSupportEmail()}>
+              <Pressable
+                onPress={() =>
+                  sendSupportEmail(
+                    t("support_email_subject"),
+                    t("email_not_opened")
+                  )
+                }
+              >
                 <S.SecondaryContentText>
-                  Precisa de ajuda?
+                  {t("need_help")}
                 </S.SecondaryContentText>
               </Pressable>
             </S.SecondaryContentColumn>

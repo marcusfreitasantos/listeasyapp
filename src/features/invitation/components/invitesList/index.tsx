@@ -1,10 +1,11 @@
+import { useContext } from "react";
 import * as S from "./styles";
 import { FlatList } from "react-native-gesture-handler";
 import { InviteEntity } from "../../model/invite";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { InviteListItem } from "../inviteListItem";
 import { GlobalUserContext } from "@/src/context/userContext";
-import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 type InvitesListProps = {
   invites: InviteEntity[];
@@ -17,6 +18,7 @@ export const InvitesList = ({
   acceptInvite,
   removeInvite,
 }: InvitesListProps) => {
+  const { t } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
 
   const filteredSentInvites = invites.filter(
@@ -36,7 +38,7 @@ export const InvitesList = ({
       <S.InvitesListWrapper>
         <S.InvitesListHeader>
           <S.InvitesListTitle>
-            Convites enviados com status pendente: {filteredSentInvites.length}
+            {t("pending_invitations")}: {filteredSentInvites.length}
           </S.InvitesListTitle>
         </S.InvitesListHeader>
 
@@ -47,7 +49,7 @@ export const InvitesList = ({
           keyExtractor={(item, index) =>
             item.id?.toString() ?? index.toString()
           }
-          ListEmptyComponent={() => <ListEmpty />}
+          ListEmptyComponent={() => <ListEmpty title={t("nothing_found")} />}
           renderItem={({ item }) => (
             <InviteListItem
               item={item}
@@ -62,7 +64,9 @@ export const InvitesList = ({
       <S.InvitesListWrapper>
         <S.InvitesListHeader>
           <S.InvitesListTitle>
-            Você tem {filteredPendingInvites.length} convite(s) pendente(s)
+            {t("you_have_count_pending_invites", {
+              count: filteredPendingInvites.length,
+            })}
           </S.InvitesListTitle>
         </S.InvitesListHeader>
 
@@ -73,7 +77,7 @@ export const InvitesList = ({
           keyExtractor={(item, index) =>
             item.id?.toString() ?? index.toString()
           }
-          ListEmptyComponent={() => <ListEmpty />}
+          ListEmptyComponent={() => <ListEmpty title={t("nothing_found")} />}
           renderItem={({ item }) => (
             <InviteListItem
               item={item}

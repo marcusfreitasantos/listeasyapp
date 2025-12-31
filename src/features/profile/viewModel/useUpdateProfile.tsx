@@ -1,14 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import { updateUserData } from "@/src/services/firebase/auth";
+import { updateUserProfile } from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
+import { useTranslation } from "react-i18next";
+import { FeatherIconName } from "@/@types/icons";
+import { DynamicFormFiedls } from "@/src/components/dynamicForm";
+import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 
 export const useUpdateProfileViewModel = () => {
+  const { t } = useTranslation();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
-  const fileMaxSize = 500;
+  const fileMaxSize = 300;
+  const [formFields, setFormFields] = useState<DynamicFormFiedls[] | []>([]);
+  const { handlePasswordReset } = useResetPasswordViewModel();
 
   const handleImageUpload = async (fileLocalPath: string) => {
     try {
@@ -38,8 +45,8 @@ export const useUpdateProfileViewModel = () => {
         result.assets[0].fileSize > fileMaxSize * 1024
       ) {
         Alert.alert(
-          "Imagem não enviada!",
-          `O arquivo precisa ter no máximo ${fileMaxSize}kb.`
+          t("file_not_sent"),
+          t("file_max_size_warning", { file_size: `${fileMaxSize}kb` })
         );
         return;
       }
@@ -56,18 +63,22 @@ export const useUpdateProfileViewModel = () => {
     let photoURL = null;
 
     try {
-      if (!currentUser) throw new Error("Invalid user");
+      if (!currentUser) throw new Error(t("invalid_user"));
 
       if (localPhotoURL && localPhotoURL !== currentUser.user.photoURL) {
         photoURL = (await handleImageUpload(localPhotoURL)) ?? null;
       }
 
-      const response = await updateUserData(currentUser, displayName, photoURL);
+      const response = await updateUserProfile(
+        currentUser.user,
+        displayName,
+        photoURL
+      );
 
       if (response) {
-        Alert.alert("Sucesso!", "Seu perfil foi atualizado.", [
+        Alert.alert(t("success"), t("profile_updated"), [
           {
-            text: "Confirmar",
+            text: t("confirm"),
             onPress: () => {
               setCurrentUser({
                 additionalUserInfo: currentUser.additionalUserInfo,
@@ -78,16 +89,48 @@ export const useUpdateProfileViewModel = () => {
         ]);
       }
     } catch (error: any) {
-      Alert.alert("Oops! Algo deu errado:", `${error?.message || error}`);
+      Alert.alert(t("something_wrong"), `${error?.message || error}`);
     } finally {
       setLoading(false);
     }
   };
+
+  const confirmResetPassword = () => {
+    Alert.alert(t("warning"), t("password_reset_email_sent"), [
+      {
+        text: t("cancel"),
+      },
+      {
+        text: t("continue"),
+        onPress: () => handlePasswordReset(currentUser?.user.email ?? ""),
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      const updatedFormFields = [
+        {
+          fieldName: "displayName",
+          iconName: "user" as FeatherIconName,
+          placeholder: t("name_lastname"),
+          defaultValue: currentUser?.user.displayName ?? "",
+          validationRules: {
+            required: false,
+          },
+        },
+      ];
+
+      setFormFields(updatedFormFields);
+    }
+  }, [currentUser]);
 
   return {
     loading,
     handleUpdate,
     pickImage,
     fileMaxSize,
+    formFields,
+    confirmResetPassword,
   };
 };

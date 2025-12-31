@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
 import * as S from "./styles";
 import { CheckboxInputField } from "@/src/components/checkboxdInputField";
+import { useTranslation } from "react-i18next";
 
 type ItemsFilterProps = {
   filterMethod: (itemStatus: string[]) => void;
 };
 
 export const ItemsFilter = ({ filterMethod }: ItemsFilterProps) => {
+  const { t } = useTranslation();
+
   const filterOptions = [
     {
-      label: "Marcado",
+      label: t("checked"),
       value: "checked",
     },
     {
-      label: "Não marcado",
+      label: t("unchecked"),
       value: "unchecked",
     },
   ];
@@ -37,9 +40,9 @@ export const ItemsFilter = ({ filterMethod }: ItemsFilterProps) => {
       {filterOptions.map((item, index) => {
         return (
           <CheckboxInputField
-            key={item.label}
-            isItemChecked={selectedOptions.includes(item.label)}
-            handleCheckItem={() => handleCheck(item.label)}
+            key={item.value}
+            isItemChecked={selectedOptions.includes(item.value)}
+            handleCheckItem={() => handleCheck(item.value)}
             checkBoxLabel={item.label}
           />
         );

@@ -1,20 +1,13 @@
 import { Linking, Alert } from "react-native";
 
-export const sendSupportEmail = async () => {
+export const sendSupportEmail = async (subject: string, alert: string) => {
   const recipient = "contato@mafreitas.com.br";
-  const subject = "[List Easy] Preciso de ajuda!";
   const url = `mailto:${recipient}?subject=${subject}`;
   try {
     const isSuported = await Linking.canOpenURL(url);
-    if (isSuported) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert("Oops!", "Não foi possível abrir o e-mail.");
-    }
+    if (!isSuported) throw new Error(alert);
+    await Linking.openURL(url);
   } catch (error) {
-    Alert.alert(
-      "Oops!",
-      `Algo errado aconteceu. Tente novamente mais tarde. Erro: ${error}`
-    );
+    Alert.alert(`${error}`);
   }
 };

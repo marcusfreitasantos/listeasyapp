@@ -5,6 +5,7 @@ import { ListItemType } from "@/src/features/listsManager/model/list";
 import { KeyboardTypeOptions } from "react-native";
 import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
 import * as Crypto from "expo-crypto";
+import { useTranslation } from "react-i18next";
 
 type AddListItemModalProps = {
   handleAddNewItem: (listItem: ListItemType) => void;
@@ -17,11 +18,13 @@ export const AddListItemModal = ({
   handleEditItem,
   currentItem,
 }: AddListItemModalProps) => {
+  const { t } = useTranslation();
+
   const formFields = [
     {
       fieldName: "name",
       iconName: "file" as FeatherIconName,
-      placeholder: "Nome do item",
+      placeholder: t("item_name"),
       defaultValue: currentItem ? currentItem.name : "",
       validationRules: {
         required: true,
@@ -30,7 +33,7 @@ export const AddListItemModal = ({
     {
       fieldName: "price",
       iconName: "dollar-sign" as FeatherIconName,
-      placeholder: "Preço",
+      placeholder: t("price"),
       defaultValue: currentItem
         ? centsToReais(currentItem.price).toFixed(2).toString()
         : "",
@@ -42,7 +45,7 @@ export const AddListItemModal = ({
     {
       fieldName: "quantity",
       iconName: "grid" as FeatherIconName,
-      placeholder: "Quantidade",
+      placeholder: t("quantity"),
       defaultValue: currentItem ? currentItem.quantity.toString() : "",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
@@ -52,7 +55,7 @@ export const AddListItemModal = ({
     {
       fieldName: "details",
       iconName: "align-left" as FeatherIconName,
-      placeholder: "Observações",
+      placeholder: t("notes"),
       defaultValue: currentItem ? currentItem.details : "",
       validationRules: {
         required: false,
@@ -81,10 +84,12 @@ export const AddListItemModal = ({
     <S.FormWrapper>
       <S.FormContent>
         <DynamicForm
-          formTitle={currentItem ? `Editar '${currentItem.name}'` : "Novo item"}
+          formTitle={
+            currentItem ? `${t("edit")} '${currentItem.name}'` : t("new_item")
+          }
           formFields={formFields}
           handleFormData={(formData: any) => handleSubmit(formData)}
-          submitBtnText={currentItem ? "Atualizar" : "Criar"}
+          submitBtnText={currentItem ? t("update") : t("create")}
         />
       </S.FormContent>
     </S.FormWrapper>

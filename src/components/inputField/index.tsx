@@ -23,30 +23,20 @@ export const InputField = ({
   return (
     <S.InputFieldWrapper marginBottom={marginBottom}>
       {iconName && (
-        <Feather
-          name={iconName}
-          size={iconSize}
-          color={
-            colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
-          }
-        />
+        <Feather name={iconName} size={iconSize} color={theme.primaryColor} />
       )}
       <S.InputField
         {...rest}
         autoCapitalize="none"
         secureTextEntry={secureText}
-        placeholderTextColor={
-          colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
-        }
+        placeholderTextColor={theme.primaryColor}
       />
 
       {rest.secureTextEntry && (
         <Feather
           name={secureText ? "eye" : "eye-off"}
           size={iconSize}
-          color={
-            colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
-          }
+          color={theme.primaryColor}
           onPress={() => setSecureText(!secureText)}
         />
       )}

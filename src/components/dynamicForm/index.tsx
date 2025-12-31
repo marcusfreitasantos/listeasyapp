@@ -1,26 +1,29 @@
+import { useEffect, useMemo } from "react";
+import { KeyboardTypeOptions } from "react-native";
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { useForm, Controller } from "react-hook-form";
 import { InputField } from "@/src/components/inputField";
 import { FeatherIconName } from "@/@types/icons";
-import { KeyboardTypeOptions } from "react-native";
-import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+export type DynamicFormFiedls = {
+  fieldName: string;
+  iconName: FeatherIconName;
+  defaultValue?: string;
+  placeholder: string;
+  keyboardType?: KeyboardTypeOptions;
+  validationRules: {
+    required: boolean;
+    maxLength?: number;
+    minLength?: number;
+  };
+};
 
 type DynamicFormProps = {
   formTitle?: string;
   submitBtnText: string;
-  formFields: {
-    fieldName: string;
-    iconName: FeatherIconName;
-    defaultValue?: string;
-    placeholder: string;
-    keyboardType?: KeyboardTypeOptions;
-    validationRules: {
-      required: boolean;
-      maxLength?: number;
-      minLength?: number;
-    };
-  }[];
+  formFields: DynamicFormFiedls[];
   handleFormData: (data: Record<string, string>) => void;
 };
 
@@ -30,10 +33,15 @@ export const DynamicForm = ({
   formFields,
   handleFormData,
 }: DynamicFormProps) => {
-  const formDefaultValues = formFields.reduce((acc, field) => {
-    acc[field.fieldName] = field.defaultValue ?? "";
-    return acc;
-  }, {} as Record<string, string>);
+  const { t } = useTranslation();
+  const formDefaultValues = useMemo(
+    () =>
+      formFields.reduce((acc, field) => {
+        acc[field.fieldName] = field.defaultValue ?? "";
+        return acc;
+      }, {} as Record<string, string>),
+    [formFields]
+  );
 
   const {
     control,
@@ -63,17 +71,17 @@ export const DynamicForm = ({
     let errorMsg = "";
 
     if (errorType === "required") {
-      errorMsg = "Campo obrigatório!";
-    } else if (errorType === "maxLength") {
-      errorMsg = "Número de caracteres excedido.";
-    } else if (errorType === "minLength") {
-      errorMsg = "Este campo precisa ter no mínimo 3 caracteres";
+      errorMsg = t("required_field");
     } else if (fieldName === "password") {
       if (errorType === "minLength") {
-        errorMsg = "Este campo precisa ter no mínimo 8 caracteres";
+        errorMsg = t("at_least_count_characters", { count: 8 });
       }
+    } else if (errorType === "maxLength") {
+      errorMsg = t("max_characters_exceeded");
+    } else if (errorType === "minLength") {
+      errorMsg = t("at_least_count_characters", { count: 3 });
     } else {
-      errorMsg = "Erro desconhecido!";
+      errorMsg = t("unknown_error");
     }
 
     return errorMsg;
@@ -81,7 +89,7 @@ export const DynamicForm = ({
 
   useEffect(() => {
     reset(formDefaultValues);
-  }, []);
+  }, [formDefaultValues, reset]);
 
   return (
     <S.FormWrapper>
@@ -92,11 +100,11 @@ export const DynamicForm = ({
           return (
             <S.FormField key={item.fieldName}>
               <Controller
+                rules={item.validationRules}
                 control={control}
                 name={item.fieldName as string}
                 render={({ field: { onChange, value } }) => (
                   <InputField
-                    {...register(item.fieldName, item.validationRules)}
                     iconName={item.iconName}
                     placeholder={item.placeholder}
                     value={

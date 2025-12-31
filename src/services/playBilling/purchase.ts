@@ -12,7 +12,6 @@ export const validatePurchaseToken = async (purchaseToken: string) => {
 
     return validPurchase.data;
   } catch (error) {
-    console.log(error);
     throw new Error(`Error validating purchase token: ${error}`);
   }
 };

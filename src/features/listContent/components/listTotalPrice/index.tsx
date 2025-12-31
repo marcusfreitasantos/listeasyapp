@@ -1,5 +1,6 @@
 import * as S from "./styles";
 import { centsToReais } from "@/src/utils/convertCurrency";
+import { useTranslation } from "react-i18next";
 
 type ListTotalPriceProps = {
   totalPrice: number;
@@ -10,15 +11,17 @@ export const ListTotalPrice = ({
   totalPrice,
   totalItems,
 }: ListTotalPriceProps) => {
+  const { t } = useTranslation();
+
   return (
     <S.ListTotalPriceWrapper>
       {totalItems ? (
         <S.ListTotalItemsText>
-          {totalItems} {totalItems > 1 ? "itens únicos" : "item"}
+          {totalItems} {totalItems > 1 ? t("item_plural") : t("item")}
         </S.ListTotalItemsText>
       ) : null}
       <S.ListTotalPriceText>
-        Total: R$ {centsToReais(totalPrice).toFixed(2)}
+        Total: {centsToReais(totalPrice).toFixed(2)}
       </S.ListTotalPriceText>
     </S.ListTotalPriceWrapper>
   );

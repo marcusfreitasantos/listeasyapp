@@ -8,6 +8,7 @@ import { LoadingSpinner } from "../loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { Button } from "../button";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 type DrawerCustomContentProps = {
   items: {
@@ -18,6 +19,7 @@ type DrawerCustomContentProps = {
 };
 
 export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
+  const { t } = useTranslation();
   const { loading, handleLogoutUser } = useLogoutCurrentUser();
   const { currentUser } = useContext(GlobalUserContext);
 
@@ -46,7 +48,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
 
                 <S.DrawerUserInfoTitle numberOfLines={1}>
                   {currentUser?.user.isAnonymous
-                    ? "Convidado"
+                    ? t("guest")
                     : currentUser?.user.displayName ?? currentUser?.user.email}
                 </S.DrawerUserInfoTitle>
 
@@ -73,16 +75,21 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
 
               <DrawerItem
                 route=""
-                title="Ajuda"
+                title={t("help")}
                 iconName="help-circle"
-                onPress={sendSupportEmail}
+                onPress={() =>
+                  sendSupportEmail(
+                    t("support_email_subject"),
+                    t("email_not_opened")
+                  )
+                }
               />
             </S.DrawerItemGroup>
 
             {currentUser?.user.isAnonymous && (
               <>
                 <Button
-                  btnText="Crie sua conta agora"
+                  btnText={t("register_for_free")}
                   onPress={() => {
                     router.replace({
                       pathname: "/signup",
@@ -93,7 +100,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                   }}
                 />
                 <S.DrawerUserInfoText>
-                  E destrave todas as funcionalidades do List Easy.
+                  {t("unlock_all_features")}
                 </S.DrawerUserInfoText>
               </>
             )}
@@ -102,7 +109,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
 
             <DrawerItem
               route="logout"
-              title="Sair"
+              title={t("logout")}
               iconName="log-out"
               onPress={handleLogoutUser}
             />

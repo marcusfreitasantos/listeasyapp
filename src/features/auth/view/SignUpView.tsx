@@ -13,8 +13,10 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
+import { useTranslation } from "react-i18next";
 
 export const SignUpView = () => {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const { loading, handleSignUp, isAnonymous } = useSignUpViewModel();
@@ -27,7 +29,7 @@ export const SignUpView = () => {
     {
       fieldName: "displayName",
       iconName: "user" as FeatherIconName,
-      placeholder: "Seu nome e sobrenome",
+      placeholder: t("name_lastname"),
       validationRules: {
         required: true,
         minLength: 3,
@@ -36,7 +38,7 @@ export const SignUpView = () => {
     {
       fieldName: "email",
       iconName: "mail" as FeatherIconName,
-      placeholder: "E-mail",
+      placeholder: t("email"),
       validationRules: {
         required: true,
       },
@@ -44,7 +46,7 @@ export const SignUpView = () => {
     {
       fieldName: "password",
       iconName: "lock" as FeatherIconName,
-      placeholder: "Senha",
+      placeholder: t("password"),
       validationRules: {
         required: true,
         minLength: 8,
@@ -65,10 +67,10 @@ export const SignUpView = () => {
             <LoadingSpinner />
           ) : (
             <DynamicForm
-              formTitle="Cadastre-se gratuitamente"
+              formTitle={t("register_for_free")}
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Cadastrar"
+              submitBtnText={t("register")}
             />
           )}
         </S.MainContent>
@@ -77,13 +79,20 @@ export const SignUpView = () => {
           <Link href={isAnonymous ? "/lists" : "/"} asChild dismissTo>
             <Pressable>
               <S.SecondaryContentText>
-                {isAnonymous ? "Voltar" : "Já tem conta? Faça login."}
+                {isAnonymous ? t("back") : t("already_user")}
               </S.SecondaryContentText>
             </Pressable>
           </Link>
 
-          <Pressable onPress={() => sendSupportEmail()}>
-            <S.SecondaryContentText>Precisa de ajuda?</S.SecondaryContentText>
+          <Pressable
+            onPress={() =>
+              sendSupportEmail(
+                t("support_email_subject"),
+                t("email_not_opened")
+              )
+            }
+          >
+            <S.SecondaryContentText>{t("need_help")}</S.SecondaryContentText>
           </Pressable>
         </S.SecondaryContentRow>
       </S.Container>

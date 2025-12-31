@@ -1,10 +1,10 @@
-export const getFormattedDate = (timestamp: any) => {
+export const getFormattedDate = (timestamp: any, language: string) => {
   if (!timestamp) return "";
   const date =
     typeof timestamp.toDate === "function"
       ? timestamp.toDate()
       : new Date(timestamp);
-  return date.toLocaleDateString("pt-BR", {
+  return date.toLocaleDateString(language, {
     day: "2-digit",
     month: "long",
     year: "numeric",

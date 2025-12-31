@@ -1,8 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { GlobalListContext } from "@/src/context/listContext";
-import { getSubscriptionByUserEmail } from "@/src/services/firebase/subscriptions";
-import { SubscriptionEntity } from "../../subscriptions/model/subscription";
 import { updateListContent, getListById } from "@/src/services/firebase/lists";
 import { useIsFocused } from "@react-navigation/native";
 import { InvitedUserEntity } from "../model/invitedUser";
@@ -13,8 +11,11 @@ import { updateInvite } from "@/src/services/firebase/invitations";
 import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
+import { getUserByEmail } from "@/src/services/firebase/auth";
+import { useTranslation } from "react-i18next";
 
 export const useShareListsViewModel = () => {
+  const { t } = useTranslation();
   const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
   const { getUserLists } = useListManagerViewModel();
   const isFocused = useIsFocused();
@@ -22,22 +23,26 @@ export const useShareListsViewModel = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
   const [invitedUserEmail, setInvitedUsereEmail] = useState("");
-  const [foundUsers, setFoundUsers] = useState<SubscriptionEntity[] | null>(
-    null
-  );
+  const [foundUser, setFoundUser] = useState<{
+    displayName: string;
+    email: string;
+    uid: string;
+  } | null>(null);
 
   const resetStates = () => {
     setLoading(false);
-    setFoundUsers(null);
+    setFoundUser(null);
+    setInvitedUsereEmail("");
   };
 
   const fetchUsersByEmail = async (userEmail: string) => {
     try {
       setLoading(true);
-      const response = await getSubscriptionByUserEmail(userEmail);
-      setFoundUsers(response);
+      const response = await getUserByEmail(userEmail);
+      setFoundUser(response);
     } catch (error) {
-      console.log("Nothing found");
+      console.error(error);
+      setFoundUser(null);
     } finally {
       setLoading(false);
     }
@@ -51,7 +56,7 @@ export const useShareListsViewModel = () => {
       setLoading(true);
       const listObj = await getListById(listId);
 
-      if (!listObj) throw new Error("Lista inválida");
+      if (!listObj) throw new Error(t("invalid_list"));
 
       const listColaborators = listObj.colaborators
         ? [...listObj.colaborators]
@@ -79,7 +84,7 @@ export const useShareListsViewModel = () => {
   ) => {
     try {
       setLoading(true);
-      if (!listToUpdate) throw new Error("Lista inválida");
+      if (!listToUpdate) throw new Error(t("invalid_list"));
 
       const currentListColaborators = listToUpdate.colaborators
         ? [...listToUpdate.colaborators]
@@ -123,14 +128,17 @@ export const useShareListsViewModel = () => {
     };
 
     Alert.alert(
-      "Atenção!",
-      `O usuário "${invitedUser.userName}" receberá um convite para ter acesso à lista: "${currentList?.title}". Deseja continuar?`,
+      t("warning"),
+      t("user_invitation_warning", {
+        user_name: invitedUser.userName,
+        list_name: currentList?.title,
+      }),
       [
         {
-          text: "Cancelar",
+          text: t("cancel"),
         },
         {
-          text: "Confirmar",
+          text: t("confirm"),
           onPress: async () => {
             try {
               setLoading(true);
@@ -152,15 +160,18 @@ export const useShareListsViewModel = () => {
   ) => {
     const alertMsg =
       invitedUser.userId === currentUser?.user.uid
-        ? `Você sairá da lista: "${list.title}". Deseja continuar?`
-        : `O usuário "${invitedUser.userName}" será removido da lista: "${list.title}". Deseja continuar?`;
+        ? t("quit_list_warning", { list_name: list.title })
+        : t("remove_user_from_list_warning", {
+            user_name: invitedUser.userName,
+            list_name: list.title,
+          });
 
-    Alert.alert("Atenção!", alertMsg, [
+    Alert.alert(t("warning"), alertMsg, [
       {
-        text: "Cancelar",
+        text: t("cancel"),
       },
       {
-        text: "Confirmar",
+        text: t("confirm"),
         onPress: () => removeColaboratorsFromCurrentList(invitedUser, list),
       },
     ]);
@@ -176,7 +187,7 @@ export const useShareListsViewModel = () => {
   };
 
   const acceptInvite = async (invite: InviteEntity, accepted: boolean) => {
-    if (!currentUser) throw new Error("Invalid user");
+    if (!currentUser) throw new Error(t("invalid_user"));
 
     try {
       setLoading(true);
@@ -199,8 +210,8 @@ export const useShareListsViewModel = () => {
           invite.list.id
         );
       }
-    } catch (error) {
-      console.log("Error accepting invite: ", error);
+    } catch (e) {
+      Alert.alert(t("error"), `${t("error_accept_invite")}. \n ${e}`);
     } finally {
       fetchUserInvites(currentUser?.user.email ?? "");
       setLoading(false);
@@ -210,12 +221,12 @@ export const useShareListsViewModel = () => {
   const sendInviteByWhatsapp = async () => {
     const playStoreLink =
       "https://play.google.com/store/apps/details?id=com.penpack.listeasy";
-    const message = `👋 Ei! ${
-      currentUser?.user.displayName ?? currentUser?.user.email
-    } te convidou pra usar o List Easy! 📋✨
-Vamos organizar juntos a lista "${currentList?.title}"? 
-Baixe o app aqui 👉 ${playStoreLink} 🚀🛒
-Te espero lá! 😄`;
+
+    const message = t("whatsapp_invite_msg", {
+      user_name: currentUser?.user.displayName ?? currentUser?.user.email,
+      list_name: currentList?.title,
+      url: playStoreLink,
+    });
 
     const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
 
@@ -224,10 +235,10 @@ Te espero lá! 😄`;
       if (supported) {
         await Linking.openURL(whatsappUrl);
       } else {
-        Alert.alert("Erro", "Whatsapp não está instalado no seu dispositivo.");
+        Alert.alert(t("error"), t("whatsapp_not_found"));
       }
     } catch (e) {
-      Alert.alert("Erro", "Falha ao abrir o WhatsApp: " + e);
+      Alert.alert(t("error"), `${t("failed_opening_whatsapp")}. \n ${e}`);
     }
   };
 
@@ -250,8 +261,8 @@ Te espero lá! 😄`;
       sendInviteByWhatsapp();
     } catch (e) {
       Alert.alert(
-        "Erro",
-        `Não foi possível gerar o convite. Tente novamente mais tarde. \n ${e}
+        t("error"),
+        `${t("error_creating_invite")}. \n ${e}
         )}`
       );
     } finally {
@@ -267,7 +278,7 @@ Te espero lá! 😄`;
     currentList,
     loading,
     fetchUsersByEmail,
-    foundUsers,
+    foundUser,
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
@@ -275,5 +286,6 @@ Te espero lá! 😄`;
     acceptInvite,
     handleInvitationToNonUser,
     setInvitedUsereEmail,
+    invitedUserEmail,
   };
 };

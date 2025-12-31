@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { GlobalUserContext } from "../context/userContext";
-import { userLogout } from "../services/firebase/auth";
+import { logoutUser } from "../services/firebase/auth";
 import { useRouter } from "expo-router";
 
 export const useLogoutCurrentUser = () => {
@@ -11,7 +11,7 @@ export const useLogoutCurrentUser = () => {
   const handleLogoutUser = async () => {
     setLoading(true);
     try {
-      await userLogout();
+      await logoutUser();
     } catch (e) {
       console.log(e);
     } finally {

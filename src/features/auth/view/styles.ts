@@ -27,7 +27,7 @@ export const SecondaryContentColumn = styled.View`
   align-items: center;
   width: 100%;
   gap: ${({ theme }) => theme.defaultSizes.xSmall};
-  padding-bottom: ${({ theme }) => theme.defaultSizes.medium};
+  padding-bottom: ${({ theme }) => theme.defaultSizes.large};
 `;
 
 export const MainContentText = styled.Text`
@@ -43,4 +43,9 @@ export const SecondaryContentText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
+`;
+
+export const HorizontalBtnIcon = styled.TouchableOpacity`
+  flex-direction: row;
+  gap: ${({ theme }) => theme.defaultSizes.xxSmall};
 `;

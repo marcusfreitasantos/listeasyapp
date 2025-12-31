@@ -1,7 +1,6 @@
 import * as S from "./styles";
 import { useTheme } from "styled-components/native";
 import Feather from "@expo/vector-icons/Feather";
-import { useState } from "react";
 
 type AddItemBtnProps = {
   modalIsOpen: boolean;

@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const appVersion = "4.1.2";
+const appVersion = "4.1.3";
 const bgColor = "#222222";
 const isLocal = process.env.APP_ENV === "local";
 
@@ -15,7 +15,6 @@ const config: ExpoConfig = {
   userInterfaceStyle: "automatic",
   ios: {
     supportsTablet: true,
-
     bundleIdentifier: "com.penpack.listeasy",
     googleServicesFile: isLocal
       ? "./google-services.plist"
@@ -26,6 +25,7 @@ const config: ExpoConfig = {
       NSCameraUsageDescription:
         "O List Easy precisa acessar sua câmera para armazenar sua foto de perfil",
       ITSAppUsesNonExemptEncryption: false,
+      LSApplicationQueriesSchemes: ["mailto"],
     },
   },
   android: {
@@ -48,6 +48,15 @@ const config: ExpoConfig = {
   },
   platforms: ["android", "ios"],
   plugins: [
+    [
+      "expo-localization",
+      {
+        supportedLocales: {
+          ios: ["en", "pt-BR"],
+          android: ["en", "pt-BR"],
+        },
+      },
+    ],
     [
       "react-native-google-mobile-ads",
       {
@@ -164,6 +173,7 @@ const config: ExpoConfig = {
     eas: {
       projectId: "021d95ea-9341-4a16-bed5-85eeacc48547",
     },
+    listEasyApiKey: process.env.LIST_EASY_API_KEY,
   },
   owner: "marcusfreitas",
   updates: {

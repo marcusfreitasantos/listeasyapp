@@ -1,6 +1,7 @@
 import * as S from "./styles";
 import { Button } from "@/src/components/button";
 import { InviteEntity } from "../../model/invite";
+import { useTranslation } from "react-i18next";
 
 type InviteListItemProps = {
   item: InviteEntity;
@@ -15,6 +16,7 @@ export const InviteListItem = ({
   removeInvite,
   isSentInvite,
 }: InviteListItemProps) => {
+  const { t } = useTranslation();
   const handleReject = () => {
     if (isSentInvite) {
       removeInvite(item);
@@ -28,20 +30,25 @@ export const InviteListItem = ({
       <S.InviteInfo>
         <S.InviteTittle numberOfLines={1}>
           {isSentInvite
-            ? `Convidado: ${item.userEmail}`
+            ? `${t("guest")}: ${item.userEmail}`
             : item.referralUsername}
         </S.InviteTittle>
-        <S.InviteListName>Lista: {item.list.name}</S.InviteListName>
+        <S.InviteListName>
+          {t("list")}: {item.list.name}
+        </S.InviteListName>
       </S.InviteInfo>
 
       <S.InviteBtnWrapper>
         {!isSentInvite && (
-          <Button btnText="Aceitar" onPress={() => acceptInvite(item, true)} />
+          <Button
+            btnText={t("accept")}
+            onPress={() => acceptInvite(item, true)}
+          />
         )}
 
         <Button
           btnType="dark"
-          btnText={isSentInvite ? "Remover" : "Rejeitar"}
+          btnText={isSentInvite ? t("remove") : t("reject")}
           onPress={() => handleReject()}
         />
       </S.InviteBtnWrapper>

@@ -11,24 +11,28 @@ import { useRouter } from "expo-router";
 import { useTheme } from "styled-components/native";
 import { NotFoundUserCard } from "../components/notFoundUserCard";
 import { ListEmpty } from "@/src/components/listEmpty";
+import { useTranslation } from "react-i18next";
 
 export const SharedListsView = () => {
+  const { t } = useTranslation();
   const {
     currentList,
     loading,
     fetchUsersByEmail,
-    foundUsers,
+    foundUser,
     handleAddColaboratorToCurrentList,
     handleRemoveColaboratorFromCurrentList,
     isAlreadyColaborator,
     handleInvitationToNonUser,
     setInvitedUsereEmail,
+    invitedUserEmail,
   } = useShareListsViewModel();
+
   const formFields = [
     {
       fieldName: "userEmail",
       iconName: "user-plus" as FeatherIconName,
-      placeholder: "Pesquisar e-mail do usuário",
+      placeholder: t("search_user_email"),
       validationRules: {
         required: true,
       },
@@ -57,12 +61,11 @@ export const SharedListsView = () => {
             color={theme.primaryColor}
             onPress={() => router.push("/lists")}
           />
-          <S.ContentTitle>Convidar usuário</S.ContentTitle>
+          <S.ContentTitle>{t("invite_user")}</S.ContentTitle>
         </S.ContentHeader>
 
         <S.ContentSubtitle>
-          Digite o e-mail da pessoa que deseja enviar o convite para acessar a
-          lista: "{currentList?.title}".
+          {t("enter_email_address_to_invite_user")}: "{currentList?.title}".
         </S.ContentSubtitle>
 
         {loading ? (
@@ -72,41 +75,37 @@ export const SharedListsView = () => {
             <DynamicForm
               formFields={formFields}
               handleFormData={(formData: any) => onSubmit(formData)}
-              submitBtnText="Pesquisar"
+              submitBtnText={t("search")}
             />
 
-            {foundUsers && currentList && (
+            {currentList && invitedUserEmail && (
               <>
-                <S.ListTitle>Resultado da sua busca</S.ListTitle>
+                <S.ListTitle>{t("search_results")}</S.ListTitle>
 
-                <FlatList
-                  data={foundUsers}
-                  renderItem={({ item }) => (
-                    <FoundUserCard
-                      invitedUser={{
-                        userId: item.userId,
-                        userEmail: item.userEmail,
-                        userName: item.userName,
-                      }}
-                      alreadyInList={isAlreadyColaborator(item.userId)}
-                      handleAddColaborator={handleAddColaboratorToCurrentList}
-                      currentList={currentList}
-                      handleRemoveColaborator={
-                        handleRemoveColaboratorFromCurrentList
-                      }
-                    />
-                  )}
-                  ListEmptyComponent={() => (
-                    <NotFoundUserCard sendInvite={handleInvitationToNonUser} />
-                  )}
-                />
+                {foundUser ? (
+                  <FoundUserCard
+                    invitedUser={{
+                      userId: foundUser.uid,
+                      userEmail: foundUser.email,
+                      userName: foundUser.displayName,
+                    }}
+                    alreadyInList={isAlreadyColaborator(foundUser.uid)}
+                    handleAddColaborator={handleAddColaboratorToCurrentList}
+                    currentList={currentList}
+                    handleRemoveColaborator={
+                      handleRemoveColaboratorFromCurrentList
+                    }
+                  />
+                ) : (
+                  <NotFoundUserCard sendInvite={handleInvitationToNonUser} />
+                )}
               </>
             )}
 
             {currentList?.colaborators?.length ? (
               <>
                 <S.ListTitle>
-                  Colaboradores em "{currentList.title}"
+                  {t("colaborators")} {t("in")} "{currentList.title}"
                 </S.ListTitle>
 
                 <FlatList
@@ -127,7 +126,7 @@ export const SharedListsView = () => {
                     />
                   )}
                   ListEmptyComponent={() => (
-                    <ListEmpty text="Esta lista não tem colaboradores." />
+                    <ListEmpty title={t("no_colaborators")} />
                   )}
                 />
               </>

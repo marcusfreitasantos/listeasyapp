@@ -14,6 +14,7 @@ import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { InvitedUserEntity } from "@/src/features/sharedLists/model/invitedUser";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { useTranslation } from "react-i18next";
 
 type ListCardProps = {
   list: ListEntityType;
@@ -31,6 +32,7 @@ export const ListCard = ({
   generatePdf,
   removeCurrentUserFromSharedList,
 }: ListCardProps) => {
+  const { t, i18n } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
   const { setCurrentList } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
@@ -45,17 +47,21 @@ export const ListCard = ({
   const essentialPlanId = "plan_essencial";
 
   const handleDeleteList = () => {
-    Alert.alert("Atenção!", `A lista '${list.title}' será excluída.`, [
-      {
-        text: "Cancelar",
-      },
-      {
-        text: "Confirmar",
-        onPress: () => {
-          if (list.id) removeList(list.id);
+    Alert.alert(
+      t("warning"),
+      t("list_will_be_deleted", { list_name: list.title }),
+      [
+        {
+          text: t("cancel"),
         },
-      },
-    ]);
+        {
+          text: t("confirm"),
+          onPress: () => {
+            if (list.id) removeList(list.id);
+          },
+        },
+      ]
+    );
   };
 
   const handleRemoveCurrentUserFromSharedList = () => {
@@ -105,31 +111,31 @@ export const ListCard = ({
 
   const listMenuOptions = [
     {
-      label: "Editar",
+      label: t("edit"),
       iconName: "edit" as FeatherIconName,
       onPress: () => handleEditList(),
       showOption: true,
     },
     {
-      label: "Acesso compartilhado",
+      label: t("share_access"),
       iconName: "share-2" as FeatherIconName,
       onPress: () => handleShareListAccess(),
       showOption: true,
     },
     {
-      label: "Exportar em PDF",
+      label: t("pdf_export"),
       iconName: "file-text" as FeatherIconName,
       onPress: () => handlePDFExport(),
       showOption: true,
     },
     {
-      label: "Excluir",
+      label: t("delete"),
       iconName: "trash" as FeatherIconName,
       onPress: () => handleDeleteList(),
       showOption: !isColaborator,
     },
     {
-      label: "Sair da lista",
+      label: t("quit_list"),
       iconName: "delete" as FeatherIconName,
       onPress: () => handleRemoveCurrentUserFromSharedList(),
       showOption: isColaborator,
@@ -145,7 +151,7 @@ export const ListCard = ({
         <S.ListCardTitle numberOfLines={1}>{list.title}</S.ListCardTitle>
 
         {isColaborator && (
-          <S.ListCardSubTitle>[compartilhada]</S.ListCardSubTitle>
+          <S.ListCardSubTitle>[{t("shared")}]</S.ListCardSubTitle>
         )}
 
         <S.ListCardMenuBtn onPress={() => setIsMenuOpen(!isMenuOpen)}>
@@ -170,7 +176,7 @@ export const ListCard = ({
           </S.ListCardTotalPriceWrapper>
 
           <S.ListCardTotalPriceTextRegular>
-            Atualização: {getFormattedDate(list.updatedAt)}
+            {t("updated_at")}: {getFormattedDate(list.updatedAt, i18n.language)}
           </S.ListCardTotalPriceTextRegular>
         </S.ListCardInfoWrapper>
       )}

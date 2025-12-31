@@ -9,11 +9,15 @@ import {
 import { Alert } from "react-native";
 import { GlobalInvitationsContext } from "@/src/context/invitationsContext";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useInvitationsViewModel = () => {
+  const { t } = useTranslation();
   const { currentUserInvites, setCurrentUserInvites } = useContext(
     GlobalInvitationsContext
   );
+  const { currentUser } = useContext(GlobalUserContext);
   const [loadingInvites, setLoadingInvites] = useState(false);
   const router = useRouter();
 
@@ -21,23 +25,23 @@ export const useInvitationsViewModel = () => {
     try {
       await insertNewInvite(inviteObj);
       Alert.alert(
-        "Maravilha!",
-        `Seu convite para ${inviteObj.userEmail} foi enviado.`,
+        t("great"),
+        t("your_invite_was_sent", { email_address: inviteObj.userEmail }),
         [
-          { text: "Convites", onPress: () => router.push("/invitations") },
-          { text: "voltar" },
+          {
+            text: t("invitations"),
+            onPress: () => router.push("/invitations"),
+          },
+          { text: t("back") },
         ]
       );
     } catch (error) {
-      console.log("Error creating invitation:", error);
-      Alert.alert(
-        "Oops!",
-        "Não foi possível criar o convite. Tente novamente mais tarde."
-      );
+      Alert.alert(t("something_wrong"), `${error}`);
     }
   };
 
   const fetchUserInvites = async (userEmail: string) => {
+    if (currentUser?.user.isAnonymous) return;
     try {
       const response = await getInvitesByUserEmail(userEmail);
       const sortedInvites = response.filter(
@@ -91,14 +95,14 @@ export const useInvitationsViewModel = () => {
 
   const handleRemoveCurrentUserInvitation = (inviteObj: InviteEntity) => {
     Alert.alert(
-      "Atenção!",
-      `O convite para '${inviteObj.userEmail}' será removido. Continuar?`,
+      t("warning"),
+      t("remove_invite_for_user", { email_address: inviteObj.userEmail }),
       [
         {
-          text: "Cancelar",
+          text: t("cancel"),
         },
         {
-          text: "Continuar",
+          text: t("continue"),
           onPress: () => removeCurrentUserInvitationById(inviteObj),
         },
       ]

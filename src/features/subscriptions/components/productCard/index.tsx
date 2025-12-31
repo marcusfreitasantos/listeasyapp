@@ -5,6 +5,8 @@ import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { Button } from "@/src/components/button";
 import { SubscriptionEntity } from "../../model/subscription";
+import { useTranslation } from "react-i18next";
+import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 type ProductCardProps = {
   productData: ProductEntity;
@@ -17,6 +19,7 @@ export const ProductCard = ({
   handleSubscription,
   currentSubscription,
 }: ProductCardProps) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
   const isCurrentPlan =
@@ -33,7 +36,7 @@ export const ProductCard = ({
 
         {isCurrentPlan && (
           <S.CurrentProductWrapper>
-            <S.CurrentProduct>Atual</S.CurrentProduct>
+            <S.CurrentProduct>{t("current")}</S.CurrentProduct>
           </S.CurrentProductWrapper>
         )}
       </S.ProductHeader>
@@ -45,11 +48,11 @@ export const ProductCard = ({
       <S.Divisor />
 
       <S.ProductPrice>
-        R${centsToReais(productData.amount).toFixed(2)}
+        {formatPriceWithCurrency(productData.amount, productData.currency)}
       </S.ProductPrice>
 
       <Button
-        btnText={isCurrentPlan ? "Cancelar" : "Assinar"}
+        btnText={isCurrentPlan ? t("cancel") : t("subscribe")}
         btnType={isCurrentPlan ? "dark" : "light"}
         onPress={() => handleSubscription(productData.productId)}
       />

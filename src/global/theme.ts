@@ -25,16 +25,12 @@ const darkTheme = {
   defaultContainerSpacing,
 };
 const lightTheme = {
+  ...darkTheme,
   primaryColor: "#222222",
   secondaryColor: "#FFCC30",
   thirdColor: "#333333",
   textColor: "#555555",
   lightGray: "#f1f1f1",
-  defaultSizes,
-  defaultBorderRadius,
-  defaultBorder,
-  defaultFontFamily,
-  defaultContainerSpacing,
 };
 
 export { lightTheme, darkTheme };

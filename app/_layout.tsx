@@ -4,6 +4,7 @@ import { darkTheme, lightTheme } from "@/src/global/theme";
 import { Stack } from "expo-router";
 import MainContextProvider from "@/src/context/mainContextProvider";
 import mobileAds from "react-native-google-mobile-ads";
+import "@/src/i18n";
 
 export default function Layout() {
   const colorScheme = useColorScheme();

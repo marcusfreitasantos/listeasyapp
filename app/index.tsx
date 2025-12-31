@@ -41,7 +41,6 @@ const SignIn = () => {
 
     if (subscriptions.length) setCurrentSubscription(subscriptions[0]);
 
-    console.log("subs", subscriptions);
     if (invites?.length) {
       router.replace("/invitations");
     } else {
