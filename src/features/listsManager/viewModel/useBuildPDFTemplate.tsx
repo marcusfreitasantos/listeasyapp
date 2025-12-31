@@ -116,7 +116,7 @@ export const useBuildPDFTemplate = () => {
                               <span class="pdf__item_title">${
                                 item.name
                               }</span>                        
-                              <span class="pdf__item_price">R$ ${centsToReais(
+                              <span class="pdf__item_price">${centsToReais(
                                 item.price
                               ).toFixed(2)}</span>
                           </div>`
@@ -125,7 +125,7 @@ export const useBuildPDFTemplate = () => {
                     
                       <div class="pdf__item_wrapper">
                           <span class="pdf__item_title">Total:</span>                        
-                          <span class="pdf__item_price">R$ ${centsToReais(
+                          <span class="pdf__item_price">${centsToReais(
                             listTotalPrice
                           ).toFixed(2)}</span>
                       </div>

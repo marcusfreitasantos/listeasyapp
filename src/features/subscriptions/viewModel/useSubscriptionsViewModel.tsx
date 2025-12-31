@@ -313,16 +313,12 @@ export const useSubscriptionsViewModel = () => {
         }
       });
 
-      if (subscriptionManageWarning) {
-        setProducts(
-          sortProductsByAmount(
-            fetchedProducts.filter((product) => product !== undefined),
-            "asc"
-          )
-        );
-      } else {
-        setProducts([]);
-      }
+      setProducts(
+        sortProductsByAmount(
+          fetchedProducts.filter((product) => product !== undefined),
+          "asc"
+        )
+      );
     }
   }, [subscriptions]);
 

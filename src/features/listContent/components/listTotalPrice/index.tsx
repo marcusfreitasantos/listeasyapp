@@ -21,7 +21,7 @@ export const ListTotalPrice = ({
         </S.ListTotalItemsText>
       ) : null}
       <S.ListTotalPriceText>
-        Total: R$ {centsToReais(totalPrice).toFixed(2)}
+        Total: {centsToReais(totalPrice).toFixed(2)}
       </S.ListTotalPriceText>
     </S.ListTotalPriceWrapper>
   );

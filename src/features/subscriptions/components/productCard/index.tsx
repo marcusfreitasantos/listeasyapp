@@ -6,6 +6,7 @@ import { useTheme } from "styled-components/native";
 import { Button } from "@/src/components/button";
 import { SubscriptionEntity } from "../../model/subscription";
 import { useTranslation } from "react-i18next";
+import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 type ProductCardProps = {
   productData: ProductEntity;
@@ -47,7 +48,7 @@ export const ProductCard = ({
       <S.Divisor />
 
       <S.ProductPrice>
-        R${centsToReais(productData.amount).toFixed(2)}
+        {formatPriceWithCurrency(productData.amount, productData.currency)}
       </S.ProductPrice>
 
       <Button

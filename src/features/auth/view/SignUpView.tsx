@@ -84,7 +84,14 @@ export const SignUpView = () => {
             </Pressable>
           </Link>
 
-          <Pressable onPress={() => sendSupportEmail()}>
+          <Pressable
+            onPress={() =>
+              sendSupportEmail(
+                t("support_email_subject"),
+                t("email_not_opened")
+              )
+            }
+          >
             <S.SecondaryContentText>{t("need_help")}</S.SecondaryContentText>
           </Pressable>
         </S.SecondaryContentRow>

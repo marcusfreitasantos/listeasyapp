@@ -77,7 +77,12 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
                 route=""
                 title={t("help")}
                 iconName="help-circle"
-                onPress={sendSupportEmail}
+                onPress={() =>
+                  sendSupportEmail(
+                    t("support_email_subject"),
+                    t("email_not_opened")
+                  )
+                }
               />
             </S.DrawerItemGroup>
 

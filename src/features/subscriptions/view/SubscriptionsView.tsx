@@ -19,22 +19,25 @@ const SubscriptionsView = () => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <FlatList
-          keyExtractor={(item) => item.productId}
-          ListEmptyComponent={() => (
+        <>
+          {subscriptionManageWarning ? (
             <ListEmpty title={subscriptionManageWarning} />
-          )}
-          data={products.reverse()}
-          renderItem={({ item }) => (
-            <ProductCard
-              productData={item}
-              handleSubscription={() =>
-                handlePurchaseSubscription(item.productId)
-              }
-              currentSubscription={currentSubscription}
+          ) : (
+            <FlatList
+              keyExtractor={(item) => item.productId}
+              data={products.reverse()}
+              renderItem={({ item }) => (
+                <ProductCard
+                  productData={item}
+                  handleSubscription={() =>
+                    handlePurchaseSubscription(item.productId)
+                  }
+                  currentSubscription={currentSubscription}
+                />
+              )}
             />
           )}
-        />
+        </>
       )}
     </S.SubscriptionsViewContainer>
   );

@@ -81,9 +81,11 @@ export const ListItemCard = ({
 
       <S.ListInfoRow>
         <S.ListItemPrice>
-          Preço: R${centsToReais(listItem.price).toFixed(2)}
+          {t("price")}: {centsToReais(listItem.price).toFixed(2)}
         </S.ListItemPrice>
-        <S.ListItemQnt>Quantidade: {listItem.quantity}</S.ListItemQnt>
+        <S.ListItemQnt>
+          {t("quantity")}: {listItem.quantity}
+        </S.ListItemQnt>
       </S.ListInfoRow>
     </S.ListItemWrapper>
   );

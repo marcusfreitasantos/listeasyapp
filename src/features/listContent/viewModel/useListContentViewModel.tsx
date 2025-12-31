@@ -7,10 +7,12 @@ import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
 import { useIsFocused } from "@react-navigation/native";
 import { Platform } from "react-native";
 import { useTranslation } from "react-i18next";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 
 export const useListContentViewModel = () => {
   const { t } = useTranslation();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
   const [currentStatus, setCurrentStatus] = useState<string[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -26,6 +28,8 @@ export const useListContentViewModel = () => {
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
     __DEV__ ? TestIds.INTERSTITIAL : admobPubId
   );
+
+  const [isSubscriber, setIsSubscriber] = useState(false);
 
   const isFocused = useIsFocused();
 
@@ -131,7 +135,7 @@ export const useListContentViewModel = () => {
       currentList &&
       currentList.items.length &&
       currentList.items.length % 5 === 0;
-    if (isLoaded && showAd) {
+    if (!isSubscriber && isLoaded && showAd) {
       show();
     } else {
       setModalIsOpen(!modalIsOpen);
@@ -169,6 +173,7 @@ export const useListContentViewModel = () => {
 
   useEffect(() => {
     resetStates();
+    setIsSubscriber(currentSubscription?.status === "active");
   }, [isFocused]);
 
   useEffect(() => {

@@ -27,7 +27,7 @@ export const InputField = ({
           name={iconName}
           size={iconSize}
           color={
-            colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
+            colorScheme === "dark" ? theme.primaryColor : theme.secondaryColor
           }
         />
       )}
@@ -36,7 +36,7 @@ export const InputField = ({
         autoCapitalize="none"
         secureTextEntry={secureText}
         placeholderTextColor={
-          colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
+          colorScheme === "dark" ? theme.primaryColor : theme.secondaryColor
         }
       />
 
@@ -45,7 +45,7 @@ export const InputField = ({
           name={secureText ? "eye" : "eye-off"}
           size={iconSize}
           color={
-            colorScheme === "dark" ? theme.secondaryColor : theme.primaryColor
+            colorScheme === "dark" ? theme.primaryColor : theme.secondaryColor
           }
           onPress={() => setSecureText(!secureText)}
         />
