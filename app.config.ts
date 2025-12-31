@@ -25,6 +25,7 @@ const config: ExpoConfig = {
       NSCameraUsageDescription:
         "O List Easy precisa acessar sua câmera para armazenar sua foto de perfil",
       ITSAppUsesNonExemptEncryption: false,
+      LSApplicationQueriesSchemes: ["mailto"],
     },
   },
   android: {

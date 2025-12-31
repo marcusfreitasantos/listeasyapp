@@ -10,12 +10,14 @@ import { Alert } from "react-native";
 import { GlobalInvitationsContext } from "@/src/context/invitationsContext";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { GlobalUserContext } from "@/src/context/userContext";
 
 export const useInvitationsViewModel = () => {
   const { t } = useTranslation();
   const { currentUserInvites, setCurrentUserInvites } = useContext(
     GlobalInvitationsContext
   );
+  const { currentUser } = useContext(GlobalUserContext);
   const [loadingInvites, setLoadingInvites] = useState(false);
   const router = useRouter();
 
@@ -39,6 +41,7 @@ export const useInvitationsViewModel = () => {
   };
 
   const fetchUserInvites = async (userEmail: string) => {
+    if (currentUser?.user.isAnonymous) return;
     try {
       const response = await getInvitesByUserEmail(userEmail);
       const sortedInvites = response.filter(
