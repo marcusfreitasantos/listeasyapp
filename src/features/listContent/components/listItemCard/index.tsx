@@ -3,7 +3,6 @@ import * as S from "./styles";
 import { ListItemType } from "../../../listsManager/model/list";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
-import { centsToReais } from "@/src/utils/convertCurrency";
 import { CheckboxInputField } from "@/src/components/checkboxdInputField";
 import { useTranslation } from "react-i18next";
 import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";

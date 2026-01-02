@@ -20,8 +20,8 @@ const SubscriptionsView = () => {
         <LoadingSpinner />
       ) : (
         <>
-          {subscriptionManageWarning ? (
-            <ListEmpty title={subscriptionManageWarning} />
+          {subscriptionManageWarning() ? (
+            <ListEmpty title={subscriptionManageWarning()} />
           ) : (
             <FlatList
               keyExtractor={(item) => item.productId}

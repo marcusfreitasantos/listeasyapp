@@ -13,6 +13,7 @@ type ProductsContextType = {
     React.SetStateAction<ProductEntity[] | null>
   >;
   currency: string;
+  productIds: string[];
 };
 
 export type { ProductEntity, ProductsContextType };

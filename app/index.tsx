@@ -19,14 +19,12 @@ const SignIn = () => {
   const theme = useTheme();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const { setCurrentSubscription } = useContext(GlobalSubscriptionContext);
-  const { setCurrentProducts } = useContext(GlobalProductsContext);
+  const { setCurrentProducts, productIds } = useContext(GlobalProductsContext);
 
   const [initializing, setInitializing] = useState(true);
   const { fetchUserInvites } = useInvitationsViewModel();
 
   const { connected, fetchProducts, subscriptions } = useIAP();
-
-  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
 
   const sortProductsByAmount = (
     productsList: ProductEntity[],

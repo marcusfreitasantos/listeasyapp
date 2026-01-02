@@ -23,7 +23,6 @@ export const SingleListView = () => {
     setSearchTerm,
     modalIsOpen,
     setModalIsOpen,
-    updateListItems,
     removeItemFromList,
     updateSingleItem,
     loading,

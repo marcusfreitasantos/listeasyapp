@@ -8,6 +8,7 @@ export const GlobalProductsContext = createContext<ProductsContextType>({
   currentProducts: null,
   setCurrentProducts: () => null,
   currency: "",
+  productIds: [""],
 });
 
 const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -17,9 +18,11 @@ const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const currency = currentProducts ? currentProducts[0]?.currency : "";
 
+  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
+
   return (
     <GlobalProductsContext.Provider
-      value={{ currentProducts, setCurrentProducts, currency }}
+      value={{ currentProducts, setCurrentProducts, currency, productIds }}
     >
       {children}
     </GlobalProductsContext.Provider>
