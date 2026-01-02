@@ -12,7 +12,7 @@ type ListItemCardProps = {
   itemId: string;
   removeItemFromList: (itemId: string) => void;
   setModalIsOpen: (state: boolean) => void;
-  updateItemInList: (listItem: ListItemType) => void;
+  updateSingleItem: (listItem: ListItemType) => void;
   setCurrentItem: React.Dispatch<React.SetStateAction<ListItemType | null>>;
 };
 
@@ -21,7 +21,7 @@ export const ListItemCard = ({
   itemId,
   setModalIsOpen,
   removeItemFromList,
-  updateItemInList,
+  updateSingleItem,
   setCurrentItem,
 }: ListItemCardProps) => {
   const { t } = useTranslation();
@@ -51,7 +51,7 @@ export const ListItemCard = ({
 
   const handleCheckItem = (isChecked: boolean) => {
     setCurrentItem({ ...listItem, checked: isChecked });
-    updateItemInList({ ...listItem, checked: isChecked });
+    updateSingleItem({ ...listItem, checked: isChecked });
   };
 
   return (

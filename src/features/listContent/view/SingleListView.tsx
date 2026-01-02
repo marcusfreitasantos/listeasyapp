@@ -25,7 +25,7 @@ export const SingleListView = () => {
     setModalIsOpen,
     updateListItems,
     removeItemFromList,
-    updateItemInList,
+    updateSingleItem,
     loading,
     currentItem,
     setCurrentItem,
@@ -37,6 +37,7 @@ export const SingleListView = () => {
     setShowItemsFilter,
     setCurrentStatus,
     currentItems,
+    handleAddListItemSubmit,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -108,7 +109,7 @@ export const SingleListView = () => {
                 listItem={item}
                 setModalIsOpen={setModalIsOpen}
                 itemId={item.id}
-                updateItemInList={updateItemInList}
+                updateSingleItem={updateSingleItem}
                 removeItemFromList={removeItemFromList}
                 setCurrentItem={setCurrentItem}
               />
@@ -118,8 +119,7 @@ export const SingleListView = () => {
 
           {modalIsOpen && (
             <AddListItemModal
-              handleAddNewItem={updateListItems}
-              handleEditItem={updateItemInList}
+              handleAddListItemSubmit={handleAddListItemSubmit}
               currentItem={currentItem}
             />
           )}

@@ -3,19 +3,16 @@ import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { ListItemType } from "@/src/features/listsManager/model/list";
 import { KeyboardTypeOptions } from "react-native";
-import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
-import * as Crypto from "expo-crypto";
+import { centsToReais } from "@/src/utils/convertCurrency";
 import { useTranslation } from "react-i18next";
 
 type AddListItemModalProps = {
-  handleAddNewItem: (listItem: ListItemType) => void;
-  handleEditItem: (updatedItem: ListItemType) => void;
+  handleAddListItemSubmit: (formData: ListItemType) => void;
   currentItem: ListItemType | null;
 };
 
 export const AddListItemModal = ({
-  handleAddNewItem,
-  handleEditItem,
+  handleAddListItemSubmit,
   currentItem,
 }: AddListItemModalProps) => {
   const { t } = useTranslation();
@@ -63,23 +60,6 @@ export const AddListItemModal = ({
     },
   ];
 
-  const handleSubmit = (formData: ListItemType) => {
-    const formatedData = {
-      id: Crypto.randomUUID(),
-      name: formData.name,
-      price: reaisToCents(Number(formData.price)),
-      quantity: Number(formData.quantity),
-      details: formData.details,
-      checked: currentItem?.checked ?? false,
-    };
-
-    if (currentItem && typeof currentItem.id === "string") {
-      handleEditItem({ ...formatedData, id: currentItem.id });
-    } else {
-      handleAddNewItem(formatedData);
-    }
-  };
-
   return (
     <S.FormWrapper>
       <S.FormContent>
@@ -88,7 +68,7 @@ export const AddListItemModal = ({
             currentItem ? `${t("edit")} '${currentItem.name}'` : t("new_item")
           }
           formFields={formFields}
-          handleFormData={(formData: any) => handleSubmit(formData)}
+          handleFormData={(formData: any) => handleAddListItemSubmit(formData)}
           submitBtnText={currentItem ? t("update") : t("create")}
         />
       </S.FormContent>

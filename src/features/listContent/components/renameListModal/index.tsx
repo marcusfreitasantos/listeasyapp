@@ -26,16 +26,12 @@ export const RenameListModal = ({
     },
   ];
 
-  const onSubmit = (formData: { listName: string }) => {
-    handleSubmit(formData.listName);
-  };
-
   return (
     <S.FormWrapper>
       <DynamicForm
         formTitle=""
         formFields={formFields}
-        handleFormData={(formData: any) => onSubmit(formData)}
+        handleFormData={(formData: any) => handleSubmit(formData.listName)}
         submitBtnText={t("update")}
       />
     </S.FormWrapper>
