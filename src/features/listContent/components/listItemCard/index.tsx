@@ -3,25 +3,27 @@ import * as S from "./styles";
 import { ListItemType } from "../../../listsManager/model/list";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
-import { centsToReais } from "@/src/utils/convertCurrency";
 import { CheckboxInputField } from "@/src/components/checkboxdInputField";
 import { useTranslation } from "react-i18next";
+import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 type ListItemCardProps = {
   listItem: ListItemType;
   itemId: string;
+  currency: string;
   removeItemFromList: (itemId: string) => void;
   setModalIsOpen: (state: boolean) => void;
-  updateItemInList: (listItem: ListItemType) => void;
+  updateSingleItem: (listItem: ListItemType) => void;
   setCurrentItem: React.Dispatch<React.SetStateAction<ListItemType | null>>;
 };
 
 export const ListItemCard = ({
   listItem,
   itemId,
+  currency,
   setModalIsOpen,
   removeItemFromList,
-  updateItemInList,
+  updateSingleItem,
   setCurrentItem,
 }: ListItemCardProps) => {
   const { t } = useTranslation();
@@ -51,7 +53,7 @@ export const ListItemCard = ({
 
   const handleCheckItem = (isChecked: boolean) => {
     setCurrentItem({ ...listItem, checked: isChecked });
-    updateItemInList({ ...listItem, checked: isChecked });
+    updateSingleItem({ ...listItem, checked: isChecked });
   };
 
   return (
@@ -81,7 +83,7 @@ export const ListItemCard = ({
 
       <S.ListInfoRow>
         <S.ListItemPrice>
-          {t("price")}: {centsToReais(listItem.price).toFixed(2)}
+          {t("price")}: {formatPriceWithCurrency(listItem.price, currency)}
         </S.ListItemPrice>
         <S.ListItemQnt>
           {t("quantity")}: {listItem.quantity}

@@ -23,9 +23,8 @@ export const SingleListView = () => {
     setSearchTerm,
     modalIsOpen,
     setModalIsOpen,
-    updateListItems,
     removeItemFromList,
-    updateItemInList,
+    updateSingleItem,
     loading,
     currentItem,
     setCurrentItem,
@@ -37,6 +36,8 @@ export const SingleListView = () => {
     setShowItemsFilter,
     setCurrentStatus,
     currentItems,
+    handleAddListItemSubmit,
+    currency,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -106,9 +107,10 @@ export const SingleListView = () => {
             renderItem={({ item }) => (
               <ListItemCard
                 listItem={item}
+                currency={currency}
                 setModalIsOpen={setModalIsOpen}
                 itemId={item.id}
-                updateItemInList={updateItemInList}
+                updateSingleItem={updateSingleItem}
                 removeItemFromList={removeItemFromList}
                 setCurrentItem={setCurrentItem}
               />
@@ -118,8 +120,7 @@ export const SingleListView = () => {
 
           {modalIsOpen && (
             <AddListItemModal
-              handleAddNewItem={updateListItems}
-              handleEditItem={updateItemInList}
+              handleAddListItemSubmit={handleAddListItemSubmit}
               currentItem={currentItem}
             />
           )}
@@ -128,6 +129,7 @@ export const SingleListView = () => {
             <ListTotalPrice
               totalPrice={currentList.totalPrice}
               totalItems={currentList.items.length}
+              currency={currency}
             />
 
             <AddItemBtn

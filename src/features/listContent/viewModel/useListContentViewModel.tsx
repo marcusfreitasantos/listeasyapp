@@ -8,11 +8,15 @@ import { useIsFocused } from "@react-navigation/native";
 import { Platform } from "react-native";
 import { useTranslation } from "react-i18next";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import * as Crypto from "expo-crypto";
+import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
+import { GlobalProductsContext } from "@/src/context/productsContext";
 
 export const useListContentViewModel = () => {
   const { t } = useTranslation();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { currency } = useContext(GlobalProductsContext);
   const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
   const [currentStatus, setCurrentStatus] = useState<string[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -81,7 +85,7 @@ export const useListContentViewModel = () => {
     }
   };
 
-  const updateItemInList = async (updatedItem: ListItemType) => {
+  const updateSingleItem = async (updatedItem: ListItemType) => {
     if (modalIsOpen) setLoading(true);
 
     try {
@@ -157,6 +161,23 @@ export const useListContentViewModel = () => {
     );
   };
 
+  const handleAddListItemSubmit = (formData: ListItemType) => {
+    const formatedData = {
+      id: Crypto.randomUUID(),
+      name: formData.name,
+      price: reaisToCents(Number(formData.price)),
+      quantity: Number(formData.quantity),
+      details: formData.details,
+      checked: currentItem?.checked ?? false,
+    };
+
+    if (currentItem && typeof currentItem.id === "string") {
+      updateSingleItem({ ...formatedData, id: currentItem.id });
+    } else {
+      updateListItems(formatedData);
+    }
+  };
+
   useEffect(() => {
     if (!modalIsOpen) resetStates();
   }, [modalIsOpen]);
@@ -193,7 +214,7 @@ export const useListContentViewModel = () => {
     removeItemFromList,
     currentItem,
     setCurrentItem,
-    updateItemInList,
+    updateSingleItem,
     renameModalIsOpen,
     setRenameModalIsOpen,
     updateListName,
@@ -202,5 +223,7 @@ export const useListContentViewModel = () => {
     showItemsFilter,
     setShowItemsFilter,
     setCurrentStatus,
+    handleAddListItemSubmit,
+    currency,
   };
 };

@@ -1,14 +1,13 @@
 import { Alert, Linking, Platform } from "react-native";
 import { useState, useEffect, useContext } from "react";
-import { ProductEntity } from "../model/product";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { GlobalProductsContext } from "@/src/context/productsContext";
 import {
   insertNewSubscription,
   switchSubscription,
+  getSubscriptionByPurchaseToken,
 } from "@/src/services/firebase/subscriptions";
 import { useIAP, ErrorCode, PurchaseAndroid } from "expo-iap";
-import { reaisToCents } from "@/src/utils/convertCurrency";
-import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
 import { validatePurchaseToken } from "@/src/services/playBilling/purchase";
@@ -16,27 +15,31 @@ import { useTranslation } from "react-i18next";
 
 export const useSubscriptionsViewModel = () => {
   const { t } = useTranslation();
-  const [products, setProducts] = useState<ProductEntity[]>([]);
+  const { currentProducts, productIds } = useContext(GlobalProductsContext);
   const { currentUser } = useContext(GlobalUserContext);
   const { currentSubscription, setCurrentSubscription } = useContext(
     GlobalSubscriptionContext
   );
   const [loading, setLoading] = useState(false);
-  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
 
-  const subscriptionManageWarning =
-    currentSubscription?.platform === Platform.OS
-      ? ""
-      : t("subscription_manage_warning", {
-          platform: currentSubscription?.platform,
-        });
+  const subscriptionManageWarning = () => {
+    if (currentSubscription) {
+      return currentSubscription?.platform === Platform.OS
+        ? ""
+        : t("subscription_manage_warning", {
+            platform: currentSubscription?.platform,
+          });
+    }
+
+    return "";
+  };
 
   const {
     connected,
-    fetchProducts,
     subscriptions,
     requestPurchase,
     finishTransaction,
+    fetchProducts,
   } = useIAP({
     onPurchaseSuccess: async (purchase) => {
       await handlePurchaseUpdate(purchase);
@@ -52,6 +55,17 @@ export const useSubscriptionsViewModel = () => {
       Alert.alert(t("something_wrong"), error.responseCode?.toString());
     },
   });
+
+  const checkSubscriptionExists = async (purchaseToken: string) => {
+    try {
+      const subscriptionFound = await getSubscriptionByPurchaseToken(
+        purchaseToken
+      );
+      return subscriptionFound;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const showSuccessMessage = (productId: string) => {
     Alert.alert(
@@ -186,7 +200,7 @@ export const useSubscriptionsViewModel = () => {
 
         if (
           currentSubscription &&
-          currentSubscription?.productId !== purchase.productId
+          currentSubscription.productId !== purchase.productId
         ) {
           await updateSubscriptionInFirebase(
             purchase.productId,
@@ -194,11 +208,16 @@ export const useSubscriptionsViewModel = () => {
             purchase.purchaseToken
           );
         } else {
-          await insertSubscriptionInFirebase(
-            purchase.productId,
-            purchase.id,
+          const subscriptionExist = await checkSubscriptionExists(
             purchase.purchaseToken
           );
+          if (!subscriptionExist) {
+            await insertSubscriptionInFirebase(
+              purchase.productId,
+              purchase.id,
+              purchase.purchaseToken
+            );
+          }
         }
 
         showSuccessMessage(purchase.productId);
@@ -258,23 +277,10 @@ export const useSubscriptionsViewModel = () => {
       } catch (error) {
         setLoading(false);
         console.error("Subscription request failed:", error);
+      } finally {
+        setLoading(false);
       }
     }
-  };
-
-  const sortProductsByAmount = (
-    productsList: ProductEntity[],
-    sortingOrder: "asc" | "desc"
-  ) => {
-    const sortedProducts = productsList.sort((a, b) => {
-      if (sortingOrder === "desc") {
-        return a.amount - b.amount;
-      } else {
-        return b.amount - a.amount;
-      }
-    });
-
-    return sortedProducts;
   };
 
   const handleCancelSubscription = () => {
@@ -295,35 +301,8 @@ export const useSubscriptionsViewModel = () => {
     }
   }, [connected]);
 
-  useEffect(() => {
-    if (subscriptions) {
-      const fetchedProducts = subscriptions.map((sub) => {
-        if ("subscriptionOfferDetailsAndroid" in sub) {
-          return {
-            productId: sub.id,
-            name: sub.displayName ?? sub.title,
-            description: sub.description,
-            amount: reaisToCents(Number(sub.price)),
-            currency: sub.currency,
-            interval: parseBillingPeriod(
-              sub.subscriptionOfferDetailsAndroid[0].pricingPhases
-                .pricingPhaseList[0].billingPeriod
-            ),
-          } as ProductEntity;
-        }
-      });
-
-      setProducts(
-        sortProductsByAmount(
-          fetchedProducts.filter((product) => product !== undefined),
-          "asc"
-        )
-      );
-    }
-  }, [subscriptions]);
-
   return {
-    products,
+    currentProducts,
     loading,
     currentSubscription,
     handlePurchaseSubscription,

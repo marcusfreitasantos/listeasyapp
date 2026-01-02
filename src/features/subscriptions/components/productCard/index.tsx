@@ -1,6 +1,5 @@
 import * as S from "./styles";
 import { ProductEntity } from "../../model/product";
-import { centsToReais } from "@/src/utils/convertCurrency";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
 import { Button } from "@/src/components/button";

@@ -7,7 +7,7 @@ import { ListEmpty } from "@/src/components/listEmpty";
 
 const SubscriptionsView = () => {
   const {
-    products,
+    currentProducts,
     loading,
     currentSubscription,
     handlePurchaseSubscription,
@@ -20,12 +20,12 @@ const SubscriptionsView = () => {
         <LoadingSpinner />
       ) : (
         <>
-          {subscriptionManageWarning ? (
-            <ListEmpty title={subscriptionManageWarning} />
+          {subscriptionManageWarning() ? (
+            <ListEmpty title={subscriptionManageWarning()} />
           ) : (
             <FlatList
               keyExtractor={(item) => item.productId}
-              data={products.reverse()}
+              data={currentProducts?.reverse()}
               renderItem={({ item }) => (
                 <ProductCard
                   productData={item}

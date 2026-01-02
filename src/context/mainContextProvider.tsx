@@ -3,15 +3,18 @@ import UserContextProvider from "@/src/context/userContext";
 import ListContextProvider from "@/src/context/listContext";
 import SubscriptionContextProvider from "./subscriptionContext";
 import InvitationsContextProvider from "./invitationsContext";
+import ProductsContextProvider from "./productsContext";
 
 const MainContextProvider = ({ children }: { children: ReactNode }) => {
   return (
     <UserContextProvider>
-      <SubscriptionContextProvider>
-        <ListContextProvider>
-          <InvitationsContextProvider>{children}</InvitationsContextProvider>
-        </ListContextProvider>
-      </SubscriptionContextProvider>
+      <ProductsContextProvider>
+        <SubscriptionContextProvider>
+          <ListContextProvider>
+            <InvitationsContextProvider>{children}</InvitationsContextProvider>
+          </ListContextProvider>
+        </SubscriptionContextProvider>
+      </ProductsContextProvider>
     </UserContextProvider>
   );
 };

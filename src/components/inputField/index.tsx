@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextInputProps, useColorScheme } from "react-native";
+import { TextInputProps } from "react-native";
 import * as S from "./styles";
 import Feather from "@expo/vector-icons/Feather";
 import { useTheme } from "styled-components/native";
@@ -16,7 +16,6 @@ export const InputField = ({
   ...rest
 }: InputFieldProps) => {
   const [secureText, setSecureText] = useState(rest.secureTextEntry);
-  const colorScheme = useColorScheme();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 

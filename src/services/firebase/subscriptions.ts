@@ -75,6 +75,27 @@ export const getSubscriptionByUserId = async (userId: string) => {
   }
 };
 
+export const getSubscriptionByPurchaseToken = async (purchaseToken: string) => {
+  try {
+    const queryCommand = query(
+      subsCollection,
+      where("purchaseToken", "==", purchaseToken)
+    );
+    const querySnapshot = await getDocs(queryCommand);
+
+    return querySnapshot.docs.map(
+      (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
+        ({
+          id: doc.ref.id,
+          ...doc.data(),
+        } as SubscriptionEntity)
+    )[0];
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error fetching subscription by userId: ${error}`);
+  }
+};
+
 export const getSubscriptionByUserEmail = async (userEmail: string) => {
   try {
     const queryCommand = query(

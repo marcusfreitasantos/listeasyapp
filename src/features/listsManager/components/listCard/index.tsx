@@ -9,15 +9,16 @@ import { GlobalListContext } from "@/src/context/listContext";
 import { FeatherIconName } from "@/@types/icons";
 import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { useRouter } from "expo-router";
-import { centsToReais } from "@/src/utils/convertCurrency";
 import { useBuildPDFTemplate } from "../../viewModel/useBuildPDFTemplate";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { InvitedUserEntity } from "@/src/features/sharedLists/model/invitedUser";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useTranslation } from "react-i18next";
+import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 type ListCardProps = {
   list: ListEntityType;
+  currency: string;
   removeList: (listId: string) => void;
   generatePdf: (listName: string, html: string) => void;
   removeCurrentUserFromSharedList: (
@@ -28,6 +29,7 @@ type ListCardProps = {
 
 export const ListCard = ({
   list,
+  currency,
   removeList,
   generatePdf,
   removeCurrentUserFromSharedList,
@@ -171,7 +173,7 @@ export const ListCard = ({
             <S.ListCardTotalPriceTextBold>Total: </S.ListCardTotalPriceTextBold>
 
             <S.ListCardTotalPriceTextRegular>
-              {centsToReais(list.totalPrice).toFixed(2)}
+              {formatPriceWithCurrency(list.totalPrice, currency)}
             </S.ListCardTotalPriceTextRegular>
           </S.ListCardTotalPriceWrapper>
 
