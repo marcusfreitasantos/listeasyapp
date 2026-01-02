@@ -112,7 +112,7 @@
   "support_email_subject": "[List Easy] I need support!",
   "email_not_opened": "The email could not be opened.",
   "current": "current",
-  "subscribe": "subscribe",
+  "subscribe": "Subscribe",
   "services": {
     "firebase_auth": {
       "email_already_exist": "A user with this email address already exists!",

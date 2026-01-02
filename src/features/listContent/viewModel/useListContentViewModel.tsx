@@ -10,11 +10,13 @@ import { useTranslation } from "react-i18next";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import * as Crypto from "expo-crypto";
 import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
+import { GlobalProductsContext } from "@/src/context/productsContext";
 
 export const useListContentViewModel = () => {
   const { t } = useTranslation();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { currency } = useContext(GlobalProductsContext);
   const [currentItems, setCurrentItems] = useState(currentList?.items ?? []);
   const [currentStatus, setCurrentStatus] = useState<string[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -222,5 +224,6 @@ export const useListContentViewModel = () => {
     setShowItemsFilter,
     setCurrentStatus,
     handleAddListItemSubmit,
+    currency,
   };
 };

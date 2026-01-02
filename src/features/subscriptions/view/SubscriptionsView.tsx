@@ -7,7 +7,7 @@ import { ListEmpty } from "@/src/components/listEmpty";
 
 const SubscriptionsView = () => {
   const {
-    products,
+    currentProducts,
     loading,
     currentSubscription,
     handlePurchaseSubscription,
@@ -25,7 +25,7 @@ const SubscriptionsView = () => {
           ) : (
             <FlatList
               keyExtractor={(item) => item.productId}
-              data={products.reverse()}
+              data={currentProducts?.reverse()}
               renderItem={({ item }) => (
                 <ProductCard
                   productData={item}

@@ -12,12 +12,14 @@ import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import { GlobalProductsContext } from "@/src/context/productsContext";
 
 export const useListManagerViewModel = () => {
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
   const { setListsLength, currentUserLists, setCurrentUserLists } =
     useContext(GlobalListContext);
+  const { currency } = useContext(GlobalProductsContext);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -115,5 +117,6 @@ export const useListManagerViewModel = () => {
     removeList,
     getUserLists,
     generatePdf,
+    currency,
   };
 };

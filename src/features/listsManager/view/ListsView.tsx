@@ -28,6 +28,7 @@ const ListsView = () => {
     removeList,
     generatePdf,
     getUserLists,
+    currency,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
@@ -69,6 +70,7 @@ const ListsView = () => {
               renderItem={({ item }) => (
                 <ListCard
                   list={item}
+                  currency={currency}
                   removeList={removeList}
                   generatePdf={generatePdf}
                   removeCurrentUserFromSharedList={

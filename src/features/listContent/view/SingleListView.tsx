@@ -38,6 +38,7 @@ export const SingleListView = () => {
     setCurrentStatus,
     currentItems,
     handleAddListItemSubmit,
+    currency,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -107,6 +108,7 @@ export const SingleListView = () => {
             renderItem={({ item }) => (
               <ListItemCard
                 listItem={item}
+                currency={currency}
                 setModalIsOpen={setModalIsOpen}
                 itemId={item.id}
                 updateSingleItem={updateSingleItem}
@@ -128,6 +130,7 @@ export const SingleListView = () => {
             <ListTotalPrice
               totalPrice={currentList.totalPrice}
               totalItems={currentList.items.length}
+              currency={currency}
             />
 
             <AddItemBtn

@@ -7,4 +7,12 @@ type ProductEntity = {
   interval: string;
 };
 
-export type { ProductEntity };
+type ProductsContextType = {
+  currentProducts: ProductEntity[] | null;
+  setCurrentProducts: React.Dispatch<
+    React.SetStateAction<ProductEntity[] | null>
+  >;
+  currency: string;
+};
+
+export type { ProductEntity, ProductsContextType };

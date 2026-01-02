@@ -3,14 +3,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  Linking,
-  Alert,
 } from "react-native";
 import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
 import { useSignInViewModel } from "../viewModel/useSignInViewModel";
-import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
@@ -21,7 +18,6 @@ import { useTranslation } from "react-i18next";
 export const SignInView = () => {
   const { t } = useTranslation();
   const colorScheme = useColorScheme();
-  const theme = useTheme();
   const { loading, handleSignIn, handleAnonymousSignIn } = useSignInViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
