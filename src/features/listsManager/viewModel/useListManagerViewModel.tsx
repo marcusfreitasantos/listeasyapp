@@ -15,7 +15,6 @@ import * as FileSystem from "expo-file-system";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import { useTranslation } from "react-i18next";
 import { ListEntityType } from "../model/list";
-import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useBuildPDFTemplate } from "./useBuildPDFTemplate";
 import { router } from "expo-router";
@@ -26,7 +25,6 @@ export const useListManagerViewModel = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
-  const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
   const {
     currentUserLists,
     currentList,
@@ -139,7 +137,14 @@ export const useListManagerViewModel = () => {
       userEmail: currentUser?.user.email ?? "",
     };
 
-    handleRemoveColaboratorFromCurrentList(invitedUser, list);
+    (async () => {
+      const mod = await import(
+        "../../sharedLists/viewModel/useShareListsViewModel"
+      );
+      const { handleRemoveColaboratorFromCurrentList } =
+        mod.useShareListsViewModel();
+      handleRemoveColaboratorFromCurrentList(invitedUser, list);
+    })();
   };
 
   const handlePDFExport = (list: ListEntityType) => {
