@@ -5,7 +5,7 @@ import { ListItemType } from "../../listsManager/model/list";
 import { calculateCurrentListTotal } from "@/src/utils/calculateCurrentListTotal";
 import { useInterstitialAd, TestIds } from "react-native-google-mobile-ads";
 import { useIsFocused } from "@react-navigation/native";
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import * as Crypto from "expo-crypto";
@@ -178,6 +178,32 @@ export const useListContentViewModel = () => {
     }
   };
 
+  const handleRemoveItemFromList = (itemName: string, itemId: string) => {
+    Alert.alert(
+      t("warning"),
+      t("item_will_be_removed", { item_name: itemName }),
+      [
+        {
+          text: t("cancel"),
+        },
+        {
+          text: t("confirm"),
+          onPress: () => removeItemFromList(itemId),
+        },
+      ]
+    );
+  };
+
+  const handleEditItem = (listItem: ListItemType) => {
+    setCurrentItem({ ...listItem });
+    setModalIsOpen(true);
+  };
+
+  const handleCheckItem = (isChecked: boolean, listItem: ListItemType) => {
+    setCurrentItem({ ...listItem, checked: isChecked });
+    updateSingleItem({ ...listItem, checked: isChecked });
+  };
+
   useEffect(() => {
     if (!modalIsOpen) resetStates();
   }, [modalIsOpen]);
@@ -225,5 +251,8 @@ export const useListContentViewModel = () => {
     setCurrentStatus,
     handleAddListItemSubmit,
     currency,
+    handleRemoveItemFromList,
+    handleEditItem,
+    handleCheckItem,
   };
 };

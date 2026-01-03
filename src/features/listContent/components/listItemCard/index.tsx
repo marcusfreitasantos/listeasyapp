@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import * as S from "./styles";
 import { ListItemType } from "../../../listsManager/model/list";
 import Feather from "@expo/vector-icons/Feather";
@@ -9,60 +8,32 @@ import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 type ListItemCardProps = {
   listItem: ListItemType;
-  itemId: string;
   currency: string;
-  removeItemFromList: (itemId: string) => void;
-  setModalIsOpen: (state: boolean) => void;
-  updateSingleItem: (listItem: ListItemType) => void;
-  setCurrentItem: React.Dispatch<React.SetStateAction<ListItemType | null>>;
+  handleRemoveItemFromList: (itemName: string, itemId: string) => void;
+  handleEditItem: (currenItem: ListItemType) => void;
+  handleCheckItem: (isChecked: boolean, listItem: ListItemType) => void;
 };
 
 export const ListItemCard = ({
   listItem,
-  itemId,
   currency,
-  setModalIsOpen,
-  removeItemFromList,
-  updateSingleItem,
-  setCurrentItem,
+  handleRemoveItemFromList,
+  handleEditItem,
+  handleCheckItem,
 }: ListItemCardProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
-  const handleRemoveItemFromList = () => {
-    Alert.alert(
-      t("warning"),
-      t("item_will_be_removed", { item_name: listItem.name }),
-      [
-        {
-          text: t("cancel"),
-        },
-        {
-          text: t("confirm"),
-          onPress: () => removeItemFromList(itemId),
-        },
-      ]
-    );
-  };
-
-  const handleEditItem = () => {
-    setCurrentItem({ ...listItem });
-    setModalIsOpen(true);
-  };
-
-  const handleCheckItem = (isChecked: boolean) => {
-    setCurrentItem({ ...listItem, checked: isChecked });
-    updateSingleItem({ ...listItem, checked: isChecked });
-  };
-
   return (
-    <S.ListItemWrapper onPress={() => handleEditItem()}>
+    <S.ListItemWrapper onPress={() => handleEditItem(listItem)}>
       <S.ListItemHeader>
         <S.ListItemNameWrapper>
           <CheckboxInputField
             isItemChecked={listItem.checked ?? false}
-            handleCheckItem={(isChecked: boolean) => handleCheckItem(isChecked)}
+            handleCheckItem={(isChecked: boolean) =>
+              handleCheckItem(isChecked, listItem)
+            }
           />
           <S.ListItemName numberOfLines={2}>{listItem.name}</S.ListItemName>
         </S.ListItemNameWrapper>
@@ -74,7 +45,7 @@ export const ListItemCard = ({
             size={iconSize}
             color={theme.primaryColor}
             name="trash"
-            onPress={() => handleRemoveItemFromList()}
+            onPress={() => handleRemoveItemFromList(listItem.name, listItem.id)}
             onPressIn={(e) => e.stopPropagation()}
             hitSlop={60}
           />

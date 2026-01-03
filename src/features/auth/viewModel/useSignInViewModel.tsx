@@ -20,7 +20,7 @@ export const useSignInViewModel = () => {
 
       router.push("/lists");
     } catch (error: any) {
-      Alert.alert(t("something_wrong"), `${error}`);
+      Alert.alert(t("something_wrong"), `${t(error.message)}`);
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export const useSignInViewModel = () => {
 
       router.push("/lists");
     } catch (error: any) {
-      Alert.alert(t("something_wrong"), `${error}`);
+      Alert.alert(t("something_wrong"), t(error.message));
     } finally {
       setLoading(false);
     }

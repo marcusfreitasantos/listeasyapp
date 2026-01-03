@@ -68,6 +68,7 @@
   "new_item": "New item",
   "item": "item",
   "item_plural": "items",
+  "items_list": "Items list",
   "update": "Update",
   "updated_at": "Updated at",
   "checked": "Checked",
@@ -125,5 +126,7 @@
       "logout_error": "We were unable to log out.",
       "anonymous_login_error": "Access was not possible without registration."
     }
-  }
+  },
+  "available_for_android": "Available for Android",
+  "available_for_ios": "Available for IOS"
 }

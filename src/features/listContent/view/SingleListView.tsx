@@ -23,7 +23,7 @@ export const SingleListView = () => {
     setSearchTerm,
     modalIsOpen,
     setModalIsOpen,
-    removeItemFromList,
+    handleEditItem,
     updateSingleItem,
     loading,
     currentItem,
@@ -38,6 +38,8 @@ export const SingleListView = () => {
     currentItems,
     handleAddListItemSubmit,
     currency,
+    handleRemoveItemFromList,
+    handleCheckItem,
   } = useListContentViewModel();
 
   const router = useRouter();
@@ -108,11 +110,9 @@ export const SingleListView = () => {
               <ListItemCard
                 listItem={item}
                 currency={currency}
-                setModalIsOpen={setModalIsOpen}
-                itemId={item.id}
-                updateSingleItem={updateSingleItem}
-                removeItemFromList={removeItemFromList}
-                setCurrentItem={setCurrentItem}
+                handleCheckItem={handleCheckItem}
+                handleRemoveItemFromList={handleRemoveItemFromList}
+                handleEditItem={handleEditItem}
               />
             )}
             ListEmptyComponent={() => <ListEmpty title={t("no_items_found")} />}
