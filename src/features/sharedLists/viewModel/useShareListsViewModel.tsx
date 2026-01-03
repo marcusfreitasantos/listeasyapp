@@ -8,7 +8,6 @@ import { InviteEntity } from "../../invitation/model/invite";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { useInvitationsViewModel } from "../../invitation/viewModel/useInvitationsViewModel";
 import { updateInvite } from "@/src/services/firebase/invitations";
-import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
 import { getUserByEmail } from "@/src/services/firebase/auth";
@@ -17,7 +16,6 @@ import { useTranslation } from "react-i18next";
 export const useShareListsViewModel = () => {
   const { t } = useTranslation();
   const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
-  const { getUserLists } = useListManagerViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentUser } = useContext(GlobalUserContext);
@@ -108,7 +106,6 @@ export const useShareListsViewModel = () => {
       console.log(e);
     } finally {
       resetStates();
-      getUserLists();
     }
   };
 

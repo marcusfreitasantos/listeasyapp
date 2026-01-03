@@ -1,9 +1,15 @@
 import { useTheme } from "styled-components/native";
 import { ListItemType } from "../model/list";
 import { centsToReais } from "@/src/utils/convertCurrency";
+import { useTranslation } from "react-i18next";
+import { useContext } from "react";
+import { GlobalProductsContext } from "@/src/context/productsContext";
+import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
 
 export const useBuildPDFTemplate = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
+  const { currency } = useContext(GlobalProductsContext);
 
   const buildHtmlPDFTemplate = (
     listName: string,
@@ -107,7 +113,7 @@ export const useBuildPDFTemplate = () => {
                 </div>  
                 
                 <div class="pdf__content">
-                    <h2>Lista de itens</h2>
+                    <h2>${t("items_list")}</h2>
 
                       ${itemsList
                         ?.map(
@@ -116,25 +122,29 @@ export const useBuildPDFTemplate = () => {
                               <span class="pdf__item_title">${
                                 item.name
                               }</span>                        
-                              <span class="pdf__item_price">${centsToReais(
-                                item.price
-                              ).toFixed(2)}</span>
+                              <span class="pdf__item_price">${formatPriceWithCurrency(
+                                item.price,
+                                currency
+                              )}</span>
                           </div>`
                         )
                         .join("")}   
                     
                       <div class="pdf__item_wrapper">
                           <span class="pdf__item_title">Total:</span>                        
-                          <span class="pdf__item_price">${centsToReais(
-                            listTotalPrice
-                          ).toFixed(2)}</span>
+                          <span class="pdf__item_price">${formatPriceWithCurrency(
+                            listTotalPrice,
+                            currency
+                          )}</span>
                       </div>
                 </div>
   
                 <div style="flex: 1"></div>
   
                 <footer>
-                    <a href="https://play.google.com/store/apps/details?id=com.penpack.listeasy">Disponível para Android na PlayStore.</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.penpack.listeasy">${t(
+                      "available_for_android"
+                    )}</a>
                 </footer>
             </div>
           </body>

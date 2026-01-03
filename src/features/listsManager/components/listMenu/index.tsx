@@ -3,7 +3,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { FeatherIconName } from "@/@types/icons";
 import { useTheme } from "styled-components/native";
 
-type ListMenuProps = {
+export type ListMenuProps = {
   options: {
     label: string;
     iconName: FeatherIconName;

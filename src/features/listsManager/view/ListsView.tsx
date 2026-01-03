@@ -9,30 +9,70 @@ import { ModalAddList } from "../components/modalAddList";
 import { useListManagerViewModel } from "../viewModel/useListManagerViewModel";
 import { ListEmpty } from "@/src/components/listEmpty";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
-import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
-import { useTranslation } from "react-i18next";
+import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
+import { FeatherIconName } from "@/@types/icons";
+import { ListEntityType } from "../model/list";
 
 const ListsView = () => {
-  const { t } = useTranslation();
   const flatListRef = useRef<FlatList>(null);
-  const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
 
   const {
     loading,
     searchTerm,
-    setSearchTerm,
     currentUserLists,
-    createNewList,
     modalIsOpen,
-    setModalIsOpen,
-    removeList,
-    generatePdf,
-    getUserLists,
     currency,
+    isColaborator,
+    createNewList,
+    setSearchTerm,
+    setModalIsOpen,
+    handleDeleteList,
+    handlePDFExport,
+    getUserLists,
+    handleRemoveCurrentUserFromSharedList,
+    handleEditList,
+    handleShareListAccess,
+    t,
+    i18n,
   } = useListManagerViewModel();
 
   const scrollToTop = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
+  };
+
+  const listMenuOptions = (list: ListEntityType) => {
+    return [
+      {
+        label: t("edit"),
+        iconName: "edit" as FeatherIconName,
+        onPress: () => handleEditList(list),
+        showOption: true,
+      },
+      {
+        label: t("share_access"),
+        iconName: "share-2" as FeatherIconName,
+        onPress: () => handleShareListAccess(list),
+        showOption: true,
+      },
+      {
+        label: t("pdf_export"),
+        iconName: "file-text" as FeatherIconName,
+        onPress: () => handlePDFExport(list),
+        showOption: true,
+      },
+      {
+        label: t("delete"),
+        iconName: "trash" as FeatherIconName,
+        onPress: () => handleDeleteList(list),
+        showOption: !isColaborator,
+      },
+      {
+        label: t("quit_list"),
+        iconName: "delete" as FeatherIconName,
+        onPress: () => handleRemoveCurrentUserFromSharedList(list),
+        showOption: isColaborator,
+      },
+    ];
   };
 
   useEffect(() => {
@@ -70,12 +110,15 @@ const ListsView = () => {
               renderItem={({ item }) => (
                 <ListCard
                   list={item}
+                  isColaborator={isColaborator}
                   currency={currency}
-                  removeList={removeList}
-                  generatePdf={generatePdf}
-                  removeCurrentUserFromSharedList={
-                    handleRemoveColaboratorFromCurrentList
-                  }
+                  listCardSubtitle={t("shared")}
+                  listMenuOptions={listMenuOptions}
+                  totalPriceText={`${t("updated_at")}: ${getFormattedDate(
+                    item.updatedAt,
+                    i18n.language
+                  )}`}
+                  handleEditList={handleEditList}
                 />
               )}
               ListEmptyComponent={() => (

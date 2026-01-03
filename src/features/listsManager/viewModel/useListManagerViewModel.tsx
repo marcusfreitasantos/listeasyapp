@@ -13,16 +13,33 @@ import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import { GlobalProductsContext } from "@/src/context/productsContext";
+import { useTranslation } from "react-i18next";
+import { ListEntityType } from "../model/list";
+import { useShareListsViewModel } from "../../sharedLists/viewModel/useShareListsViewModel";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { useBuildPDFTemplate } from "./useBuildPDFTemplate";
+import { router } from "expo-router";
 
 export const useListManagerViewModel = () => {
+  const { t, i18n } = useTranslation();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
-  const { setListsLength, currentUserLists, setCurrentUserLists } =
-    useContext(GlobalListContext);
-  const { currency } = useContext(GlobalProductsContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
+  const { handleRemoveColaboratorFromCurrentList } = useShareListsViewModel();
+  const {
+    currentUserLists,
+    currentList,
+    setListsLength,
+    setCurrentUserLists,
+    setCurrentList,
+  } = useContext(GlobalListContext);
+  const { currency, productIds } = useContext(GlobalProductsContext);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [isColaborator, setIsColaborator] = useState(false);
 
   const getUserLists = async () => {
     try {
@@ -95,6 +112,69 @@ export const useListManagerViewModel = () => {
     }
   };
 
+  const handleDeleteList = (list: ListEntityType) => {
+    Alert.alert(
+      t("warning"),
+      t("list_will_be_deleted", { list_name: list.title }),
+      [
+        {
+          text: t("cancel"),
+        },
+        {
+          text: t("confirm"),
+          onPress: () => {
+            if (list.id) removeList(list.id);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleRemoveCurrentUserFromSharedList = (list: ListEntityType) => {
+    setCurrentList(list);
+
+    const invitedUser = {
+      userId: currentUser?.user.uid ?? "",
+      userName: currentUser?.user.displayName ?? "",
+      userEmail: currentUser?.user.email ?? "",
+    };
+
+    handleRemoveColaboratorFromCurrentList(invitedUser, list);
+  };
+
+  const handlePDFExport = (list: ListEntityType) => {
+    if (
+      currentSubscription?.status === "active" &&
+      currentSubscription?.productId !== productIds[0]
+    ) {
+      const html = buildHtmlPDFTemplate(
+        list.title,
+        list.items,
+        list.totalPrice
+      );
+      generatePdf(list.title, html);
+    } else {
+      router.push("/(drawer)/subscriptions");
+    }
+  };
+
+  const handleEditList = (list: ListEntityType) => {
+    setCurrentList(list);
+    router.push(`/lists/${list.id}`);
+  };
+
+  const handleShareListAccess = (list: ListEntityType) => {
+    setCurrentList(list);
+    if (
+      currentSubscription?.status === "active" &&
+      currentSubscription?.productId !== productIds[0]
+    ) {
+      router.push("/sharedLists");
+    } else {
+      router.push("/(drawer)/subscriptions");
+    }
+  };
+
   useEffect(() => {
     if (isFocused) {
       getUserLists();
@@ -106,17 +186,31 @@ export const useListManagerViewModel = () => {
     setListsLength(currentUserLists.length);
   }, [currentUserLists]);
 
+  useEffect(() => {
+    setIsColaborator(
+      currentList?.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ??
+        false
+    );
+  }, [currentList]);
+
   return {
     loading,
     searchTerm,
-    setSearchTerm,
     currentUserLists,
-    createNewList,
     modalIsOpen,
+    currency,
+    isColaborator,
+    t,
+    i18n,
+    setSearchTerm,
+    createNewList,
     setModalIsOpen,
     removeList,
     getUserLists,
-    generatePdf,
-    currency,
+    handleDeleteList,
+    handleRemoveCurrentUserFromSharedList,
+    handlePDFExport,
+    handleEditList,
+    handleShareListAccess,
   };
 };
