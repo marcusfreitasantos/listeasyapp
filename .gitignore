@@ -39,3 +39,4 @@ app-ads.txt
 # Native builds
 /ios
 /android
+/coverage
