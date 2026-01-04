@@ -17,8 +17,9 @@ export const AddItemBtn = ({ onPress, modalIsOpen }: AddItemBtnProps) => {
 
   return (
     <S.BtnWrapper>
-      <S.BtnContent onPress={handleBtnPress}>
+      <S.BtnContent onPress={handleBtnPress} testID="add_item_btn">
         <Feather
+          testID="add_item_icon"
           size={iconSize}
           color={theme.secondaryColor}
           name={modalIsOpen ? "x" : "plus-circle"}
