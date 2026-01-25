@@ -40,14 +40,14 @@ export const DrawerUserInfoAvatarDefaultContent = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.large};
   font-weight: 700;
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.textColor};
 `;
 
 export const DrawerUserInfoTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: 700;
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   width: 90%;
 `;
 
@@ -55,7 +55,7 @@ export const DrawerUserInfoText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 300;
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   width: 90%;
 `;
 

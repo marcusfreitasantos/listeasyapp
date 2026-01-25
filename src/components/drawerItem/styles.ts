@@ -11,5 +11,5 @@ export const DrawerItemText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   font-weight: 700;
-  color: white;
+  color: ${({ theme }) => theme.textColor};
 `;

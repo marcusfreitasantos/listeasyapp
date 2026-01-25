@@ -14,7 +14,7 @@ export const InvitesListTitle = styled.Text`
 `;
 
 export const Divisor = styled.View`
-  background-color: ${({ theme }) => theme.lightGray};
+  background-color: ${({ theme }) => theme.fourthColor};
   padding: 1px 0;
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
   margin: ${({ theme }) => theme.defaultSizes.small} 0;

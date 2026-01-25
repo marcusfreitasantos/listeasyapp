@@ -86,7 +86,6 @@ export const SignInView = () => {
             <S.SecondaryContentColumn>
               <Button
                 btnText={t("continue_without_register")}
-                btnType="dark"
                 btnStyle="outline"
                 onPress={handleAnonymousSignIn}
               />
@@ -95,7 +94,7 @@ export const SignInView = () => {
                 onPress={() =>
                   sendSupportEmail(
                     t("support_email_subject"),
-                    t("email_not_opened")
+                    t("email_not_opened"),
                   )
                 }
               >
