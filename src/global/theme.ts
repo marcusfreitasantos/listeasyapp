@@ -23,7 +23,7 @@ const defaultTheme = {
 
 const darkTheme = {
   ...defaultTheme,
-  primaryColor: "#FFCC30",
+  primaryColor: "#f0bb1c",
   secondaryColor: "#222222",
   thirdColor: "#333333",
   fourthColor: "#f1f1f1",
@@ -35,7 +35,7 @@ const lightTheme = {
   primaryColor: "#222222",
   secondaryColor: "#f1f1f1",
   thirdColor: "#d9d9d9",
-  fourthColor: "#FFCC30",
+  fourthColor: "#f0bb1c",
   textColor: "#333333",
 };
 

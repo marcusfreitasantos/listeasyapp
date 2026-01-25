@@ -65,7 +65,7 @@ export const useBuildPDFTemplate = () => {
                 }
                 .pdf__item_title{
                     font-size: 14px;
-                    color: ${({ theme }) => theme.fourthColor};
+                    color: ${theme.fourthColor};
                     font-weight: 400;
                     flex: 1;
                     padding: 15px;
@@ -82,7 +82,7 @@ export const useBuildPDFTemplate = () => {
                 footer{
                     background-color: ${theme.secondaryColor};
                     padding: 15px;  
-                    color: ${({ theme }) => theme.fourthColor};
+                    color: ${theme.fourthColor};
                     font-size: 12px;
                     text-align: center;
                 }
