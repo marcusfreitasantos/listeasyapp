@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const appVersion = "4.1.4";
+const appVersion = "4.1.5";
 const bgColor = "#222222";
 const isLocal = process.env.APP_ENV === "local";
 
