@@ -27,7 +27,7 @@ export const ListCardHeader = styled.View`
 export const ListCardInfoWrapper = styled.View``;
 
 export const ListCardTitle = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.medium};
@@ -35,7 +35,7 @@ export const ListCardTitle = styled.Text`
 `;
 
 export const ListCardSubTitle = styled.Text`
-  color: ${({ theme }) => theme.primaryColor};
+  color: ${({ theme }) => theme.textColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.xSmall};
 `;
@@ -45,14 +45,14 @@ export const ListCardTotalPriceWrapper = styled.View`
 `;
 
 export const ListCardTotalPriceTextBold = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;
 
 export const ListCardTotalPriceTextRegular = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: light;
   font-size: ${({ theme }) => theme.defaultSizes.small};

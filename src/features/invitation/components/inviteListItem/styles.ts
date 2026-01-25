@@ -21,7 +21,7 @@ export const InviteTittle = styled.Text`
 `;
 
 export const InviteListName = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.fourthColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;

@@ -11,7 +11,7 @@ export const ListMenuItem = styled.TouchableOpacity`
 `;
 
 export const ListMenuItemText = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-weight: bold;
   font-size: ${({ theme }) => theme.defaultSizes.small};

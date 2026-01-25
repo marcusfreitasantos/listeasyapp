@@ -26,8 +26,8 @@ const darkTheme = {
   primaryColor: "#FFCC30",
   secondaryColor: "#222222",
   thirdColor: "#333333",
-  lightGray: "#f1f1f1",
-  textColor: "#555555",
+  fourthColor: "#f1f1f1",
+  textColor: "#eee",
 };
 
 const lightTheme = {
@@ -35,8 +35,8 @@ const lightTheme = {
   primaryColor: "#222222",
   secondaryColor: "#f1f1f1",
   thirdColor: "#d9d9d9",
+  fourthColor: "#FFCC30",
   textColor: "#333333",
-  lightGray: "#FFCC30",
 };
 
 export { lightTheme, darkTheme };

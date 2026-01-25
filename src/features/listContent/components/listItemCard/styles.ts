@@ -31,7 +31,7 @@ export const ListItemNameWrapper = styled.View`
 `;
 
 export const ListItemName = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: bold;
@@ -45,13 +45,13 @@ export const ListInfoRow = styled.View`
 `;
 
 export const ListItemPrice = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.textColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;
 
 export const ListItemQnt = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;

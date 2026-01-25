@@ -14,7 +14,7 @@ export const useBuildPDFTemplate = () => {
   const buildHtmlPDFTemplate = (
     listName: string,
     itemsList: ListItemType[],
-    listTotalPrice: number
+    listTotalPrice: number,
   ) => {
     const html = `
       <html>
@@ -65,7 +65,7 @@ export const useBuildPDFTemplate = () => {
                 }
                 .pdf__item_title{
                     font-size: 14px;
-                    color: white;
+                    color: ${({ theme }) => theme.fourthColor};
                     font-weight: 400;
                     flex: 1;
                     padding: 15px;
@@ -82,7 +82,7 @@ export const useBuildPDFTemplate = () => {
                 footer{
                     background-color: ${theme.secondaryColor};
                     padding: 15px;  
-                    color: white;
+                    color: ${({ theme }) => theme.fourthColor};
                     font-size: 12px;
                     text-align: center;
                 }
@@ -124,9 +124,9 @@ export const useBuildPDFTemplate = () => {
                               }</span>                        
                               <span class="pdf__item_price">${formatPriceWithCurrency(
                                 item.price,
-                                currency
+                                currency,
                               )}</span>
-                          </div>`
+                          </div>`,
                         )
                         .join("")}   
                     
@@ -134,7 +134,7 @@ export const useBuildPDFTemplate = () => {
                           <span class="pdf__item_title">Total:</span>                        
                           <span class="pdf__item_price">${formatPriceWithCurrency(
                             listTotalPrice,
-                            currency
+                            currency,
                           )}</span>
                       </div>
                 </div>
@@ -143,7 +143,7 @@ export const useBuildPDFTemplate = () => {
   
                 <footer>
                     <a href="https://play.google.com/store/apps/details?id=com.penpack.listeasy">${t(
-                      "available_for_android"
+                      "available_for_android",
                     )}</a>
                 </footer>
             </div>
