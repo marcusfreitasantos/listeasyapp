@@ -12,25 +12,31 @@ const defaultFontFamily = "NunitoSans";
 const defaultContainerSpacing = `${RFValue(16)}px`;
 const defaultBorder = "1px solid #ddd";
 const defaultBorderRadius = `${RFValue(6)}px`;
-const darkTheme = {
-  primaryColor: "#FFCC30",
-  secondaryColor: "#222222",
-  thirdColor: "#333333",
-  lightGray: "#f1f1f1",
-  textColor: "#555555",
+
+const defaultTheme = {
   defaultSizes,
   defaultBorderRadius,
   defaultBorder,
   defaultFontFamily,
   defaultContainerSpacing,
 };
-const lightTheme = {
-  ...darkTheme,
-  primaryColor: "#222222",
-  secondaryColor: "#FFCC30",
+
+const darkTheme = {
+  ...defaultTheme,
+  primaryColor: "#FFCC30",
+  secondaryColor: "#222222",
   thirdColor: "#333333",
-  textColor: "#555555",
   lightGray: "#f1f1f1",
+  textColor: "#555555",
+};
+
+const lightTheme = {
+  ...defaultTheme,
+  primaryColor: "#222222",
+  secondaryColor: "#f1f1f1",
+  thirdColor: "#d9d9d9",
+  textColor: "#333333",
+  lightGray: "#FFCC30",
 };
 
 export { lightTheme, darkTheme };
