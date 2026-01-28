@@ -1,4 +1,4 @@
-import SubscriptionsView from "@/src/features/subscriptions/view/SubscriptionsView";
+import { SubscriptionsView } from "@/src/features/subscriptions/view/SubscriptionsView";
 
 const Subscriptions = () => {
   return <SubscriptionsView />;

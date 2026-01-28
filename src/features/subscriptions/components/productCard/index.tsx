@@ -52,7 +52,6 @@ export const ProductCard = ({
 
       <Button
         btnText={isCurrentPlan ? t("cancel") : t("subscribe")}
-        btnType={isCurrentPlan ? "dark" : "light"}
         onPress={() => handleSubscription(productData.productId)}
       />
     </S.ProductCard>

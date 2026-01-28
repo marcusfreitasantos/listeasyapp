@@ -22,7 +22,7 @@ export const ContentTitle = styled.Text`
 `;
 
 export const ContentSubtitle = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.fourthColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   line-height: ${({ theme }) => theme.defaultSizes.medium};

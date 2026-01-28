@@ -16,11 +16,11 @@ export const CheckBoxItem = styled.View<CheckBoxItemProps>`
   height: ${(props) => props.size}px;
   border: ${({ theme }) => theme.defaultBorder};
   border-radius: 2px;
-  border-color: white;
+  border-color: ${({ theme }) => theme.primaryColor};
 `;
 
 export const CheckBoxItemLabel = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
 `;

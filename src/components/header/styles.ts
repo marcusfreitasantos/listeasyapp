@@ -26,7 +26,7 @@ export const HeaderUserInfoTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
   font-weight: 700;
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
   width: 80%;
 `;
 
@@ -37,7 +37,7 @@ export const HeaderUserInfoTextRow = styled.Text`
 export const HeaderUserInfoText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
-  color: white;
+  color: ${({ theme }) => theme.primaryColor};
 `;
 
 export const HeaderUserInfoTextBold = styled.Text`

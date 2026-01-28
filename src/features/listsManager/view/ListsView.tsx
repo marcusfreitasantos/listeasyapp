@@ -13,7 +13,7 @@ import { getFormattedDate } from "@/src/utils/convertFirestoreTimestamp";
 import { FeatherIconName } from "@/@types/icons";
 import { ListEntityType } from "../model/list";
 
-const ListsView = () => {
+export const ListsView = () => {
   const flatListRef = useRef<FlatList>(null);
 
   const {
@@ -149,5 +149,3 @@ const ListsView = () => {
     </KeyboardAvoidingView>
   );
 };
-
-export default ListsView;

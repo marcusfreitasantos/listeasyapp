@@ -5,7 +5,7 @@ import { ProductCard } from "../components/productCard";
 import { FlatList } from "react-native-gesture-handler";
 import { ListEmpty } from "@/src/components/listEmpty";
 
-const SubscriptionsView = () => {
+export const SubscriptionsView = () => {
   const {
     currentProducts,
     loading,
@@ -42,5 +42,3 @@ const SubscriptionsView = () => {
     </S.SubscriptionsViewContainer>
   );
 };
-
-export default SubscriptionsView;

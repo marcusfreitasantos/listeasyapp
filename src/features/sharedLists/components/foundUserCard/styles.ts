@@ -7,7 +7,7 @@ export const FoundUserCardWrapper = styled.View`
 `;
 
 export const FoundUserCardName = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.fourthColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   line-height: ${({ theme }) => theme.defaultSizes.medium};
@@ -15,7 +15,7 @@ export const FoundUserCardName = styled.Text`
 `;
 
 export const FoundUserCardEmail = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.fourthColor};
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};
   line-height: ${({ theme }) => theme.defaultSizes.medium};

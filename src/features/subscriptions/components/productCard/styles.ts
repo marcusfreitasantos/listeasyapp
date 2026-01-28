@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 
 export const ProductCard = styled.View`
-  background-color: white;
+  background-color: ${({ theme }) => theme.thirdColor};
   padding: ${({ theme }) => theme.defaultContainerSpacing};
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
   margin-bottom: ${({ theme }) => theme.defaultSizes.small};
@@ -9,7 +9,7 @@ export const ProductCard = styled.View`
 `;
 
 export const Divisor = styled.View`
-  background-color: ${({ theme }) => theme.lightGray};
+  background-color: ${({ theme }) => theme.secondaryColor};
   padding: 1px 0;
   border-radius: ${({ theme }) => theme.defaultBorderRadius};
   margin: ${({ theme }) => theme.defaultSizes.small} 0;
@@ -32,7 +32,7 @@ export const ProductHeaderGroup = styled.View`
 export const ProductTitle = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
-  color: ${({ theme }) => theme.secondaryColor};
+  color: ${({ theme }) => theme.primaryColor};
   font-weight: bold;
 `;
 
