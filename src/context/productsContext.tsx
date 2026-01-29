@@ -18,7 +18,7 @@ const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const currency = currentProducts ? currentProducts[0]?.currency : "";
 
-  const productIds = ["plan_essencial", "plan_premium", "plan_premium_annual"];
+  const productIds = ["plan_essencial"];
 
   return (
     <GlobalProductsContext.Provider

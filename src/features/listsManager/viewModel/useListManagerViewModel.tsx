@@ -94,7 +94,7 @@ export const useListManagerViewModel = () => {
 
       const pdfName = `${file.uri.slice(
         0,
-        file.uri.lastIndexOf("/") + 1
+        file.uri.lastIndexOf("/") + 1,
       )}lista_${listName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "")}.pdf`;
 
       await FileSystem.moveAsync({
@@ -124,7 +124,7 @@ export const useListManagerViewModel = () => {
             if (list.id) removeList(list.id);
           },
         },
-      ]
+      ],
     );
   };
 
@@ -138,9 +138,8 @@ export const useListManagerViewModel = () => {
     };
 
     (async () => {
-      const mod = await import(
-        "../../sharedLists/viewModel/useShareListsViewModel"
-      );
+      const mod =
+        await import("../../sharedLists/viewModel/useShareListsViewModel");
       const { handleRemoveColaboratorFromCurrentList } =
         mod.useShareListsViewModel();
       handleRemoveColaboratorFromCurrentList(invitedUser, list);
@@ -148,19 +147,8 @@ export const useListManagerViewModel = () => {
   };
 
   const handlePDFExport = (list: ListEntityType) => {
-    if (
-      currentSubscription?.status === "active" &&
-      currentSubscription?.productId !== productIds[0]
-    ) {
-      const html = buildHtmlPDFTemplate(
-        list.title,
-        list.items,
-        list.totalPrice
-      );
-      generatePdf(list.title, html);
-    } else {
-      router.push("/(drawer)/subscriptions");
-    }
+    const html = buildHtmlPDFTemplate(list.title, list.items, list.totalPrice);
+    generatePdf(list.title, html);
   };
 
   const handleEditList = (list: ListEntityType) => {
@@ -170,14 +158,7 @@ export const useListManagerViewModel = () => {
 
   const handleShareListAccess = (list: ListEntityType) => {
     setCurrentList(list);
-    if (
-      currentSubscription?.status === "active" &&
-      currentSubscription?.productId !== productIds[0]
-    ) {
-      router.push("/sharedLists");
-    } else {
-      router.push("/(drawer)/subscriptions");
-    }
+    router.push("/sharedLists");
   };
 
   useEffect(() => {
@@ -194,7 +175,7 @@ export const useListManagerViewModel = () => {
   useEffect(() => {
     setIsColaborator(
       currentList?.colaboratorsIds?.includes(currentUser?.user.uid ?? "") ??
-        false
+        false,
     );
   }, [currentList]);
 
