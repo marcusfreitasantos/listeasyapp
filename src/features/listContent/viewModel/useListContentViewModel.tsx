@@ -30,7 +30,7 @@ export const useListContentViewModel = () => {
       ? "ca-app-pub-8430347978354434/6035864738"
       : "ca-app-pub-8430347978354434/6152293969";
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
-    __DEV__ ? TestIds.INTERSTITIAL : admobPubId
+    __DEV__ ? TestIds.INTERSTITIAL : admobPubId,
   );
 
   const [isSubscriber, setIsSubscriber] = useState(false);
@@ -92,7 +92,7 @@ export const useListContentViewModel = () => {
       if (!currentList) throw new Error(t("invalid_list"));
 
       const updatedItems = currentList.items.map((item) =>
-        item.id === updatedItem.id ? updatedItem : item
+        item.id === updatedItem.id ? updatedItem : item,
       );
 
       const updatedList = {
@@ -116,7 +116,7 @@ export const useListContentViewModel = () => {
       if (!currentList) throw new Error(t("invalid_list"));
 
       const itemsUpdated = currentList?.items.filter(
-        (item) => item.id !== itemToRemoveId
+        (item) => item.id !== itemToRemoveId,
       );
 
       const updatedList = {
@@ -138,7 +138,7 @@ export const useListContentViewModel = () => {
     const showAd =
       currentList &&
       currentList.items.length &&
-      currentList.items.length % 5 === 0;
+      currentList.items.length % 3 === 0;
     if (!isSubscriber && isLoaded && showAd) {
       show();
     } else {
@@ -157,7 +157,7 @@ export const useListContentViewModel = () => {
     const showChecked = currentStatus.includes("checked");
 
     setCurrentItems(
-      items.filter((item: ListItemType) => item.checked === showChecked)
+      items.filter((item: ListItemType) => item.checked === showChecked),
     );
   };
 
@@ -190,7 +190,7 @@ export const useListContentViewModel = () => {
           text: t("confirm"),
           onPress: () => removeItemFromList(itemId),
         },
-      ]
+      ],
     );
   };
 
