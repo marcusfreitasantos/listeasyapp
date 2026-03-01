@@ -58,9 +58,11 @@ export const ListCard = ({
           <S.ListCardTotalPriceWrapper>
             <S.ListCardTotalPriceTextBold>Total: </S.ListCardTotalPriceTextBold>
 
-            <S.ListCardTotalPriceTextRegular>
-              {formatPriceWithCurrency(list.totalPrice, currency)}
-            </S.ListCardTotalPriceTextRegular>
+            {currency && (
+              <S.ListCardTotalPriceTextRegular>
+                {formatPriceWithCurrency(list.totalPrice, currency)}
+              </S.ListCardTotalPriceTextRegular>
+            )}
           </S.ListCardTotalPriceWrapper>
 
           <S.ListCardTotalPriceTextRegular>

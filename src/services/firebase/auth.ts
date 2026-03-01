@@ -1,4 +1,5 @@
-import auth, {
+import {
+  getAuth,
   FirebaseAuthTypes,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,11 +8,13 @@ import auth, {
   sendPasswordResetEmail,
   updateEmail,
   signInAnonymously,
+  EmailAuthProvider,
 } from "@react-native-firebase/auth";
+import { getApp } from "@react-native-firebase/app";
 import axios from "axios";
 import Constants from "expo-constants";
 
-const firebaseAuth = auth();
+const firebaseAuth = getAuth(getApp());
 
 const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 
@@ -43,13 +46,13 @@ const resolveFirebaseError = (error: unknown, fallbackKey: string): string => {
 export const registerUser = async (
   email: string,
   password: string,
-  displayName?: string
+  displayName?: string,
 ): Promise<FirebaseAuthTypes.UserCredential> => {
   try {
     const credential = await createUserWithEmailAndPassword(
       firebaseAuth,
       email,
-      password
+      password,
     );
 
     if (displayName) {
@@ -64,7 +67,7 @@ export const registerUser = async (
 
 export const loginUser = async (
   email: string,
-  password: string
+  password: string,
 ): Promise<FirebaseAuthTypes.UserCredential> => {
   try {
     return await signInWithEmailAndPassword(firebaseAuth, email, password);
@@ -97,7 +100,7 @@ export const loginAnonymously =
 export const updateUserProfile = async (
   user: FirebaseAuthTypes.User,
   displayName?: string,
-  photoURL?: string | null
+  photoURL?: string | null,
 ): Promise<FirebaseAuthTypes.User | null> => {
   try {
     await updateProfile(user, {
@@ -113,7 +116,7 @@ export const updateUserProfile = async (
 
 export const updateUserEmailAddress = async (
   user: FirebaseAuthTypes.User,
-  email: string
+  email: string,
 ): Promise<FirebaseAuthTypes.User | null> => {
   try {
     await updateEmail(user, email);
@@ -128,7 +131,10 @@ export const resetUserPassword = async (email: string): Promise<void> => {
     await sendPasswordResetEmail(firebaseAuth, email);
   } catch (error) {
     throw new Error(
-      resolveFirebaseError(error, "services.firebase_auth.reset_email_not_sent")
+      resolveFirebaseError(
+        error,
+        "services.firebase_auth.reset_email_not_sent",
+      ),
     );
   }
 };
@@ -140,12 +146,12 @@ export const resetUserPassword = async (email: string): Promise<void> => {
 export const convertAnonymousUser = async (
   email: string,
   password: string,
-  displayName?: string
+  displayName?: string,
 ): Promise<FirebaseAuthTypes.User | null> => {
   const user = firebaseAuth.currentUser;
   if (!user || !user.isAnonymous) return null;
 
-  const credential = auth.EmailAuthProvider.credential(email, password);
+  const credential = EmailAuthProvider.credential(email, password);
 
   await user.linkWithCredential(credential);
 
@@ -173,7 +179,7 @@ export const getUserByEmail = async (email: string) => {
         headers: {
           "x-api-key": listEasyApiKey,
         },
-      }
+      },
     );
 
     return response.data;

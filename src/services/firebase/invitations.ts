@@ -8,6 +8,7 @@ import {
   orderBy,
   doc,
   updateDoc,
+  deleteDoc,
   FirebaseFirestoreTypes,
   serverTimestamp,
   addDoc,
@@ -30,13 +31,13 @@ export const insertNewInvite = async (invite: InviteEntity) => {
 };
 
 export const getInvitesByUserEmail = async (
-  userEmail: string
+  userEmail: string,
 ): Promise<InviteEntity[]> => {
   try {
     const queryCommand = query(
       invitesCollection,
       where("userEmail", "==", userEmail),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const querySnapshot = await getDocs(queryCommand);
 
@@ -45,7 +46,7 @@ export const getInvitesByUserEmail = async (
         ({
           id: doc.id,
           ...doc.data(),
-        } as InviteEntity)
+        }) as InviteEntity,
     );
   } catch (error) {
     console.log(error);
@@ -54,13 +55,13 @@ export const getInvitesByUserEmail = async (
 };
 
 export const getInvitesSentByCurrentUser = async (
-  userId: string
+  userId: string,
 ): Promise<InviteEntity[]> => {
   try {
     const queryCommand = query(
       invitesCollection,
       where("referralUserId", "==", userId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const querySnapshot = await getDocs(queryCommand);
 
@@ -69,7 +70,7 @@ export const getInvitesSentByCurrentUser = async (
         ({
           id: doc.id,
           ...doc.data(),
-        } as InviteEntity)
+        }) as InviteEntity,
     );
   } catch (error) {
     console.log(error);
@@ -91,7 +92,7 @@ export const updateInvite = async (invite: InviteEntity) => {
 
 export const removeInviteById = async (inviteId: string) => {
   try {
-    await invitesCollection.doc(inviteId).delete();
+    await deleteDoc(doc(invitesCollection, inviteId));
   } catch (error) {
     throw new Error(`Error removing invite: ${error}`);
   }

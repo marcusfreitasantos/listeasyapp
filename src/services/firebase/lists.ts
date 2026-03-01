@@ -8,6 +8,7 @@ import {
   orderBy,
   doc,
   updateDoc,
+  deleteDoc,
   FirebaseFirestoreTypes,
   serverTimestamp,
   addDoc,
@@ -50,13 +51,13 @@ export const getListById = async (listId: string): Promise<ListEntityType> => {
 };
 
 export const getListsByAuthorId = async (
-  userId: string
+  userId: string,
 ): Promise<ListEntityType[]> => {
   try {
     const queryCommand = query(
       listsCollection,
       where("authorId", "==", userId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
     const querySnapshot = await getDocs(queryCommand);
 
@@ -65,7 +66,7 @@ export const getListsByAuthorId = async (
         ({
           id: doc.id,
           ...doc.data(),
-        } as ListEntityType)
+        }) as ListEntityType,
     );
   } catch (error) {
     console.log(error);
@@ -74,12 +75,12 @@ export const getListsByAuthorId = async (
 };
 
 export const getListsByColaboratorId = async (
-  userId: string
+  userId: string,
 ): Promise<ListEntityType[]> => {
   try {
     const queryCommand = query(
       listsCollection,
-      where("colaboratorsIds", "array-contains", userId)
+      where("colaboratorsIds", "array-contains", userId),
     );
     const querySnapshot = await getDocs(queryCommand);
 
@@ -88,7 +89,7 @@ export const getListsByColaboratorId = async (
         ({
           id: doc.id,
           ...doc.data(),
-        } as ListEntityType)
+        }) as ListEntityType,
     );
   } catch (error) {
     console.log(error);
@@ -110,7 +111,7 @@ export const updateListContent = async (currentList: ListEntityType) => {
 
 export const removeListById = async (listId: string) => {
   try {
-    await listsCollection.doc(listId).delete();
+    await deleteDoc(doc(listsCollection, listId));
   } catch (error) {
     throw new Error(`Error removing list: ${error}`);
   }
