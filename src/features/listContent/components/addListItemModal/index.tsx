@@ -43,7 +43,7 @@ export const AddListItemModal = ({
       fieldName: "quantity",
       iconName: "grid" as FeatherIconName,
       placeholder: t("quantity"),
-      defaultValue: currentItem ? currentItem.quantity.toString() : "",
+      defaultValue: currentItem ? currentItem.quantity.toString() : "1",
       keyboardType: "numeric" as KeyboardTypeOptions,
       validationRules: {
         required: false,

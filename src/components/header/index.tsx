@@ -41,7 +41,7 @@ export const Header = () => {
         <BannerAd
           ref={bannerRef}
           unitId={adUnitId}
-          size={BannerAdSize.LEADERBOARD}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         />
       )}
 
