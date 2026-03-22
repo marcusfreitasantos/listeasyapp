@@ -52,14 +52,16 @@ export const ListItemCard = ({
         </S.ListItemIconsRow>
       </S.ListItemHeader>
 
-      <S.ListInfoRow>
-        <S.ListItemPrice>
-          {t("price")}: {formatPriceWithCurrency(listItem.price, currency)}
-        </S.ListItemPrice>
-        <S.ListItemQnt>
-          {t("quantity")}: {listItem.quantity}
-        </S.ListItemQnt>
-      </S.ListInfoRow>
+      {currency && (
+        <S.ListInfoRow>
+          <S.ListItemPrice>
+            {t("price")}: {formatPriceWithCurrency(listItem.price, currency)}
+          </S.ListItemPrice>
+          <S.ListItemQnt>
+            {t("quantity")}: {listItem.quantity}
+          </S.ListItemQnt>
+        </S.ListInfoRow>
+      )}
     </S.ListItemWrapper>
   );
 };
