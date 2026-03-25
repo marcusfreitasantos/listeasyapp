@@ -19,7 +19,8 @@ const SignIn = () => {
   const theme = useTheme();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const { setCurrentSubscription } = useContext(GlobalSubscriptionContext);
-  const { setCurrentProducts, productIds } = useContext(GlobalProductsContext);
+  const { currentProducts, setCurrentProducts, productIds, setCurrency } =
+    useContext(GlobalProductsContext);
 
   const [initializing, setInitializing] = useState(true);
   const { fetchUserInvites } = useInvitationsViewModel();
@@ -28,7 +29,7 @@ const SignIn = () => {
 
   const sortProductsByAmount = (
     productsList: ProductEntity[],
-    sortingOrder: "asc" | "desc"
+    sortingOrder: "asc" | "desc",
   ) => {
     const sortedProducts = productsList.sort((a, b) => {
       if (sortingOrder === "desc") {
@@ -82,7 +83,7 @@ const SignIn = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (subscriptions) {
+    if (subscriptions.length) {
       const fetchedProducts = subscriptions.map((sub) => {
         if ("subscriptionOfferDetailsAndroid" in sub) {
           return {
@@ -93,7 +94,7 @@ const SignIn = () => {
             currency: sub.currency,
             interval: parseBillingPeriod(
               sub.subscriptionOfferDetailsAndroid[0].pricingPhases
-                .pricingPhaseList[0].billingPeriod
+                .pricingPhaseList[0].billingPeriod,
             ),
           } as ProductEntity;
         }
@@ -102,8 +103,8 @@ const SignIn = () => {
       setCurrentProducts(
         sortProductsByAmount(
           fetchedProducts.filter((product) => product !== undefined),
-          "asc"
-        )
+          "asc",
+        ),
       );
     }
   }, [subscriptions]);
@@ -116,6 +117,10 @@ const SignIn = () => {
       });
     }
   }, [connected]);
+
+  useEffect(() => {
+    if (currentProducts?.length) setCurrency(currentProducts[0].currency);
+  }, [currentProducts]);
 
   if (initializing)
     return (

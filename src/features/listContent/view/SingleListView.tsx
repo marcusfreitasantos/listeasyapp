@@ -46,7 +46,7 @@ export const SingleListView = () => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
 
-  if (!currentList) return null;
+  if (!currentList || !currency) return null;
 
   return (
     <S.ListView>
@@ -103,7 +103,7 @@ export const SingleListView = () => {
 
           <FlatList
             data={currentItems.filter((item) =>
-              item.name.toLowerCase().includes(searchTerm.toLowerCase())
+              item.name.toLowerCase().includes(searchTerm.toLowerCase()),
             )}
             keyExtractor={(item) => (Math.random() + item.name).toString()}
             renderItem={({ item }) => (

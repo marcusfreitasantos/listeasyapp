@@ -12,7 +12,8 @@ type ProductsContextType = {
   setCurrentProducts: React.Dispatch<
     React.SetStateAction<ProductEntity[] | null>
   >;
-  currency: string;
+  currency: string | null;
+  setCurrency: React.Dispatch<React.SetStateAction<string | null>>;
   productIds: string[];
 };
 
