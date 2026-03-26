@@ -138,7 +138,7 @@ export const useListContentViewModel = () => {
     const showAd =
       currentList &&
       currentList.items.length &&
-      currentList.items.length % 3 === 0;
+      currentList.items.length % 10 === 0;
     if (!isSubscriber && isLoaded && showAd) {
       show();
     } else {
