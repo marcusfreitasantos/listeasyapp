@@ -9,7 +9,7 @@ import { ListMenuProps } from "../listMenu";
 
 type ListCardProps = {
   list: ListEntityType;
-  currency: string;
+  currency?: string | null;
   isColaborator: boolean;
   totalPriceText: string;
   listCardSubtitle: string;
