@@ -63,3 +63,13 @@ export const ProductPrice = styled.Text`
   color: ${({ theme }) => theme.textColor};
   font-weight: bold;
 `;
+
+export const ProductPriceTopicsGroup = styled.View`
+  flex-direction: column;
+`;
+
+export const ProductPriceTopics = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.small};
+  color: ${({ theme }) => theme.textColor};
+`;
