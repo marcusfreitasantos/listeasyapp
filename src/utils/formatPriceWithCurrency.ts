@@ -5,14 +5,14 @@ export const formatPriceWithCurrency = (
   try {
     const formatted = new Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: currency || "USD",
+      currency: currency || "BRL",
     }).format(amount / 100);
     return formatted.replace(/^(\D+)(?=\d)/, "$1\u00A0");
   } catch (error) {
-    // Fallback to USD if currency is invalid
+    // Fallback to BRL if currency is invalid
     const formatted = new Intl.NumberFormat(undefined, {
       style: "currency",
-      currency: "USD",
+      currency: "BRL",
     }).format(amount / 100);
     return formatted.replace(/^(\D+)(?=\d)/, "$1\u00A0");
   }
