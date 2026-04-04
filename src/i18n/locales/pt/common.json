@@ -128,5 +128,12 @@
     }
   },
   "available_for_android": "Disponível para Android",
-  "available_for_ios": "Disponível para iOS"
+  "available_for_ios": "Disponível para iOS",
+  "month": "mês",
+  "year": "ano",
+  "renew_every_month": "Renova automaticamente todo mês.",
+  "optional_subscription": "Assinatura opcional para acessar recursos premium.",
+  "cancel_anytime": "Cancele a qualquer momento pelo {{platform}}.",
+  "payment_through_platform": "O pagamento será cobrado na sua conta do {{platform}}.",
+  "unknown_platform": "Plataforma desconhecida"
 }
