@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 export const SignInView = () => {
   const { t } = useTranslation();
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
   const { loading, handleSignIn, handleAnonymousSignIn } = useSignInViewModel();
 
   const onSubmit = (data: Record<string, string>) => {

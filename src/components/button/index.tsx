@@ -12,7 +12,7 @@ export const Button = ({
   btnStyle = "solid",
   ...rest
 }: ButtonProps) => {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
   return (
     <S.ButtonWrapper
       {...rest}
