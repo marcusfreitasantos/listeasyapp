@@ -1,7 +1,7 @@
 import { ExpoConfig } from "@expo/config";
 const appVersion = "4.2.0";
 const bgColor = "#222222";
-const isLocal = process.env.APP_ENV === "local";
+const isLocal = false;
 
 const config: ExpoConfig = {
   name: "List Easy",
@@ -17,7 +17,7 @@ const config: ExpoConfig = {
     supportsTablet: true,
     bundleIdentifier: "com.penpack.listeasy",
     googleServicesFile: isLocal
-      ? "./google-services.plist"
+      ? "/Users/marcusfreitas/Projetos/L/list-easy/app/listeasyapp/google-services.plist"
       : process.env.GOOGLE_SERVICES_FILE_IOS,
     infoPlist: {
       NSPhotoLibraryUsageDescription:
@@ -30,7 +30,6 @@ const config: ExpoConfig = {
   },
   android: {
     userInterfaceStyle: "automatic",
-    edgeToEdgeEnabled: true,
     package: "com.penpack.listeasy",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
@@ -38,7 +37,7 @@ const config: ExpoConfig = {
     },
     icon: "./assets/icon.png",
     googleServicesFile: isLocal
-      ? "./google-services.json"
+      ? "/Users/marcusfreitas/Projetos/L/list-easy/app/listeasyapp/google-services.json"
       : process.env.GOOGLE_SERVICES_FILE_ANDROID,
   },
   web: {
@@ -48,6 +47,14 @@ const config: ExpoConfig = {
   },
   platforms: ["android", "ios"],
   plugins: [
+    [
+      "expo-file-system",
+      {
+        supportsOpeningDocumentsInPlace: true,
+        enableFileSharing: true,
+      },
+    ],
+    "expo-sharing",
     [
       "expo-localization",
       {
@@ -123,11 +130,6 @@ const config: ExpoConfig = {
       {
         ios: {
           useFrameworks: "static",
-        },
-        android: {
-          enableProguardInReleaseBuilds: true,
-          enableShrinkResourcesInReleaseBuilds: true,
-          kotlinVersion: "2.1.20",
         },
       },
     ],

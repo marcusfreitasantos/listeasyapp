@@ -9,7 +9,7 @@ type AddItemBtnProps = {
 };
 
 export const AddItemBtn = ({ onPress, modalIsOpen }: AddItemBtnProps) => {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.large.replace("px", ""));
 

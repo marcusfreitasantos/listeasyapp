@@ -8,7 +8,6 @@ import * as S from "./styles";
 import Logo from "@/src/components/logo";
 import { Link } from "expo-router";
 import { useSignUpViewModel } from "../viewModel/useSignUpViewModel";
-import { useTheme } from "styled-components/native";
 import { DynamicForm } from "@/src/components/dynamicForm";
 import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
@@ -17,8 +16,7 @@ import { useTranslation } from "react-i18next";
 
 export const SignUpView = () => {
   const { t } = useTranslation();
-  const colorScheme = useColorScheme();
-  const theme = useTheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
   const { loading, handleSignUp, isAnonymous } = useSignUpViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
@@ -88,7 +86,7 @@ export const SignUpView = () => {
             onPress={() =>
               sendSupportEmail(
                 t("support_email_subject"),
-                t("email_not_opened")
+                t("email_not_opened"),
               )
             }
           >

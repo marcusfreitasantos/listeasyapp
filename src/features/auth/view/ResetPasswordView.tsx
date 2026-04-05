@@ -19,7 +19,7 @@ export const ResetPasswordView = () => {
   const theme = useTheme();
   const iconSize = Number(theme.defaultSizes.medium.replace("px", ""));
   const { t } = useTranslation();
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "dark" | "light";
   const { loading, handlePasswordReset } = useResetPasswordViewModel();
 
   const onSubmit = (data: Record<string, string>) => {
