@@ -47,6 +47,13 @@ const config: ExpoConfig = {
   },
   platforms: ["android", "ios"],
   plugins: [
+    [
+      "expo-file-system",
+      {
+        supportsOpeningDocumentsInPlace: true,
+        enableFileSharing: true,
+      },
+    ],
     "expo-sharing",
     [
       "expo-localization",

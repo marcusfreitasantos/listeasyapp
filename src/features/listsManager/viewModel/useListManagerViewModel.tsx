@@ -11,7 +11,7 @@ import { Alert } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import * as FileSystem from "expo-file-system";
+import { File, Directory, Paths } from "expo-file-system";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import { useTranslation } from "react-i18next";
 import { ListEntityType } from "../model/list";
@@ -32,7 +32,7 @@ export const useListManagerViewModel = () => {
     setCurrentUserLists,
     setCurrentList,
   } = useContext(GlobalListContext);
-  const { currency, productIds } = useContext(GlobalProductsContext);
+  const { currency } = useContext(GlobalProductsContext);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -87,22 +87,19 @@ export const useListManagerViewModel = () => {
   const generatePdf = async (listName: string, html: string) => {
     try {
       setLoading(true);
-      const file = await printToFileAsync({
+
+      const safeName = `lista_${listName
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/gi, "")}_${Date.now()}.pdf`;
+
+      const pdfFile = await printToFileAsync({
         html,
         base64: false,
       });
 
-      const pdfName = `${file.uri.slice(
-        0,
-        file.uri.lastIndexOf("/") + 1,
-      )}lista_${listName.toLowerCase().replace(/[^a-zA-Z0-9_]/g, "")}.pdf`;
-
-      await FileSystem.moveAsync({
-        from: file.uri,
-        to: pdfName,
+      await shareAsync(pdfFile.uri, {
+        mimeType: "application/pdf",
       });
-
-      await shareAsync(pdfName);
     } catch (error) {
       Alert.alert("Oops!", `Não foi possível gerar o PDF da lista: ${error}`);
     } finally {
