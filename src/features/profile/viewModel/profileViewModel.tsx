@@ -2,16 +2,23 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import { updateUserProfile } from "@/src/services/firebase/auth";
+import {
+  updateUserProfile,
+  deleteUserData,
+} from "@/src/services/firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 import { FeatherIconName } from "@/@types/icons";
 import { DynamicFormFiedls } from "@/src/components/dynamicForm";
 import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
+import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
+import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
 
 export const useUpdateProfileViewModel = () => {
+  const { handleLogoutUser } = useLogoutCurrentUser();
   const { t } = useTranslation();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
+  const { currentSubscription } = useContext(GlobalSubscriptionContext);
   const [loading, setLoading] = useState(false);
   const fileMaxSize = 300;
   const [formFields, setFormFields] = useState<DynamicFormFiedls[] | []>([]);
@@ -20,7 +27,7 @@ export const useUpdateProfileViewModel = () => {
   const handleImageUpload = async (fileLocalPath: string) => {
     try {
       const reference = storage().ref(
-        `user_uploads/${currentUser?.user.uid}/profile_image_${currentUser?.user.uid}.png`
+        `user_uploads/${currentUser?.user.uid}/profile_image_${currentUser?.user.uid}.png`,
       );
 
       await reference.putFile(fileLocalPath);
@@ -46,7 +53,7 @@ export const useUpdateProfileViewModel = () => {
       ) {
         Alert.alert(
           t("file_not_sent"),
-          t("file_max_size_warning", { file_size: `${fileMaxSize}kb` })
+          t("file_max_size_warning", { file_size: `${fileMaxSize}kb` }),
         );
         return;
       }
@@ -57,7 +64,7 @@ export const useUpdateProfileViewModel = () => {
 
   const handleUpdate = async (
     displayName: string,
-    localPhotoURL: string | null
+    localPhotoURL: string | null,
   ) => {
     setLoading(true);
     let photoURL = null;
@@ -72,7 +79,7 @@ export const useUpdateProfileViewModel = () => {
       const response = await updateUserProfile(
         currentUser.user,
         displayName,
-        photoURL
+        photoURL,
       );
 
       if (response) {
@@ -95,6 +102,34 @@ export const useUpdateProfileViewModel = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      setLoading(true);
+      const result = await deleteUserData(
+        currentUser?.user.uid ?? "",
+        currentSubscription?.purchaseToken || "",
+      );
+      if (result.status === 200) {
+        Alert.alert(t("success"), t("account_deleted"), [
+          {
+            text: t("logout"),
+            onPress: () => handleLogoutUser(),
+          },
+        ]);
+      } else {
+        throw new Error(t("account_deletion_error"));
+      }
+    } catch (e) {
+      Alert.alert(t("error"), t("account_deletion_error"), [
+        {
+          text: t("back"),
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const confirmResetPassword = () => {
     Alert.alert(t("warning"), t("password_reset_email_sent"), [
       {
@@ -103,6 +138,18 @@ export const useUpdateProfileViewModel = () => {
       {
         text: t("continue"),
         onPress: () => handlePasswordReset(currentUser?.user.email ?? ""),
+      },
+    ]);
+  };
+
+  const confirmDeleteAccount = () => {
+    Alert.alert(t("warning"), t("delete_account_warning"), [
+      {
+        text: t("cancel"),
+      },
+      {
+        text: t("continue"),
+        onPress: () => handleDeleteAccount(),
       },
     ]);
   };
@@ -132,5 +179,6 @@ export const useUpdateProfileViewModel = () => {
     fileMaxSize,
     formFields,
     confirmResetPassword,
+    confirmDeleteAccount,
   };
 };

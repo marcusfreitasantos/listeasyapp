@@ -3,15 +3,13 @@ import { GlobalUserContext } from "@/src/context/userContext";
 import * as S from "./styles";
 import { KeyboardAvoidingView, Platform, Pressable, Alert } from "react-native";
 import { DynamicForm } from "@/src/components/dynamicForm";
-import { useTheme } from "styled-components/native";
-import { useUpdateProfileViewModel } from "../viewModel/useUpdateProfile";
+import { useUpdateProfileViewModel } from "../viewModel/profileViewModel";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { useTranslation } from "react-i18next";
 
 export const ProfileView = () => {
   const { t } = useTranslation();
   const { currentUser } = useContext(GlobalUserContext);
-  const theme = useTheme();
   const {
     loading,
     handleUpdate,
@@ -19,9 +17,10 @@ export const ProfileView = () => {
     fileMaxSize,
     formFields,
     confirmResetPassword,
+    confirmDeleteAccount,
   } = useUpdateProfileViewModel();
   const [localPhotoUrl, setLocalPhotoUrl] = useState(
-    currentUser?.user.photoURL ?? null
+    currentUser?.user.photoURL ?? null,
   );
 
   const onSubmit = (data: Record<string, string>) => {
@@ -69,14 +68,18 @@ export const ProfileView = () => {
                 submitBtnText={t("send")}
               />
             )}
+
+            <Pressable onPress={confirmResetPassword}>
+              <S.ContentText>{t("reset_password")}?</S.ContentText>
+            </Pressable>
           </>
         )}
 
-        {!loading && (
-          <Pressable onPress={confirmResetPassword}>
-            <S.ContentText>{t("reset_password")}?</S.ContentText>
+        <S.DeleteAccountBtnWrapper>
+          <Pressable onPress={confirmDeleteAccount}>
+            <S.ContentText>{t("delete_account")}?</S.ContentText>
           </Pressable>
-        )}
+        </S.DeleteAccountBtnWrapper>
       </S.Container>
     </KeyboardAvoidingView>
   );

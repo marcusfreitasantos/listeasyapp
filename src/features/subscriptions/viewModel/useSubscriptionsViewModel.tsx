@@ -10,7 +10,7 @@ import {
 import { useIAP, ErrorCode, PurchaseAndroid } from "expo-iap";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
-import { validatePurchaseToken } from "@/src/services/playBilling/purchase";
+import { validatePurchaseToken } from "@/src/services/api/purchase";
 import { useTranslation } from "react-i18next";
 
 export const useSubscriptionsViewModel = () => {
@@ -18,7 +18,7 @@ export const useSubscriptionsViewModel = () => {
   const { currentProducts, productIds } = useContext(GlobalProductsContext);
   const { currentUser } = useContext(GlobalUserContext);
   const { currentSubscription, setCurrentSubscription } = useContext(
-    GlobalSubscriptionContext
+    GlobalSubscriptionContext,
   );
   const [loading, setLoading] = useState(false);
 
@@ -58,9 +58,8 @@ export const useSubscriptionsViewModel = () => {
 
   const checkSubscriptionExists = async (purchaseToken: string) => {
     try {
-      const subscriptionFound = await getSubscriptionByPurchaseToken(
-        purchaseToken
-      );
+      const subscriptionFound =
+        await getSubscriptionByPurchaseToken(purchaseToken);
       return subscriptionFound;
     } catch (err) {
       console.log(err);
@@ -70,7 +69,7 @@ export const useSubscriptionsViewModel = () => {
   const showSuccessMessage = (productId: string) => {
     Alert.alert(
       t("great"),
-      t("subscription_activated", { product_id: productId })
+      t("subscription_activated", { product_id: productId }),
     );
     setLoading(false);
   };
@@ -78,7 +77,7 @@ export const useSubscriptionsViewModel = () => {
   const updateSubscriptionInFirebase = async (
     productId: string,
     purchaseId: string,
-    purchaseToken: string
+    purchaseToken: string,
   ) => {
     try {
       if (!productId || !currentSubscription?.purchaseToken)
@@ -110,7 +109,7 @@ export const useSubscriptionsViewModel = () => {
       }
 
       const newSubscription = subscriptions.find(
-        (sub) => sub.id === newSubscriptionId
+        (sub) => sub.id === newSubscriptionId,
       );
       if (!newSubscription) {
         throw new Error(t("new_subs_product_not_found"));
@@ -148,7 +147,7 @@ export const useSubscriptionsViewModel = () => {
   const insertSubscriptionInFirebase = async (
     productId: string,
     purchaseId: string,
-    purchaseToken: string
+    purchaseToken: string,
   ) => {
     try {
       if (!productId || !currentUser?.user.email)
@@ -172,7 +171,7 @@ export const useSubscriptionsViewModel = () => {
         newSubscription.status,
         newSubscription.platform,
         newSubscription.purchaseId,
-        newSubscription.purchaseToken
+        newSubscription.purchaseToken,
       );
 
       setCurrentSubscription({ id: insertedSubscription, ...newSubscription });
@@ -190,7 +189,7 @@ export const useSubscriptionsViewModel = () => {
       if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
 
       const validationResult = await validatePurchaseToken(
-        purchase.purchaseToken
+        purchase.purchaseToken,
       );
 
       if (validationResult.isValid) {
@@ -205,17 +204,17 @@ export const useSubscriptionsViewModel = () => {
           await updateSubscriptionInFirebase(
             purchase.productId,
             purchase.id,
-            purchase.purchaseToken
+            purchase.purchaseToken,
           );
         } else {
           const subscriptionExist = await checkSubscriptionExists(
-            purchase.purchaseToken
+            purchase.purchaseToken,
           );
           if (!subscriptionExist) {
             await insertSubscriptionInFirebase(
               purchase.productId,
               purchase.id,
-              purchase.purchaseToken
+              purchase.purchaseToken,
             );
           }
         }
