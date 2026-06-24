@@ -6,7 +6,7 @@ import {
 
 const productsFallback: ProductEntity[] = [
   {
-    amount: 799,
+    amount: 690,
     currency: "BRL",
     description:
       "Ideal for those who want more focus on their lists, without interruptions.",

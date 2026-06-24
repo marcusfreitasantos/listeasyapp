@@ -135,5 +135,9 @@
   "optional_subscription": "Optional subscription to access premium features.",
   "cancel_anytime": "Cancel anytime on {{platform}}.",
   "payment_through_platform": "Payment will be charged to your {{platform}} account.",
-  "unknown_platform": "Unknown platform"
+  "unknown_platform": "Unknown platform",
+  "delete_account": "Delete account",
+  "delete_account_warning": "Your account will be deleted permanently. All data will be lost and cannot be recovered. Do you want to continue?",
+  "account_deleted": "Your account has been deleted successfully.",
+  "account_deletion_error": "We were unable to delete your account. Please try again later."
 }

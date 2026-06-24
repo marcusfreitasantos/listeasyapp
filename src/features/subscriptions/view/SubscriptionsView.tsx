@@ -26,6 +26,9 @@ export const SubscriptionsView = () => {
             <FlatList
               keyExtractor={(item) => item.productId}
               data={currentProducts?.reverse()}
+              ListEmptyComponent={
+                <ListEmpty title="Nenhuma assinatura encontrada" />
+              }
               renderItem={({ item }) => (
                 <ProductCard
                   productData={item}

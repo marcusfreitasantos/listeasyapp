@@ -135,5 +135,9 @@
   "optional_subscription": "Assinatura opcional para acessar recursos premium.",
   "cancel_anytime": "Cancele a qualquer momento pelo {{platform}}.",
   "payment_through_platform": "O pagamento será cobrado na sua conta do {{platform}}.",
-  "unknown_platform": "Plataforma desconhecida"
+  "unknown_platform": "Plataforma desconhecida",
+  "delete_account": "Excluir conta",
+  "delete_account_warning": "Sua conta será excluída permanentemente. Todos os dados serão perdidos e não poderão ser recuperados. Deseja continuar?",
+  "account_deleted": "Sua conta foi excluída com sucesso.",
+  "account_deletion_error": "Não foi possível excluir sua conta. Tente novamente mais tarde."
 }

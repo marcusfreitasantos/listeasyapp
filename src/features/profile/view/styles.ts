@@ -56,3 +56,12 @@ export const UserInfoAvatarDefaultContent = styled.Text`
   font-weight: 700;
   color: ${({ theme }) => theme.secondaryColor};
 `;
+
+export const DeleteAccountBtnWrapper = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.secondaryColor};
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: ${({ theme }) => theme.defaultSizes.medium};
+  opacity: 0.5;
+`;
