@@ -4,6 +4,18 @@ import {
   ProductEntity,
 } from "../features/subscriptions/model/product";
 
+const productsFallback: ProductEntity[] = [
+  {
+    amount: 690,
+    currency: "BRL",
+    description:
+      "Ideal for those who want more focus on their lists, without interruptions.",
+    interval: "month",
+    name: "Essential",
+    productId: "plan_essencial",
+  },
+];
+
 export const GlobalProductsContext = createContext<ProductsContextType>({
   currentProducts: null,
   setCurrentProducts: () => null,
@@ -15,7 +27,7 @@ export const GlobalProductsContext = createContext<ProductsContextType>({
 const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentProducts, setCurrentProducts] = useState<
     ProductEntity[] | null
-  >(null);
+  >(productsFallback);
 
   const [currency, setCurrency] = useState<string | null>("BRL");
 

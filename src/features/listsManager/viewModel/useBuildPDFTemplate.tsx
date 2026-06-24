@@ -1,6 +1,5 @@
 import { useTheme } from "styled-components/native";
 import { ListItemType } from "../model/list";
-import { centsToReais } from "@/src/utils/convertCurrency";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import { GlobalProductsContext } from "@/src/context/productsContext";
@@ -17,82 +16,88 @@ export const useBuildPDFTemplate = () => {
     listTotalPrice: number,
   ) => {
     const html = `
-      <html>
-          <body>
-  
-            <style>
-                body{
-                    margin: 0;
-                    padding: 0;
-                }
-                .pdf__container{
-                  display: flex;
-                  flex-direction: column;
-                  justify-content: space-between;
-                  height: 100%;
-                }
-                .pdf__content{
-                  padding: 15px;
-                }
-                .pdf__header{
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-between;
-                    background-color: ${theme.secondaryColor};
-                    padding: 15px;
-                    margin-bottom: 20px;
-                }
-                .pdf__header h1{
-                    font-size: 24px;
-                    color: ${theme.primaryColor};
-                    text-align: right;
-                    margin: 0;
-                }
-                .pdf__content h2{
-                    font-size: 20px;
-                    color: ${theme.textColor};
-                    font-weight: bold;
-                }
-                .pdf__item_wrapper{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    background-color: ${theme.secondaryColor};
-                    margin: 5px 0;
-                    border-radius: ${theme.defaultBorderRadius};
-                    overflow: hidden;
-                }
-                .pdf__item_title{
-                    font-size: 14px;
-                    color: ${theme.fourthColor};
-                    font-weight: 400;
-                    flex: 1;
-                    padding: 15px;
-                }
-                .pdf__item_price{
-                    font-size: 14px;
-                    color: ${theme.primaryColor};
-                    background-color: ${theme.secondaryColor};
-                    font-weight: bold;
-                    padding: 15px;
-                    width: 20%;
-                    text-align: right;  
-                }
-                footer{
-                    background-color: ${theme.secondaryColor};
-                    padding: 15px;  
-                    color: ${theme.fourthColor};
-                    font-size: 12px;
-                    text-align: center;
-                }
-                footer a{
-                    text-decoration: none;
-                    color: ${theme.primaryColor};
-                    font-size: 12px;
-                    text-align: center;
-                }
-            </style>
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+        <head>
+          <meta charset="utf-8" />
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: Arial, sans-serif;
+              -webkit-print-color-adjust: exact;
+              color-adjust: exact;
+              box-sizing: border-box;
+            }
+            .pdf__container {
+              width: 100%;
+              padding: 0;
+              margin: 0;
+            }
+            .pdf__header {
+              background-color: ${theme.secondaryColor};
+              padding: 15px;
+              margin-bottom: 20px;
+            }
+            .pdf__header h1 {
+              font-size: 24px;
+              color: ${theme.primaryColor};
+              text-align: right;
+              margin: 0;
+            }
+            .pdf__content {
+              padding: 15px;
+            }
+            .pdf__content h2 {
+              font-size: 20px;
+              color: ${theme.textColor};
+              font-weight: bold;
+              margin: 0 0 10px 0;
+            }
+            .pdf__item_table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 0;
+              border-spacing: 0;
+            }
+            .pdf__item_row {
+              background-color: ${theme.secondaryColor};
+            }
+            .pdf__item_table td {
+              padding: 15px;
+              font-size: 14px;
+              vertical-align: top;
+              border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            }
+            .pdf__item_table tr:last-child td {
+              border-bottom: none;
+            }
+            .pdf__item_title {
+              color: ${theme.fourthColor};
+              font-weight: 400;
+              width: 80%;
+            }
+            .pdf__item_price {
+              color: ${theme.primaryColor};
+              font-weight: bold;
+              text-align: right;
+              width: 20%;
+            }
+            footer {
+              background-color: ${theme.secondaryColor};
+              padding: 15px;
+              color: ${theme.fourthColor};
+              font-size: 12px;
+              text-align: center;
+            }
+            footer a {
+              text-decoration: none;
+              color: ${theme.primaryColor};
+              font-size: 12px;
+            }
+          </style>
+        </head>
+        <body>
   
             <div class="pdf__container">
                 <div class="pdf__header">
@@ -114,33 +119,31 @@ export const useBuildPDFTemplate = () => {
                 
                 <div class="pdf__content">
                     <h2>${t("items_list")}</h2>
-
-                      ${itemsList
-                        ?.map(
-                          (item) =>
-                            `<div class="pdf__item_wrapper">
-                              <span class="pdf__item_title">${
-                                item.name
-                              }</span>                        
-                              <span class="pdf__item_price">${formatPriceWithCurrency(
-                                item.price,
-                                currency,
-                              )}</span>
-                          </div>`,
-                        )
-                        .join("")}   
-                    
-                      <div class="pdf__item_wrapper">
-                          <span class="pdf__item_title">Total:</span>                        
-                          <span class="pdf__item_price">${formatPriceWithCurrency(
+                    <table class="pdf__item_table" width="100%">
+                      <tbody>
+                        ${itemsList
+                          ?.map(
+                            (item) =>
+                              `<tr class="pdf__item_row">
+                                <td class="pdf__item_title" width="80%">${item.name}</td>
+                                <td class="pdf__item_price" width="20%">${formatPriceWithCurrency(
+                                  item.price,
+                                  currency,
+                                )}</td>
+                              </tr>`,
+                          )
+                          .join("")}
+                        <tr class="pdf__item_row">
+                          <td class="pdf__item_title" width="80%" style="font-weight: 700;">Total:</td>
+                          <td class="pdf__item_price" width="20%">${formatPriceWithCurrency(
                             listTotalPrice,
                             currency,
-                          )}</span>
-                      </div>
+                          )}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                 </div>
-  
-                <div style="flex: 1"></div>
-  
+
                 <footer>
                     <a href="https://play.google.com/store/apps/details?id=com.penpack.listeasy">${t(
                       "available_for_android",
