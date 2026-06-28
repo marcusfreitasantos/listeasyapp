@@ -13,6 +13,7 @@ import { useIAP } from "expo-iap";
 import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { ProductEntity } from "@/src/features/subscriptions/model/product";
+import { getCurrencyCodeFromIcuLocale } from "@/src/utils/getCurrencyCodeFromIcuLocale";
 
 const SignIn = () => {
   const router = useRouter();
@@ -85,18 +86,34 @@ const SignIn = () => {
   useEffect(() => {
     if (subscriptions.length) {
       const fetchedProducts = subscriptions.map((sub) => {
+        const subscriptionData = {
+          productId: sub.id,
+          name: sub.displayName ?? sub.title,
+          description: sub.description,
+          amount: reaisToCents(Number(sub.price)),
+          currency: sub.currency,
+        };
         if ("subscriptionOfferDetailsAndroid" in sub) {
           return {
-            productId: sub.id,
-            name: sub.displayName ?? sub.title,
-            description: sub.description,
-            amount: reaisToCents(Number(sub.price)),
-            currency: sub.currency,
+            ...subscriptionData,
             interval: parseBillingPeriod(
               sub.subscriptionOfferDetailsAndroid[0].pricingPhases
                 .pricingPhaseList[0].billingPeriod,
             ),
           } as ProductEntity;
+        } else if ("subscriptionInfoIOS" in sub) {
+          const iosJson = JSON.parse(sub.jsonRepresentationIOS ?? "{}");
+          const currency = getCurrencyCodeFromIcuLocale(
+            iosJson?.attributes?.icuLocale,
+          );
+
+          return {
+            ...subscriptionData,
+            currency: currency ?? subscriptionData.currency,
+            interval: sub.subscriptionInfoIOS?.subscriptionPeriod.unit,
+          } as ProductEntity;
+        } else {
+          return subscriptionData as ProductEntity;
         }
       });
 

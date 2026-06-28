@@ -1,7 +1,7 @@
 import { ExpoConfig } from "@expo/config";
 const appVersion = "4.2.0";
 const bgColor = "#222222";
-const isLocal = false;
+const isLocal = true;
 
 const config: ExpoConfig = {
   name: "List Easy",
