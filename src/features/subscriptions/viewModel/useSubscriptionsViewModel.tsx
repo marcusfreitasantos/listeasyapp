@@ -7,10 +7,13 @@ import {
   switchSubscription,
   getSubscriptionByPurchaseToken,
 } from "@/src/services/firebase/subscriptions";
-import { useIAP, ErrorCode, PurchaseAndroid } from "expo-iap";
+import { useIAP, ErrorCode, PurchaseAndroid, PurchaseIOS } from "expo-iap";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
-import { validatePurchaseToken } from "@/src/services/api/purchase";
+import {
+  validatePurchaseTokenFromGooglePlay,
+  validatePurchaseFromAppStore,
+} from "@/src/services/api/purchase";
 import { useTranslation } from "react-i18next";
 
 export const useSubscriptionsViewModel = () => {
@@ -182,15 +185,29 @@ export const useSubscriptionsViewModel = () => {
     }
   };
 
-  const handlePurchaseUpdate = async (purchase: PurchaseAndroid) => {
+  const validatePurchaseBasedOnPlatform = async (
+    purchase: PurchaseAndroid | PurchaseIOS,
+  ) => {
+    if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
+
+    if (Platform.OS === "android") {
+      return await validatePurchaseTokenFromGooglePlay(purchase.purchaseToken);
+    } else if (Platform.OS === "ios") {
+      return await validatePurchaseFromAppStore(purchase.purchaseToken);
+    } else {
+      return null;
+    }
+  };
+
+  const handlePurchaseUpdate = async (
+    purchase: PurchaseAndroid | PurchaseIOS,
+  ) => {
     try {
       setLoading(true);
 
       if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
 
-      const validationResult = await validatePurchaseToken(
-        purchase.purchaseToken,
-      );
+      const validationResult = await validatePurchaseBasedOnPlatform(purchase);
 
       if (validationResult.isValid) {
         await finishTransaction({
@@ -253,18 +270,34 @@ export const useSubscriptionsViewModel = () => {
 
         const subscription = subscriptions.find((s) => s.id === subscriptionId);
 
-        if (subscription && "subscriptionOfferDetailsAndroid" in subscription) {
-          const subscriptionOffers =
-            subscription?.subscriptionOfferDetailsAndroid?.map((offer) => ({
-              sku: subscriptionId,
-              offerToken: offer.offerToken,
-            })) || [{ sku: subscriptionId, offerToken: "" }];
+        if (!subscription) throw new Error(t("subscription_not_found"));
 
+        if (Platform.OS === "ios") {
           await requestPurchase({
             request: {
               ios: {
                 sku: subscriptionId,
               },
+            },
+            type: "subs",
+          });
+        } else if (Platform.OS === "android") {
+          let subscriptionOffers = [{ sku: subscriptionId, offerToken: "" }];
+
+          if (!("subscriptionOfferDetailsAndroid" in subscription)) {
+            throw new Error(t("subscription_not_found"));
+          }
+
+          if ("subscriptionOfferDetailsAndroid" in subscription) {
+            subscriptionOffers =
+              subscription?.subscriptionOfferDetailsAndroid?.map((offer) => ({
+                sku: subscriptionId,
+                offerToken: offer.offerToken,
+              })) || [{ sku: subscriptionId, offerToken: "" }];
+          }
+
+          await requestPurchase({
+            request: {
               android: {
                 skus: [subscriptionId],
                 subscriptionOffers,
@@ -272,6 +305,8 @@ export const useSubscriptionsViewModel = () => {
             },
             type: "subs",
           });
+        } else {
+          throw new Error(t("unsupported_platform"));
         }
       } catch (error) {
         setLoading(false);
@@ -287,7 +322,10 @@ export const useSubscriptionsViewModel = () => {
       Platform.OS === "android"
         ? Constants.expoConfig?.android?.package
         : Constants.expoConfig?.ios?.bundleIdentifier;
-    const url = `https://play.google.com/store/account/subscriptions?package=${packageName}`;
+    const url =
+      Platform.OS === "android"
+        ? `https://play.google.com/store/account/subscriptions?package=${packageName}`
+        : `https://apps.apple.com/account/subscriptions`;
     Linking.openURL(url);
   };
 

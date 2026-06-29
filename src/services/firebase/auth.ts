@@ -13,6 +13,10 @@ import {
 import { getApp } from "@react-native-firebase/app";
 import axios from "axios";
 import Constants from "expo-constants";
+import { Platform } from "react-native";
+
+const devBaseUrl =
+  Platform.OS === "android" ? "http://10.0.2.2:5001" : "http://127.0.0.1:5001";
 
 const firebaseAuth = getAuth(getApp());
 
@@ -172,15 +176,18 @@ export const getUserByEmail = async (email: string) => {
   }
 
   try {
-    const response = await axios.get(
-      "https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app/",
-      {
-        params: { user_email: email },
-        headers: {
-          "x-api-key": listEasyApiKey,
-        },
+    const getUserByEmailUrl = __DEV__
+      ? `${devBaseUrl}/list-easy-41446/us-central1/getUserByEmailInFirebaseAuth`
+      : "https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app";
+
+    console.log("getUserByEmailUrl___", getUserByEmailUrl);
+
+    const response = await axios.get(getUserByEmailUrl, {
+      params: { user_email: email },
+      headers: {
+        "x-api-key": listEasyApiKey,
       },
-    );
+    });
 
     return response.data;
   } catch {
@@ -188,12 +195,12 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-const deleteUserDataUrl = __DEV__
-  ? "http://127.0.0.1:5001/list-easy-41446/us-central1/deleteUserData"
-  : "https://deleteuserdata-ttyxjwblsa-uc.a.run.app";
-
 export const deleteUserData = async (userId: string, purchaseToken: string) => {
   try {
+    const deleteUserDataUrl = __DEV__
+      ? `${devBaseUrl}/list-easy-41446/us-central1/deleteUserData`
+      : "https://deleteuserdata-ttyxjwblsa-uc.a.run.app";
+
     if (!listEasyApiKey) {
       throw new Error("No API key found");
     }

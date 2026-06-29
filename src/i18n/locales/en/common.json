@@ -139,5 +139,7 @@
   "delete_account": "Delete account",
   "delete_account_warning": "Your account will be deleted permanently. All data will be lost and cannot be recovered. Do you want to continue?",
   "account_deleted": "Your account has been deleted successfully.",
-  "account_deletion_error": "We were unable to delete your account. Please try again later."
+  "account_deletion_error": "We were unable to delete your account. Please try again later.",
+  "subscription_not_found": "Subscription not found.",
+  "unsupported_platform": "Unsupported Platform."
 }
