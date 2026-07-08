@@ -65,7 +65,7 @@ export const useSubscriptionsViewModel = () => {
         await getSubscriptionByPurchaseToken(purchaseToken);
       return subscriptionFound;
     } catch (err) {
-      console.log(err);
+      console.log("checkSubscriptionExists", err);
     }
   };
 
@@ -220,7 +220,7 @@ export const useSubscriptionsViewModel = () => {
         ) {
           await updateSubscriptionInFirebase(
             purchase.productId,
-            purchase.id,
+            purchase.id || purchase.transactionId || "",
             purchase.purchaseToken,
           );
         } else {
@@ -230,7 +230,7 @@ export const useSubscriptionsViewModel = () => {
           if (!subscriptionExist) {
             await insertSubscriptionInFirebase(
               purchase.productId,
-              purchase.id,
+              purchase.id || purchase.transactionId || "",
               purchase.purchaseToken,
             );
           }

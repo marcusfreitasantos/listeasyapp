@@ -1,5 +1,8 @@
 import axios from "axios";
 import { Platform } from "react-native";
+import Constants from "expo-constants";
+
+const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 
 const devBaseUrl =
   Platform.OS === "android" ? "http://10.0.2.2:5001" : "http://127.0.0.1:5001";
@@ -12,9 +15,17 @@ export const validatePurchaseTokenFromGooglePlay = async (
   purchaseToken: string,
 ) => {
   try {
-    const validPurchase = await axios.post(validatePurchaseUrlGooglePlay, {
-      purchaseToken,
-    });
+    const validPurchase = await axios.post(
+      validatePurchaseUrlGooglePlay,
+      {
+        purchaseToken,
+      },
+      {
+        headers: {
+          "x-api-key": listEasyApiKey,
+        },
+      },
+    );
 
     return validPurchase.data;
   } catch (error) {
@@ -22,16 +33,22 @@ export const validatePurchaseTokenFromGooglePlay = async (
   }
 };
 
-const validatePurchaseUrlAppStore = __DEV__
-  ? `${devBaseUrl}/list-easy-41446/us-central1/validatePurchaseFromAppStore`
-  : "https://validatePurchaseFromAppStore-ttyxjwblsa-uc.a.run.app";
+const validatePurchaseUrlAppStore =
+  "https://validatePurchaseFromAppStore-ttyxjwblsa-uc.a.run.app";
 
 export const validatePurchaseFromAppStore = async (purchaseToken: string) => {
   try {
-    console.log("purchasetoken", purchaseToken);
-    const validPurchase = await axios.post(validatePurchaseUrlAppStore, {
-      purchaseToken,
-    });
+    const validPurchase = await axios.post(
+      validatePurchaseUrlAppStore,
+      {
+        purchaseToken,
+      },
+      {
+        headers: {
+          "x-api-key": listEasyApiKey,
+        },
+      },
+    );
 
     return validPurchase.data;
   } catch (error) {

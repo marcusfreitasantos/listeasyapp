@@ -23,7 +23,7 @@ export const insertNewSubscription = async (
   status: "active" | "inactive",
   platform: PlatformOSType,
   purchaseId: string,
-  purchaseToken: string
+  purchaseToken: string,
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
@@ -45,7 +45,7 @@ export const insertNewSubscription = async (
 };
 
 export const switchSubscription = async (
-  currentSubscription: SubscriptionEntity
+  currentSubscription: SubscriptionEntity,
 ) => {
   try {
     const listRef = doc(subsCollection, currentSubscription.id);
@@ -67,7 +67,7 @@ export const getSubscriptionByUserId = async (userId: string) => {
         ({
           id: doc.ref.id,
           ...doc.data(),
-        } as SubscriptionEntity)
+        }) as SubscriptionEntity,
     );
   } catch (error) {
     console.log(error);
@@ -77,22 +77,23 @@ export const getSubscriptionByUserId = async (userId: string) => {
 
 export const getSubscriptionByPurchaseToken = async (purchaseToken: string) => {
   try {
+    console.log("getSubscriptionByPurchaseToken", purchaseToken);
     const queryCommand = query(
       subsCollection,
-      where("purchaseToken", "==", purchaseToken)
+      where("purchaseToken", "==", purchaseToken),
     );
     const querySnapshot = await getDocs(queryCommand);
 
+    console.log("getSubscriptionByPurchaseToken", querySnapshot.docs);
     return querySnapshot.docs.map(
       (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
         ({
           id: doc.ref.id,
           ...doc.data(),
-        } as SubscriptionEntity)
+        }) as SubscriptionEntity,
     )[0];
   } catch (error) {
-    console.log(error);
-    throw new Error(`Error fetching subscription by userId: ${error}`);
+    throw new Error(`Error fetching subscription by purchaseToken: ${error}`);
   }
 };
 
@@ -100,7 +101,7 @@ export const getSubscriptionByUserEmail = async (userEmail: string) => {
   try {
     const queryCommand = query(
       subsCollection,
-      where("userEmail", "==", userEmail)
+      where("userEmail", "==", userEmail),
     );
     const querySnapshot = await getDocs(queryCommand);
 
@@ -109,10 +110,10 @@ export const getSubscriptionByUserEmail = async (userEmail: string) => {
         ({
           id: doc.ref.id,
           ...doc.data(),
-        } as SubscriptionEntity)
+        }) as SubscriptionEntity,
     );
   } catch (error) {
     console.log(error);
-    throw new Error(`Error fetching subscription by userId: ${error}`);
+    throw new Error(`Error fetching subscription by userEmail: ${error}`);
   }
 };

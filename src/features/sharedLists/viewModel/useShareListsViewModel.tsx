@@ -11,7 +11,7 @@ import { updateInvite } from "@/src/services/firebase/invitations";
 import { useListManagerViewModel } from "../../listsManager/viewModel/useListManagerViewModel";
 import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
-import { getUserByEmail } from "@/src/services/firebase/auth";
+import { getUserByEmail } from "@/src/services/api/user";
 import { useTranslation } from "react-i18next";
 
 export const useShareListsViewModel = () => {
@@ -50,7 +50,7 @@ export const useShareListsViewModel = () => {
 
   const addColaboratorToCurrentList = async (
     invitedUser: InvitedUserEntity,
-    listId: string
+    listId: string,
   ) => {
     try {
       setLoading(true);
@@ -80,7 +80,7 @@ export const useShareListsViewModel = () => {
 
   const removeColaboratorsFromCurrentList = async (
     invitedUser: InvitedUserEntity,
-    listToUpdate = currentList
+    listToUpdate = currentList,
   ) => {
     try {
       setLoading(true);
@@ -93,11 +93,11 @@ export const useShareListsViewModel = () => {
       const updatedList = {
         ...listToUpdate,
         colaboratorsIds: listToUpdate.colaboratorsIds?.filter(
-          (colaboratorId) => colaboratorId !== invitedUser.userId
+          (colaboratorId) => colaboratorId !== invitedUser.userId,
         ),
         colaborators: [
           ...currentListColaborators.filter(
-            (colaborator) => colaborator.userId !== invitedUser.userId
+            (colaborator) => colaborator.userId !== invitedUser.userId,
           ),
         ],
       };
@@ -113,7 +113,7 @@ export const useShareListsViewModel = () => {
   };
 
   const handleAddColaboratorToCurrentList = async (
-    invitedUser: InvitedUserEntity
+    invitedUser: InvitedUserEntity,
   ) => {
     const inviteObj: InviteEntity = {
       userEmail: invitedUser.userEmail,
@@ -150,13 +150,13 @@ export const useShareListsViewModel = () => {
             }
           },
         },
-      ]
+      ],
     );
   };
 
   const handleRemoveColaboratorFromCurrentList = async (
     invitedUser: InvitedUserEntity,
-    list: ListEntityType
+    list: ListEntityType,
   ) => {
     const alertMsg =
       invitedUser.userId === currentUser?.user.uid
@@ -207,7 +207,7 @@ export const useShareListsViewModel = () => {
             userName: currentUser.user.displayName ?? "",
             userEmail: currentUser.user.email ?? "",
           },
-          invite.list.id
+          invite.list.id,
         );
       }
     } catch (e) {
@@ -263,7 +263,7 @@ export const useShareListsViewModel = () => {
       Alert.alert(
         t("error"),
         `${t("error_creating_invite")}. \n ${e}
-        )}`
+        )}`,
       );
     } finally {
       setLoading(false);
