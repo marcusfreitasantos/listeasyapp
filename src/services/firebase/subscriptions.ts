@@ -77,14 +77,12 @@ export const getSubscriptionByUserId = async (userId: string) => {
 
 export const getSubscriptionByPurchaseToken = async (purchaseToken: string) => {
   try {
-    console.log("getSubscriptionByPurchaseToken", purchaseToken);
     const queryCommand = query(
       subsCollection,
       where("purchaseToken", "==", purchaseToken),
     );
     const querySnapshot = await getDocs(queryCommand);
 
-    console.log("getSubscriptionByPurchaseToken", querySnapshot.docs);
     return querySnapshot.docs.map(
       (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<SubscriptionEntity>) =>
         ({
