@@ -31,9 +31,7 @@ export const getUserByEmail = async (email: string) => {
 
 export const deleteUserData = async (userId: string, purchaseToken: string) => {
   try {
-    const deleteUserDataUrl = __DEV__
-      ? `${devBaseUrl}/list-easy-41446/us-central1/deleteUserData`
-      : "https://deleteuserdata-ttyxjwblsa-uc.a.run.app";
+    const deleteUserDataUrl = "https://deleteuserdata-ttyxjwblsa-uc.a.run.app";
 
     if (!listEasyApiKey) {
       throw new Error("No API key found");
