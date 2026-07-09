@@ -10,6 +10,7 @@ type SubscriptionEntity = {
   platform: PlatformOSType;
   purchaseId: string;
   purchaseToken: string;
+  appAccountToken?: string;
 };
 
 type SubscriptionContextType = {

@@ -7,9 +7,8 @@ const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 const devBaseUrl =
   Platform.OS === "android" ? "http://10.0.2.2:5001" : "http://127.0.0.1:5001";
 
-const validatePurchaseUrlGooglePlay = __DEV__
-  ? `${devBaseUrl}/list-easy-41446/us-central1/validatePurchaseTokenFromGooglePlay`
-  : "https://validatepurchasetokenfromgoogleplay-ttyxjwblsa-uc.a.run.app";
+const validatePurchaseUrlGooglePlay =
+  "https://validatepurchasetokenfromgoogleplay-ttyxjwblsa-uc.a.run.app";
 
 export const validatePurchaseTokenFromGooglePlay = async (
   purchaseToken: string,
