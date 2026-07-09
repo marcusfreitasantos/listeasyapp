@@ -2,10 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import { GlobalUserContext } from "@/src/context/userContext";
 import { Alert } from "react-native";
 import storage from "@react-native-firebase/storage";
-import {
-  updateUserProfile,
-  deleteUserData,
-} from "@/src/services/firebase/auth";
+import { updateUserProfile } from "@/src/services/firebase/auth";
+import { deleteUserData } from "@/src/services/api/user";
 import * as ImagePicker from "expo-image-picker";
 import { useTranslation } from "react-i18next";
 import { FeatherIconName } from "@/@types/icons";

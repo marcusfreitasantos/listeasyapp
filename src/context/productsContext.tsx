@@ -1,20 +1,9 @@
 import { createContext, useState, ReactNode, FC } from "react";
+import { Platform } from "react-native";
 import {
   ProductsContextType,
   ProductEntity,
 } from "../features/subscriptions/model/product";
-
-const productsFallback: ProductEntity[] = [
-  {
-    amount: 690,
-    currency: "BRL",
-    description:
-      "Ideal for those who want more focus on their lists, without interruptions.",
-    interval: "month",
-    name: "Essential",
-    productId: "plan_essencial",
-  },
-];
 
 export const GlobalProductsContext = createContext<ProductsContextType>({
   currentProducts: null,
@@ -27,11 +16,12 @@ export const GlobalProductsContext = createContext<ProductsContextType>({
 const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [currentProducts, setCurrentProducts] = useState<
     ProductEntity[] | null
-  >(productsFallback);
+  >(null);
 
   const [currency, setCurrency] = useState<string | null>("BRL");
 
-  const productIds = ["plan_essencial"];
+  const productIds =
+    Platform.OS === "ios" ? ["plan_essencial_month"] : ["plan_essencial"];
 
   return (
     <GlobalProductsContext.Provider

@@ -139,5 +139,7 @@
   "delete_account": "Excluir conta",
   "delete_account_warning": "Sua conta será excluída permanentemente. Todos os dados serão perdidos e não poderão ser recuperados. Deseja continuar?",
   "account_deleted": "Sua conta foi excluída com sucesso.",
-  "account_deletion_error": "Não foi possível excluir sua conta. Tente novamente mais tarde."
+  "account_deletion_error": "Não foi possível excluir sua conta. Tente novamente mais tarde.",
+  "subscription_not_found": "Assinatura não encontrada.",
+  "unsupported_platform": "Plataforma não suportada."
 }

@@ -11,12 +11,8 @@ import {
   EmailAuthProvider,
 } from "@react-native-firebase/auth";
 import { getApp } from "@react-native-firebase/app";
-import axios from "axios";
-import Constants from "expo-constants";
 
 const firebaseAuth = getAuth(getApp());
-
-const listEasyApiKey = Constants.expoConfig?.extra?.listEasyApiKey ?? null;
 
 /* -------------------------------------------------------------------------- */
 /*                              Error Handling                                */
@@ -160,59 +156,4 @@ export const convertAnonymousUser = async (
   }
 
   return firebaseAuth.currentUser;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                Backend API                                  */
-/* -------------------------------------------------------------------------- */
-
-export const getUserByEmail = async (email: string) => {
-  if (!listEasyApiKey) {
-    throw new Error("No API key found");
-  }
-
-  try {
-    const response = await axios.get(
-      "https://getuserbyemailinfirebaseauth-ttyxjwblsa-uc.a.run.app/",
-      {
-        params: { user_email: email },
-        headers: {
-          "x-api-key": listEasyApiKey,
-        },
-      },
-    );
-
-    return response.data;
-  } catch {
-    throw new Error("services.firebase_auth.user_fetch_error");
-  }
-};
-
-const deleteUserDataUrl = __DEV__
-  ? "http://127.0.0.1:5001/list-easy-41446/us-central1/deleteUserData"
-  : "https://deleteuserdata-ttyxjwblsa-uc.a.run.app";
-
-export const deleteUserData = async (userId: string, purchaseToken: string) => {
-  try {
-    if (!listEasyApiKey) {
-      throw new Error("No API key found");
-    }
-
-    const response = await axios.post(
-      deleteUserDataUrl,
-      {
-        userId,
-        purchaseToken,
-      },
-      {
-        headers: {
-          "x-api-key": listEasyApiKey,
-        },
-      },
-    );
-
-    return response;
-  } catch (error) {
-    throw new Error(`Error deleting user data: ${error}`);
-  }
 };
