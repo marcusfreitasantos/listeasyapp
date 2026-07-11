@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { Header } from "@/src/components/header";
 import { DrawerCustomContent } from "@/src/components/drawerCustomContent";
 import { FeatherIconName } from "@/@types/icons";
@@ -13,6 +13,7 @@ export default function Layout() {
   const { currentUser } = useContext(GlobalUserContext);
   const windowWidth = Dimensions.get("window").width;
   const drawerWidth = (windowWidth * 80) / 100;
+  const showSubs = !currentUser?.user.isAnonymous && Platform.OS === "android";
 
   const drawerItems = [
     {
@@ -37,7 +38,7 @@ export default function Layout() {
       route: "subscriptions",
       title: t("subscriptions"),
       iconName: "credit-card" as FeatherIconName,
-      showItem: !currentUser?.user.isAnonymous,
+      showItem: showSubs,
     },
   ];
 
