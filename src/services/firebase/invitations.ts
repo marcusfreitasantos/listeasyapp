@@ -65,6 +65,7 @@ export const getInvitesSentByCurrentUser = async (
     );
     const querySnapshot = await getDocs(queryCommand);
 
+    console.log("querySnapshot.docs: ", querySnapshot.docs);
     return querySnapshot.docs.map(
       (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<InviteEntity>) =>
         ({
