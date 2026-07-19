@@ -59,15 +59,18 @@ export const useInvitationsViewModel = () => {
       setLoadingInvites(true);
       const response = await getInvitesSentByCurrentUser(userId);
 
-      response.forEach((invite) => {
-        const alreadyAdded = currentUserInvites.find(
-          (existingInvite) => existingInvite.id === invite.id,
-        );
-        if (!alreadyAdded)
-          setCurrentUserInvites([...currentUserInvites, invite]);
+      const fetchedInvites = response.filter((invite) => {
+        if (
+          currentUserInvites.some(
+            (existingInvite) => existingInvite.id === invite.id,
+          )
+        )
+          return;
+
+        return invite;
       });
 
-      return response;
+      setCurrentUserInvites([...currentUserInvites, ...fetchedInvites]);
     } catch (error) {
       console.log("Error: ", error);
     } finally {

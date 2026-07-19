@@ -27,7 +27,7 @@ export const TabItem = styled.TouchableOpacity<TabItemProps>`
 export const TabItemText = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.medium};
-  font-weight: 700;
+  font-weight: 400;
   color: ${({ theme }) => theme.primaryColor};
   align-text: center;
 `;
