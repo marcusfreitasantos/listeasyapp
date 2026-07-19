@@ -16,7 +16,8 @@ import { useTranslation } from "react-i18next";
 
 export const useShareListsViewModel = () => {
   const { t } = useTranslation();
-  const { createInvitation, fetchUserInvites } = useInvitationsViewModel();
+  const { createInvitation, fetchInvitesReceivedByCurrentUser } =
+    useInvitationsViewModel();
   const { getUserLists } = useListManagerViewModel();
   const isFocused = useIsFocused();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
@@ -213,7 +214,7 @@ export const useShareListsViewModel = () => {
     } catch (e) {
       Alert.alert(t("error"), `${t("error_accept_invite")}. \n ${e}`);
     } finally {
-      fetchUserInvites(currentUser?.user.email ?? "");
+      fetchInvitesReceivedByCurrentUser(currentUser?.user.email ?? "");
       setLoading(false);
     }
   };

@@ -13,14 +13,8 @@ export const InvitesListTitle = styled.Text`
   flex: 1;
 `;
 
-export const Divisor = styled.View`
-  background-color: ${({ theme }) => theme.fourthColor};
-  padding: 1px 0;
-  border-radius: ${({ theme }) => theme.defaultBorderRadius};
-  margin: ${({ theme }) => theme.defaultSizes.small} 0;
-`;
-
 export const InvitesListHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: ${({ theme }) => theme.defaultSizes.medium};
 `;

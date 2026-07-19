@@ -24,7 +24,7 @@ const SignIn = () => {
     useContext(GlobalProductsContext);
 
   const [initializing, setInitializing] = useState(true);
-  const { fetchUserInvites } = useInvitationsViewModel();
+  const { fetchInvitesReceivedByCurrentUser } = useInvitationsViewModel();
 
   const { connected, fetchProducts, subscriptions } = useIAP();
 
@@ -62,7 +62,9 @@ const SignIn = () => {
   };
 
   const handleUserRedirect = async () => {
-    const invites = await fetchUserInvites(currentUser?.user.email ?? "");
+    const invites = await fetchInvitesReceivedByCurrentUser(
+      currentUser?.user.email ?? "",
+    );
     const subscriptions = await fetchCurrentUserSubscriptions();
 
     if (subscriptions.length) setCurrentSubscription(subscriptions[0]);

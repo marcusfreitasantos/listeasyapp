@@ -15,7 +15,7 @@ import { GlobalUserContext } from "@/src/context/userContext";
 export const useInvitationsViewModel = () => {
   const { t } = useTranslation();
   const { currentUserInvites, setCurrentUserInvites } = useContext(
-    GlobalInvitationsContext
+    GlobalInvitationsContext,
   );
   const { currentUser } = useContext(GlobalUserContext);
   const [loadingInvites, setLoadingInvites] = useState(false);
@@ -33,19 +33,19 @@ export const useInvitationsViewModel = () => {
             onPress: () => router.push("/invitations"),
           },
           { text: t("back") },
-        ]
+        ],
       );
     } catch (error) {
       Alert.alert(t("something_wrong"), `${error}`);
     }
   };
 
-  const fetchUserInvites = async (userEmail: string) => {
+  const fetchInvitesReceivedByCurrentUser = async (userEmail: string) => {
     if (currentUser?.user.isAnonymous) return;
     try {
       const response = await getInvitesByUserEmail(userEmail);
       const sortedInvites = response.filter(
-        (invite) => invite.status === "pending"
+        (invite) => invite.status === "pending",
       );
       if (response.length) setCurrentUserInvites(sortedInvites);
       return sortedInvites;
@@ -59,15 +59,18 @@ export const useInvitationsViewModel = () => {
       setLoadingInvites(true);
       const response = await getInvitesSentByCurrentUser(userId);
 
-      response.forEach((invite) => {
-        const alreadyAdded = currentUserInvites.find(
-          (existingInvite) => existingInvite.id === invite.id
-        );
-        if (!alreadyAdded)
-          setCurrentUserInvites([...currentUserInvites, invite]);
+      const fetchedInvites = response.filter((invite) => {
+        if (
+          currentUserInvites.some(
+            (existingInvite) => existingInvite.id === invite.id,
+          )
+        )
+          return;
+
+        return invite;
       });
 
-      return response;
+      setCurrentUserInvites([...currentUserInvites, ...fetchedInvites]);
     } catch (error) {
       console.log("Error: ", error);
     } finally {
@@ -81,7 +84,7 @@ export const useInvitationsViewModel = () => {
       await removeInviteById(inviteObj.id ?? "");
 
       const updatedInvites = currentUserInvites.filter(
-        (invite) => invite.id !== inviteObj.id
+        (invite) => invite.id !== inviteObj.id,
       );
 
       setCurrentUserInvites(updatedInvites);
@@ -105,13 +108,13 @@ export const useInvitationsViewModel = () => {
           text: t("continue"),
           onPress: () => removeCurrentUserInvitationById(inviteObj),
         },
-      ]
+      ],
     );
   };
 
   return {
     createInvitation,
-    fetchUserInvites,
+    fetchInvitesReceivedByCurrentUser,
     currentUserInvites,
     fetchInvitesSentByCurrentUser,
     handleRemoveCurrentUserInvitation,
