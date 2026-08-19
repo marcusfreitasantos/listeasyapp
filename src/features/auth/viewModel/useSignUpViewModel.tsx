@@ -7,6 +7,10 @@ import { Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useTranslation } from "react-i18next";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useSignUpViewModel = () => {
   const { t } = useTranslation();
@@ -16,7 +20,7 @@ export const useSignUpViewModel = () => {
   const handleSignUp = async (
     email: string,
     password: string,
-    displayName: string
+    displayName: string,
   ) => {
     setLoading(true);
 
@@ -27,7 +31,7 @@ export const useSignUpViewModel = () => {
         registeredUser = await convertAnonymousUser(
           email,
           password,
-          displayName
+          displayName,
         );
       } else {
         registeredUser = (await registerUser(email, password, displayName))
@@ -37,6 +41,10 @@ export const useSignUpViewModel = () => {
       if (!registeredUser?.uid) {
         throw new Error(t("unable_to_create_account"));
       }
+      await logAnalyticsEvent("sign_up", {
+        method: "email",
+        converted_from_anonymous: Boolean(isAnonymous),
+      });
       Alert.alert(t("great"), t("account_created"), [
         {
           text: t("login"),
@@ -44,6 +52,10 @@ export const useSignUpViewModel = () => {
         },
       ]);
     } catch (error: any) {
+      await logHandledError("sign_up", error, {
+        method: "email",
+        converted_from_anonymous: Boolean(isAnonymous),
+      });
       Alert.alert(t("something_wrong"), `${error}`);
     } finally {
       setLoading(false);

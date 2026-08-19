@@ -13,6 +13,10 @@ import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
 import { getUserByEmail } from "@/src/services/api/user";
 import { useTranslation } from "react-i18next";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useShareListsViewModel = () => {
   const { t } = useTranslation();
@@ -41,8 +45,10 @@ export const useShareListsViewModel = () => {
       setLoading(true);
       const response = await getUserByEmail(userEmail);
       setFoundUser(response);
+      await logAnalyticsEvent("user_search_for_share", { found: true });
     } catch (error) {
-      console.error(error);
+      await logAnalyticsEvent("user_search_for_share", { found: false });
+      await logHandledError("search_user_for_share", error);
       setFoundUser(null);
     } finally {
       setLoading(false);
@@ -72,8 +78,11 @@ export const useShareListsViewModel = () => {
       };
 
       await updateListContent(updatedList);
+      await logAnalyticsEvent("collaborator_added", {
+        collaborator_count_after: updatedList.colaboratorsIds.length,
+      });
     } catch (e) {
-      console.log(e);
+      await logHandledError("add_collaborator", e);
     } finally {
       resetStates();
     }
@@ -105,8 +114,11 @@ export const useShareListsViewModel = () => {
 
       await updateListContent(updatedList);
       setCurrentList(updatedList);
+      await logAnalyticsEvent("collaborator_removed", {
+        removed_self: invitedUser.userId === currentUser?.user.uid,
+      });
     } catch (e) {
-      console.log(e);
+      await logHandledError("remove_collaborator", e);
     } finally {
       resetStates();
       getUserLists();
@@ -144,8 +156,11 @@ export const useShareListsViewModel = () => {
             try {
               setLoading(true);
               await createInvitation(inviteObj);
+              await logAnalyticsEvent("invite_sent", {
+                recipient_type: "existing_user",
+              });
             } catch (error) {
-              console.log("Error sending invite: ", error);
+              await logHandledError("send_invite", error);
             } finally {
               setLoading(false);
             }
@@ -210,8 +225,12 @@ export const useShareListsViewModel = () => {
           },
           invite.list.id,
         );
+        await logAnalyticsEvent("invite_accepted");
+      } else {
+        await logAnalyticsEvent("invite_declined");
       }
     } catch (e) {
+      await logHandledError("respond_to_invite", e);
       Alert.alert(t("error"), `${t("error_accept_invite")}. \n ${e}`);
     } finally {
       fetchInvitesReceivedByCurrentUser(currentUser?.user.email ?? "");
@@ -235,10 +254,13 @@ export const useShareListsViewModel = () => {
       const supported = await Linking.canOpenURL(whatsappUrl);
       if (supported) {
         await Linking.openURL(whatsappUrl);
+        await logAnalyticsEvent("whatsapp_invite_opened", { supported: true });
       } else {
+        await logAnalyticsEvent("whatsapp_invite_opened", { supported: false });
         Alert.alert(t("error"), t("whatsapp_not_found"));
       }
     } catch (e) {
+      await logHandledError("open_whatsapp_invite", e);
       Alert.alert(t("error"), `${t("failed_opening_whatsapp")}. \n ${e}`);
     }
   };
@@ -259,8 +281,10 @@ export const useShareListsViewModel = () => {
       };
 
       await createInvitation(inviteObj);
+      await logAnalyticsEvent("invite_sent", { recipient_type: "non_user" });
       sendInviteByWhatsapp();
     } catch (e) {
+      await logHandledError("create_non_user_invite", e);
       Alert.alert(
         t("error"),
         `${t("error_creating_invite")}. \n ${e}

@@ -11,6 +11,10 @@ import { GlobalInvitationsContext } from "@/src/context/invitationsContext";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { GlobalUserContext } from "@/src/context/userContext";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useInvitationsViewModel = () => {
   const { t } = useTranslation();
@@ -36,6 +40,7 @@ export const useInvitationsViewModel = () => {
         ],
       );
     } catch (error) {
+      await logHandledError("send_invite", error);
       Alert.alert(t("something_wrong"), `${error}`);
     }
   };
@@ -50,6 +55,7 @@ export const useInvitationsViewModel = () => {
       if (response.length) setCurrentUserInvites(sortedInvites);
       return sortedInvites;
     } catch (error) {
+      await logHandledError("fetch_received_invites", error);
       console.log("Error: ", error);
     }
   };
@@ -72,6 +78,7 @@ export const useInvitationsViewModel = () => {
 
       setCurrentUserInvites([...currentUserInvites, ...fetchedInvites]);
     } catch (error) {
+      await logHandledError("fetch_sent_invites", error);
       console.log("Error: ", error);
     } finally {
       setLoadingInvites(false);
@@ -88,8 +95,10 @@ export const useInvitationsViewModel = () => {
       );
 
       setCurrentUserInvites(updatedInvites);
+      await logAnalyticsEvent("invite_deleted");
       return updatedInvites;
     } catch (error) {
+      await logHandledError("delete_invite", error);
       console.log("Error: ", error);
     } finally {
       setLoadingInvites(false);

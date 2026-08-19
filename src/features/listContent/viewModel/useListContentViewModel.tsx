@@ -11,6 +11,10 @@ import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import * as Crypto from "expo-crypto";
 import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
 import { GlobalProductsContext } from "@/src/context/productsContext";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useListContentViewModel = () => {
   const { t } = useTranslation();
@@ -59,8 +63,12 @@ export const useListContentViewModel = () => {
 
       await updateListContent(updatedList);
       setCurrentList(updatedList);
+      await logAnalyticsEvent("item_added", {
+        item_count_after: updatedItems.length,
+        has_price: listItems.price > 0,
+      });
     } catch (e) {
-      console.log(e);
+      await logHandledError("add_item", e);
     } finally {
       resetStates();
     }
@@ -78,8 +86,9 @@ export const useListContentViewModel = () => {
 
       await updateListContent(updatedList);
       setCurrentList(updatedList);
+      await logAnalyticsEvent("list_renamed");
     } catch (e) {
-      console.log(e);
+      await logHandledError("rename_list", e);
     } finally {
       resetStates();
     }
@@ -103,8 +112,11 @@ export const useListContentViewModel = () => {
 
       await updateListContent(updatedList);
       setCurrentList(updatedList);
+      await logAnalyticsEvent("item_updated", {
+        item_count: updatedItems.length,
+      });
     } catch (e) {
-      console.log(e);
+      await logHandledError("update_item", e);
     } finally {
       resetStates();
     }
@@ -127,8 +139,11 @@ export const useListContentViewModel = () => {
 
       await updateListContent(updatedList);
       setCurrentList(updatedList);
+      await logAnalyticsEvent("item_removed", {
+        item_count_after: itemsUpdated.length,
+      });
     } catch (e) {
-      console.log(e);
+      await logHandledError("remove_item", e);
     } finally {
       resetStates();
     }
@@ -201,6 +216,7 @@ export const useListContentViewModel = () => {
 
   const handleCheckItem = (isChecked: boolean, listItem: ListItemType) => {
     setCurrentItem({ ...listItem, checked: isChecked });
+    void logAnalyticsEvent("item_checked", { checked: isChecked });
     updateSingleItem({ ...listItem, checked: isChecked });
   };
 

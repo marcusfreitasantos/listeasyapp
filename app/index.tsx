@@ -14,6 +14,7 @@ import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { ProductEntity } from "@/src/features/subscriptions/model/product";
 import { getCurrencyCodeFromIcuLocale } from "@/src/utils/getCurrencyCodeFromIcuLocale";
+import { logHandledError } from "@/src/services/observability";
 
 const SignIn = () => {
   const router = useRouter();
@@ -49,6 +50,7 @@ const SignIn = () => {
     try {
       return await getSubscriptionByUserId(currentUser?.user.uid);
     } catch (err) {
+      await logHandledError("fetch_current_subscription", err);
       console.log(err);
     }
   };

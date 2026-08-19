@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { GlobalUserContext } from "../context/userContext";
 import { logoutUser } from "../services/firebase/auth";
 import { useRouter } from "expo-router";
+import { logAnalyticsEvent, logHandledError } from "../services/observability";
 
 export const useLogoutCurrentUser = () => {
   const { setCurrentUser } = useContext(GlobalUserContext);
@@ -12,8 +13,9 @@ export const useLogoutCurrentUser = () => {
     setLoading(true);
     try {
       await logoutUser();
+      await logAnalyticsEvent("logout");
     } catch (e) {
-      console.log(e);
+      await logHandledError("logout", e);
     } finally {
       setCurrentUser(null);
       router.replace("/");

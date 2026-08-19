@@ -8,6 +8,10 @@ import MainContextProvider from "@/src/context/mainContextProvider";
 import mobileAds from "react-native-google-mobile-ads";
 import "@/src/i18n";
 import { checkInternetConnection } from "@/src/utils/checkInternetConnection";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
@@ -18,11 +22,12 @@ export default function Layout() {
       const update = await Updates.checkForUpdateAsync();
 
       if (update.isAvailable) {
+        await logAnalyticsEvent("ota_update_available");
         await Updates.fetchUpdateAsync();
         await Updates.reloadAsync();
       }
     } catch (error) {
-      console.log(`Error fetching latest Expo update: ${error}`);
+      await logHandledError("fetch_ota_update", error);
     }
   };
 
@@ -31,10 +36,7 @@ export default function Layout() {
       await checkInternetConnection();
       await onFetchUpdateAsync();
     } catch (error) {
-      console.error(
-        "Error checking internet connection or fetching update:",
-        error,
-      );
+      await logHandledError("check_connection_and_update", error);
     }
   };
 
@@ -42,7 +44,8 @@ export default function Layout() {
     .initialize()
     .then((adapterStatuses) => {
       console.log("Mobile Ads initialized:", adapterStatuses);
-    });
+    })
+    .catch((error) => logHandledError("initialize_mobile_ads", error));
 
   useEffect(() => {
     checkConnectionThenFetchUpdate();
