@@ -14,7 +14,10 @@ import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { ProductEntity } from "@/src/features/subscriptions/model/product";
 import { getCurrencyCodeFromIcuLocale } from "@/src/utils/getCurrencyCodeFromIcuLocale";
-import { logHandledError } from "@/src/services/observability";
+import {
+  logHandledError,
+  withPerformanceTrace,
+} from "@/src/services/observability";
 
 const SignIn = () => {
   const router = useRouter();
@@ -132,10 +135,15 @@ const SignIn = () => {
 
   useEffect(() => {
     if (connected) {
-      fetchProducts({
-        skus: productIds,
-        type: "subs",
-      });
+      void withPerformanceTrace(
+        "iap_fetch_products",
+        () =>
+          fetchProducts({
+            skus: productIds,
+            type: "subs",
+          }),
+        { source: "initialization" },
+      );
     }
   }, [connected]);
 

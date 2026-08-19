@@ -1,8 +1,41 @@
 import analytics from "@react-native-firebase/analytics";
 import crashlytics from "@react-native-firebase/crashlytics";
+import perf from "@react-native-firebase/perf";
 
 type AnalyticsValue = string | number | boolean;
 type AnalyticsParams = Record<string, AnalyticsValue>;
+
+type PerformanceAttributes = Record<string, string>;
+
+export const withPerformanceTrace = async <T>(
+  name: string,
+  operation: () => Promise<T>,
+  attributes: PerformanceAttributes = {},
+): Promise<T> => {
+  let trace: Awaited<ReturnType<ReturnType<typeof perf>["startTrace"]>> | null =
+    null;
+
+  try {
+    trace = await perf().startTrace(name);
+    Object.entries(attributes).forEach(([key, value]) => {
+      trace?.putAttribute(key, value);
+    });
+    await trace?.start();
+  } catch (error) {
+    if (__DEV__) console.warn(`Performance trace start failed: ${name}`, error);
+  }
+
+  try {
+    return await operation();
+  } finally {
+    try {
+      await trace?.stop();
+    } catch (error) {
+      if (__DEV__)
+        console.warn(`Performance trace stop failed: ${name}`, error);
+    }
+  }
+};
 
 export const logAnalyticsEvent = async (
   name: string,

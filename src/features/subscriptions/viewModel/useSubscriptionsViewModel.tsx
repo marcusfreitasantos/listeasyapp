@@ -23,6 +23,7 @@ import {
 import {
   logAnalyticsEvent,
   logHandledError,
+  withPerformanceTrace,
 } from "@/src/services/observability";
 
 export const useSubscriptionsViewModel = () => {
@@ -417,10 +418,15 @@ export const useSubscriptionsViewModel = () => {
 
   useEffect(() => {
     if (connected) {
-      fetchProducts({
-        skus: productIds,
-        type: "subs",
-      });
+      void withPerformanceTrace(
+        "iap_fetch_products",
+        () =>
+          fetchProducts({
+            skus: productIds,
+            type: "subs",
+          }),
+        { source: "subscriptions" },
+      );
     }
   }, [connected]);
 
