@@ -18,6 +18,10 @@ import { ListEntityType } from "../model/list";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useBuildPDFTemplate } from "./useBuildPDFTemplate";
 import { router } from "expo-router";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useListManagerViewModel = () => {
   const { t, i18n } = useTranslation();
@@ -47,6 +51,7 @@ export const useListManagerViewModel = () => {
       const sharedLists = await getListsByColaboratorId(currentUser.user.uid);
       setCurrentUserLists(sharedLists.concat(response));
     } catch (error) {
+      await logHandledError("fetch_lists", error);
       Alert.alert("Oops!", `Não foi possível resgatar suas listas: ${error}`);
     } finally {
       setLoading(false);
@@ -64,7 +69,12 @@ export const useListManagerViewModel = () => {
           authorId: currentUser.user.uid,
         };
         await insertNewList(newEmptyList);
+        await logAnalyticsEvent("list_created", {
+          is_anonymous: Boolean(currentUser.user.isAnonymous),
+          list_count_after: currentUserLists.length + 1,
+        });
       } catch (error) {
+        await logHandledError("create_list", error);
         Alert.alert("Oops!", `Não foi possível criar a lista: ${error}`);
       } finally {
         getUserLists();
@@ -77,7 +87,11 @@ export const useListManagerViewModel = () => {
     try {
       setLoading(true);
       await removeListById(listId);
+      await logAnalyticsEvent("list_deleted", {
+        list_count_after: Math.max(currentUserLists.length - 1, 0),
+      });
     } catch (error) {
+      await logHandledError("delete_list", error);
       Alert.alert("Oops!", `Não foi possível remover a lista: ${error}`);
     } finally {
       getUserLists();
@@ -100,7 +114,12 @@ export const useListManagerViewModel = () => {
       await shareAsync(pdfFile.uri, {
         mimeType: "application/pdf",
       });
+      await logAnalyticsEvent("list_exported", {
+        format: "pdf",
+        item_count: currentList?.items.length ?? 0,
+      });
     } catch (error) {
+      await logHandledError("export_list", error);
       Alert.alert("Oops!", `Não foi possível gerar o PDF da lista: ${error}`);
     } finally {
       setLoading(false);
@@ -150,6 +169,10 @@ export const useListManagerViewModel = () => {
 
   const handleEditList = (list: ListEntityType) => {
     setCurrentList(list);
+    void logAnalyticsEvent("list_opened", {
+      item_count: list.items.length,
+      is_shared: Boolean(list.colaboratorsIds?.length),
+    });
     router.push(`/lists/${list.id}`);
   };
 

@@ -11,6 +11,10 @@ import { DynamicFormFiedls } from "@/src/components/dynamicForm";
 import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+} from "@/src/services/observability";
 
 export const useUpdateProfileViewModel = () => {
   const { handleLogoutUser } = useLogoutCurrentUser();
@@ -32,7 +36,7 @@ export const useUpdateProfileViewModel = () => {
       const photoURL = await reference.getDownloadURL();
       return photoURL;
     } catch (e) {
-      console.log("handleImageUpload__", e);
+      await logHandledError("upload_profile_photo", e);
     }
   };
 
@@ -81,6 +85,10 @@ export const useUpdateProfileViewModel = () => {
       );
 
       if (response) {
+        await logAnalyticsEvent("profile_updated", {
+          name_changed: displayName !== (currentUser.user.displayName ?? ""),
+          photo_changed: Boolean(photoURL),
+        });
         Alert.alert(t("success"), t("profile_updated"), [
           {
             text: t("confirm"),
@@ -94,6 +102,7 @@ export const useUpdateProfileViewModel = () => {
         ]);
       }
     } catch (error: any) {
+      await logHandledError("update_profile", error);
       Alert.alert(t("something_wrong"), `${error?.message || error}`);
     } finally {
       setLoading(false);
@@ -108,6 +117,7 @@ export const useUpdateProfileViewModel = () => {
         currentSubscription?.purchaseToken || "",
       );
       if (result.status === 200) {
+        await logAnalyticsEvent("account_deleted");
         Alert.alert(t("success"), t("account_deleted"), [
           {
             text: t("logout"),
@@ -118,6 +128,7 @@ export const useUpdateProfileViewModel = () => {
         throw new Error(t("account_deletion_error"));
       }
     } catch (e) {
+      await logHandledError("delete_account", e);
       Alert.alert(t("error"), t("account_deletion_error"), [
         {
           text: t("back"),

@@ -11,6 +11,7 @@ import {
   EmailAuthProvider,
 } from "@react-native-firebase/auth";
 import { getApp } from "@react-native-firebase/app";
+import { withPerformanceTrace } from "@/src/services/observability";
 
 const firebaseAuth = getAuth(getApp());
 
@@ -44,32 +45,36 @@ export const registerUser = async (
   password: string,
   displayName?: string,
 ): Promise<FirebaseAuthTypes.UserCredential> => {
-  try {
-    const credential = await createUserWithEmailAndPassword(
-      firebaseAuth,
-      email,
-      password,
-    );
+  return withPerformanceTrace("auth_register", async () => {
+    try {
+      const credential = await createUserWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password,
+      );
 
-    if (displayName) {
-      await updateProfile(credential.user, { displayName });
+      if (displayName) {
+        await updateProfile(credential.user, { displayName });
+      }
+
+      return credential;
+    } catch (error) {
+      throw new Error(resolveFirebaseError(error, "unknown_error"));
     }
-
-    return credential;
-  } catch (error) {
-    throw new Error(resolveFirebaseError(error, "unknown_error"));
-  }
+  });
 };
 
 export const loginUser = async (
   email: string,
   password: string,
 ): Promise<FirebaseAuthTypes.UserCredential> => {
-  try {
-    return await signInWithEmailAndPassword(firebaseAuth, email, password);
-  } catch {
-    throw new Error("services.firebase_auth.wrong_credentials");
-  }
+  return withPerformanceTrace("auth_login", async () => {
+    try {
+      return await signInWithEmailAndPassword(firebaseAuth, email, password);
+    } catch {
+      throw new Error("services.firebase_auth.wrong_credentials");
+    }
+  });
 };
 
 export const logoutUser = async (): Promise<void> => {
@@ -82,11 +87,13 @@ export const logoutUser = async (): Promise<void> => {
 
 export const loginAnonymously =
   async (): Promise<FirebaseAuthTypes.UserCredential> => {
-    try {
-      return await signInAnonymously(firebaseAuth);
-    } catch {
-      throw new Error("services.firebase_auth.anonymous_login_error");
-    }
+    return withPerformanceTrace("auth_anonymous_login", async () => {
+      try {
+        return await signInAnonymously(firebaseAuth);
+      } catch {
+        throw new Error("services.firebase_auth.anonymous_login_error");
+      }
+    });
   };
 
 /* -------------------------------------------------------------------------- */

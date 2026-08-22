@@ -25,10 +25,10 @@ describe("sendSupportEmail", () => {
     await sendSupportEmail("Test Subject", "Error message");
 
     expect(mockedLinking.canOpenURL).toHaveBeenCalledWith(
-      "mailto:contato@mafreitas.com.br?subject=Test Subject",
+      "mailto:support@listeasyapp.work.gd?subject=Test Subject",
     );
     expect(mockedLinking.openURL).toHaveBeenCalledWith(
-      "mailto:contato@mafreitas.com.br?subject=Test Subject",
+      "mailto:support@listeasyapp.work.gd?subject=Test Subject",
     );
     expect(mockedAlert.alert).not.toHaveBeenCalled();
   });
@@ -39,7 +39,7 @@ describe("sendSupportEmail", () => {
     await sendSupportEmail("Test Subject", "Error message");
 
     expect(mockedLinking.canOpenURL).toHaveBeenCalledWith(
-      "mailto:contato@mafreitas.com.br?subject=Test Subject",
+      "mailto:support@listeasyapp.work.gd?subject=Test Subject",
     );
     expect(mockedLinking.openURL).not.toHaveBeenCalled();
     expect(mockedAlert.alert).toHaveBeenCalledWith("Error: Error message");

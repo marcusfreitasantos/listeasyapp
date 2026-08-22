@@ -20,6 +20,11 @@ import {
   getPurchaseDeduplicationKey,
   shouldProcessPurchase,
 } from "./purchaseDeduplication";
+import {
+  logAnalyticsEvent,
+  logHandledError,
+  withPerformanceTrace,
+} from "@/src/services/observability";
 
 export const useSubscriptionsViewModel = () => {
   const { t } = useTranslation();
@@ -56,13 +61,19 @@ export const useSubscriptionsViewModel = () => {
       await handlePurchaseUpdate(purchase);
     },
 
-    onPurchaseError: (error) => {
+    onPurchaseError: async (error) => {
       setLoading(false);
 
       if (error.code === ErrorCode.UserCancelled) {
+        await logAnalyticsEvent("purchase_cancelled", {
+          platform: Platform.OS,
+        });
         return;
       }
 
+      await logHandledError("purchase_request", error, {
+        platform: Platform.OS,
+      });
       Alert.alert(t("something_wrong"), error.responseCode?.toString());
     },
   });
@@ -101,8 +112,15 @@ export const useSubscriptionsViewModel = () => {
       await switchSubscription(newSubscription);
 
       setCurrentSubscription(newSubscription);
+      await logAnalyticsEvent("subscription_switched", {
+        old_product_id: currentSubscription.productId,
+        new_product_id: productId,
+        platform: Platform.OS,
+      });
     } catch (error) {
-      console.log(error);
+      await logHandledError("switch_subscription", error, {
+        platform: Platform.OS,
+      });
     } finally {
       setLoading(false);
     }
@@ -199,8 +217,17 @@ export const useSubscriptionsViewModel = () => {
       );
 
       setCurrentSubscription({ id: insertedSubscription, ...newSubscription });
+      await logAnalyticsEvent("purchase", {
+        product_id: productId,
+        platform: Platform.OS,
+        currency:
+          currentProducts?.find((product) => product.productId === productId)
+            ?.currency ?? "unknown",
+      });
     } catch (error) {
-      console.log(error);
+      await logHandledError("save_subscription", error, {
+        platform: Platform.OS,
+      });
     } finally {
       setLoading(false);
     }
@@ -276,6 +303,9 @@ export const useSubscriptionsViewModel = () => {
         throw new Error(t("purchase_not_valid"));
       }
     } catch (error) {
+      await logHandledError("process_purchase", error, {
+        platform: Platform.OS,
+      });
       Alert.alert(t("error"), `${error}`);
       setLoading(false);
     } finally {
@@ -285,6 +315,9 @@ export const useSubscriptionsViewModel = () => {
 
   const handlePurchaseSubscription = async (subscriptionId: string) => {
     if (!connected) {
+      await logAnalyticsEvent("checkout_unavailable", {
+        platform: Platform.OS,
+      });
       Alert.alert(t("no_store_connection"), t("no_store_connection_msg"));
       return;
     }
@@ -304,6 +337,14 @@ export const useSubscriptionsViewModel = () => {
     } else {
       try {
         setLoading(true);
+        await logAnalyticsEvent("begin_checkout", {
+          product_id: subscriptionId,
+          platform: Platform.OS,
+          currency:
+            currentProducts?.find(
+              (product) => product.productId === subscriptionId,
+            )?.currency ?? "unknown",
+        });
 
         const subscription = subscriptions.find((s) => s.id === subscriptionId);
 
@@ -349,7 +390,9 @@ export const useSubscriptionsViewModel = () => {
         }
       } catch (error) {
         setLoading(false);
-        console.error("Subscription request failed:", error);
+        await logHandledError("request_subscription", error, {
+          platform: Platform.OS,
+        });
       }
     }
   };
@@ -367,11 +410,23 @@ export const useSubscriptionsViewModel = () => {
   };
 
   useEffect(() => {
+    void logAnalyticsEvent("subscription_viewed", {
+      platform: Platform.OS,
+      has_active_subscription: currentSubscription?.status === "active",
+    });
+  }, []);
+
+  useEffect(() => {
     if (connected) {
-      fetchProducts({
-        skus: productIds,
-        type: "subs",
-      });
+      void withPerformanceTrace(
+        "iap_fetch_products",
+        () =>
+          fetchProducts({
+            skus: productIds,
+            type: "subs",
+          }),
+        { source: "subscriptions" },
+      );
     }
   }, [connected]);
 
