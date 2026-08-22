@@ -12,8 +12,8 @@ export const useLogoutCurrentUser = () => {
   const handleLogoutUser = async () => {
     setLoading(true);
     try {
-      await logoutUser();
       await logAnalyticsEvent("logout");
+      await logoutUser();
     } catch (e) {
       await logHandledError("logout", e);
     } finally {

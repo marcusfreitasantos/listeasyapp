@@ -1,6 +1,22 @@
-import analytics from "@react-native-firebase/analytics";
-import crashlytics from "@react-native-firebase/crashlytics";
-import perf from "@react-native-firebase/perf";
+import {
+  getAnalytics,
+  logEvent,
+  logScreenView as firebaseLogScreenView,
+} from "@react-native-firebase/analytics";
+import { getAuth } from "@react-native-firebase/auth";
+import {
+  getCrashlytics,
+  log,
+  recordError,
+} from "@react-native-firebase/crashlytics";
+import { getPerformance } from "@react-native-firebase/perf";
+import { getApp } from "@react-native-firebase/app";
+
+const firebaseApp = getApp();
+const analyticsInstance = getAnalytics(firebaseApp);
+const authInstance = getAuth(firebaseApp);
+const crashlyticsInstance = getCrashlytics();
+const performanceInstance = getPerformance(firebaseApp);
 
 type AnalyticsValue = string | number | boolean;
 type AnalyticsParams = Record<string, AnalyticsValue>;
@@ -12,11 +28,11 @@ export const withPerformanceTrace = async <T>(
   operation: () => Promise<T>,
   attributes: PerformanceAttributes = {},
 ): Promise<T> => {
-  let trace: Awaited<ReturnType<ReturnType<typeof perf>["startTrace"]>> | null =
+  let trace: Awaited<ReturnType<typeof performanceInstance.startTrace>> | null =
     null;
 
   try {
-    trace = await perf().startTrace(name);
+    trace = await performanceInstance.startTrace(name);
     Object.entries(attributes).forEach(([key, value]) => {
       trace?.putAttribute(key, value);
     });
@@ -42,7 +58,10 @@ export const logAnalyticsEvent = async (
   params?: AnalyticsParams,
 ): Promise<void> => {
   try {
-    await analytics().logEvent(name, params);
+    await logEvent(analyticsInstance, name, {
+      ...params,
+      userId: authInstance.currentUser?.uid ?? "anonymous",
+    });
   } catch (error) {
     if (__DEV__) console.warn(`Analytics event failed: ${name}`, error);
   }
@@ -53,7 +72,7 @@ export const logScreenView = async (
   screenClass: string,
 ): Promise<void> => {
   try {
-    await analytics().logScreenView({
+    await firebaseLogScreenView(analyticsInstance, {
       screen_name: screenName,
       screen_class: screenClass,
     });
@@ -85,11 +104,12 @@ export const logHandledError = async (
         error_code: errorCode,
         ...params,
       }),
-      crashlytics().recordError(
+      recordError(
+        crashlyticsInstance,
         error instanceof Error ? error : new Error(errorCode),
       ),
     ]);
-    crashlytics().log(`operation_failed:${operation}:${errorCode}`);
+    log(crashlyticsInstance, `operation_failed:${operation}:${errorCode}`);
   } catch (loggingError) {
     if (__DEV__)
       console.warn(`Error logging failed: ${operation}`, loggingError);
