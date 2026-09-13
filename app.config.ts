@@ -164,6 +164,7 @@ const config: ExpoConfig = {
         backgroundColor: bgColor,
       },
     ],
+    "expo-notifications",
     "expo-iap",
   ],
   experiments: {
