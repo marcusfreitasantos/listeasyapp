@@ -19,23 +19,13 @@ const defaultNotificationChannelId = "default";
 type NotificationContentData = Record<string, unknown>;
 
 Notifications.setNotificationHandler({
-  handleNotification: async (notification) => {
-    console.log("[push] notification handler invoked", {
-      title: notification?.request?.content?.title,
-      body: notification?.request?.content?.body,
-      data: notification?.request?.content?.data,
-      sound: notification?.request?.content?.sound,
-      channelId: defaultNotificationChannelId,
-    });
-
-    return {
-      shouldShowAlert: true,
-      shouldShowBanner: true,
-      shouldShowList: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
-    };
-  },
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
 });
 
 const getProjectId = (): string | undefined =>
@@ -94,33 +84,22 @@ export const registerForPushNotifications = async (
   try {
     await configureAndroidNotificationChannel();
 
-    console.log("[push] starting registration", {
-      userUid,
-      platform: Platform.OS,
-      isDevice: Device.isDevice,
-      projectId: getProjectId(),
-    });
-
     if (!Device.isDevice) {
       if (__DEV__)
         console.warn("Push notifications require a physical device.");
-      console.log("[push] aborted because device is not physical");
       return null;
     }
 
     const existingPermissions = await Notifications.getPermissionsAsync();
-    console.log("[push] existing permissions", existingPermissions);
     let hasPermission = allowsNotifications(existingPermissions);
 
     if (!hasPermission) {
       const requestedPermissions =
         await Notifications.requestPermissionsAsync();
-      console.log("[push] requested permissions", requestedPermissions);
       hasPermission = allowsNotifications(requestedPermissions);
     }
 
     if (!hasPermission) {
-      console.log("[push] permission denied");
       await logAnalyticsEvent("push_notification_permission_denied", {
         userUid,
       });
@@ -128,10 +107,8 @@ export const registerForPushNotifications = async (
     }
 
     const projectId = getProjectId();
-    console.log("[push] resolved project id", projectId);
 
     if (!projectId) {
-      console.error("[push] expo project id was not found");
       throw new Error("Expo project id was not found.");
     }
 
@@ -140,8 +117,6 @@ export const registerForPushNotifications = async (
         projectId,
       })
     ).data;
-
-    console.log("[push] expo token generated", token);
 
     const userRef = doc(getFirestore(), "Users", userUid);
 
@@ -156,8 +131,6 @@ export const registerForPushNotifications = async (
       { merge: true },
     );
 
-    console.log("[push] token saved to firestore for user", userUid);
-
     await logAnalyticsEvent("push_notification_registered", {
       userUid,
       platform: Platform.OS,
@@ -165,7 +138,6 @@ export const registerForPushNotifications = async (
 
     return token;
   } catch (error) {
-    console.error("[push] registration failed", error);
     await logHandledError("register_push_notifications", error, { userUid });
     return null;
   }
@@ -191,26 +163,6 @@ export const logNotificationOpened = async (
 export const addNotificationOpenedListener = (
   handler: (response: Notifications.NotificationResponse) => void,
 ) => Notifications.addNotificationResponseReceivedListener(handler);
-
-Notifications.addNotificationReceivedListener((notification) => {
-  console.log("[push] notification received in foreground", {
-    title: notification.request.content.title,
-    body: notification.request.content.body,
-    data: notification.request.content.data,
-    sound: notification.request.content.sound,
-    channelId: defaultNotificationChannelId,
-  });
-});
-
-Notifications.addNotificationResponseReceivedListener((response) => {
-  console.log("[push] notification response received", {
-    title: response.notification.request.content.title,
-    body: response.notification.request.content.body,
-    data: response.notification.request.content.data,
-    sound: response.notification.request.content.sound,
-    channelId: defaultNotificationChannelId,
-  });
-});
 
 export const getLastNotificationResponse =
   Notifications.getLastNotificationResponse;
