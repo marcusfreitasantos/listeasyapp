@@ -1,6 +1,8 @@
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { useTranslation } from "react-i18next";
+
 import { Platform } from "react-native";
 import {
   arrayUnion,
@@ -119,6 +121,7 @@ export const registerForPushNotifications = async (
     ).data;
 
     const userRef = doc(getFirestore(), "Users", userUid);
+    const { i18n } = useTranslation();
 
     await setDoc(
       userRef,
@@ -127,6 +130,7 @@ export const registerForPushNotifications = async (
         expoPushTokens: arrayUnion(token),
         notificationPlatform: Platform.OS,
         notificationsUpdatedAt: serverTimestamp(),
+        userLanguage: i18n.language,
       },
       { merge: true },
     );
