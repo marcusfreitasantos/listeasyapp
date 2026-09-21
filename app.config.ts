@@ -1,5 +1,5 @@
 import { ExpoConfig } from "@expo/config";
-const appVersion = "4.2.5";
+const appVersion = "4.2.6";
 const bgColor = "#222222";
 const isLocal = false;
 
@@ -164,6 +164,7 @@ const config: ExpoConfig = {
         backgroundColor: bgColor,
       },
     ],
+    "expo-notifications",
     "expo-iap",
   ],
   experiments: {
