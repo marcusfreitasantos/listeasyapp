@@ -2,7 +2,6 @@ import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { useTranslation } from "react-i18next";
-
 import { Platform } from "react-native";
 import {
   arrayUnion,
@@ -82,6 +81,8 @@ export const configureAndroidNotificationChannel = async (): Promise<void> => {
 
 export const registerForPushNotifications = async (
   userUid: string,
+  userDisplayName?: string,
+  userEmail?: string,
 ): Promise<string | null> => {
   try {
     await configureAndroidNotificationChannel();
@@ -131,6 +132,8 @@ export const registerForPushNotifications = async (
         notificationPlatform: Platform.OS,
         notificationsUpdatedAt: serverTimestamp(),
         userLanguage: i18n.language,
+        userDisplayName,
+        userEmail,
       },
       { merge: true },
     );

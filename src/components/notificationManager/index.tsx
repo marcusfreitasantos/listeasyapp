@@ -17,14 +17,18 @@ const NotificationManager = () => {
     const userUid = currentUser?.user.uid;
 
     if (userUid) {
-      void registerForPushNotifications(userUid);
+      void registerForPushNotifications(
+        userUid,
+        currentUser.user?.displayName ?? "",
+        currentUser.user.email ?? "",
+      );
     }
   }, [currentUser?.user.uid]);
 
   useEffect(() => {
-    const handleNotificationResponse = (response: Parameters<
-      typeof logNotificationOpened
-    >[0]) => {
+    const handleNotificationResponse = (
+      response: Parameters<typeof logNotificationOpened>[0],
+    ) => {
       const notificationId = response.notification.request.identifier;
 
       if (handledNotificationIds.current.has(notificationId)) return;
