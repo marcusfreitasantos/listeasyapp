@@ -14,10 +14,7 @@ import { reaisToCents } from "@/src/utils/convertCurrency";
 import { parseBillingPeriod } from "@/src/utils/parseBillingPeriod";
 import { ProductEntity } from "@/src/features/subscriptions/model/product";
 import { getCurrencyCodeFromIcuLocale } from "@/src/utils/getCurrencyCodeFromIcuLocale";
-import {
-  logHandledError,
-  withPerformanceTrace,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 const SignIn = () => {
   const router = useRouter();
@@ -26,6 +23,7 @@ const SignIn = () => {
   const { setCurrentSubscription } = useContext(GlobalSubscriptionContext);
   const { currentProducts, setCurrentProducts, productIds, setCurrency } =
     useContext(GlobalProductsContext);
+  const { logHandledError, withPerformanceTrace } = useObservabilityViewModel();
 
   const [initializing, setInitializing] = useState(true);
   const { fetchInvitesReceivedByCurrentUser } = useInvitationsViewModel();

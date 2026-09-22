@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { Alert } from "react-native";
-import { useRouter } from "expo-router";
 import { resetUserPassword } from "@/src/services/firebase/auth";
 import { useTranslation } from "react-i18next";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useResetPasswordViewModel = () => {
   const { t } = useTranslation();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
 
   const handlePasswordReset = async (email: string) => {
     setLoading(true);

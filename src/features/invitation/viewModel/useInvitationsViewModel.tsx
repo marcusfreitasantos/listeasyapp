@@ -11,12 +11,10 @@ import { GlobalInvitationsContext } from "@/src/context/invitationsContext";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { GlobalUserContext } from "@/src/context/userContext";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useInvitationsViewModel = () => {
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { t } = useTranslation();
   const { currentUserInvites, setCurrentUserInvites } = useContext(
     GlobalInvitationsContext,

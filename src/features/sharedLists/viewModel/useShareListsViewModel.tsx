@@ -13,12 +13,10 @@ import { ListEntityType } from "../../listsManager/model/list";
 import { Linking } from "react-native";
 import { getUserByEmail } from "@/src/services/api/user";
 import { useTranslation } from "react-i18next";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useShareListsViewModel = () => {
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { t } = useTranslation();
   const { createInvitation, fetchInvitesReceivedByCurrentUser } =
     useInvitationsViewModel();

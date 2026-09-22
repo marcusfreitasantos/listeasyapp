@@ -20,13 +20,11 @@ import {
   getPurchaseDeduplicationKey,
   shouldProcessPurchase,
 } from "./purchaseDeduplication";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-  withPerformanceTrace,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useSubscriptionsViewModel = () => {
+  const { withPerformanceTrace, logAnalyticsEvent, logHandledError } =
+    useObservabilityViewModel();
   const { t } = useTranslation();
   const { currentProducts, productIds } = useContext(GlobalProductsContext);
   const { currentUser } = useContext(GlobalUserContext);
@@ -158,8 +156,8 @@ export const useSubscriptionsViewModel = () => {
             android: {
               skus: [newSubscriptionId],
               subscriptionOffers,
-              purchaseTokenAndroid: currentSubscription.purchaseToken,
-              replacementModeAndroid: 1,
+              purchaseToken: currentSubscription.purchaseToken,
+              replacementMode: 1,
             },
           },
           type: "subs",

@@ -18,16 +18,13 @@ import { ListEntityType } from "../model/list";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useBuildPDFTemplate } from "./useBuildPDFTemplate";
 import { router } from "expo-router";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useListManagerViewModel = () => {
   const { t, i18n } = useTranslation();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
-  const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
   const {
     currentUserLists,

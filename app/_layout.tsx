@@ -8,14 +8,13 @@ import MainContextProvider from "@/src/context/mainContextProvider";
 import mobileAds from "react-native-google-mobile-ads";
 import "@/src/i18n";
 import { checkInternetConnection } from "@/src/utils/checkInternetConnection";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? darkTheme : lightTheme;
+
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
 
   const onFetchUpdateAsync = async () => {
     try {

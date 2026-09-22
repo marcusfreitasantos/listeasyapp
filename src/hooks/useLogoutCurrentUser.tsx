@@ -2,9 +2,10 @@ import { useState, useContext } from "react";
 import { GlobalUserContext } from "../context/userContext";
 import { logoutUser } from "../services/firebase/auth";
 import { useRouter } from "expo-router";
-import { logAnalyticsEvent, logHandledError } from "../services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useLogoutCurrentUser = () => {
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { setCurrentUser } = useContext(GlobalUserContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);

@@ -7,15 +7,13 @@ import { Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useTranslation } from "react-i18next";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useSignUpViewModel = () => {
   const { t } = useTranslation();
   const { isAnonymous } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
 
   const handleSignUp = async (
     email: string,
