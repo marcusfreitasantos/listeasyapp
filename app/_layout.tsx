@@ -9,6 +9,7 @@ import mobileAds from "react-native-google-mobile-ads";
 import "@/src/i18n";
 import { checkInternetConnection } from "@/src/utils/checkInternetConnection";
 import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
+import NotificationManager from "@/src/components/notificationManager";
 
 export default function Layout() {
   const colorScheme = useColorScheme();
@@ -58,6 +59,7 @@ export default function Layout() {
             headerShown: false,
           }}
         />
+        <NotificationManager />
       </MainContextProvider>
     </ThemeProvider>
   );
