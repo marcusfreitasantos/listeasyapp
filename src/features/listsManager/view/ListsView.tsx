@@ -32,6 +32,7 @@ export const ListsView = () => {
     handleRemoveCurrentUserFromSharedList,
     handleEditList,
     handleShareListAccess,
+    handleDuplicateList,
     t,
     i18n,
   } = useListManagerViewModel();
@@ -46,6 +47,12 @@ export const ListsView = () => {
         label: t("edit"),
         iconName: "edit" as FeatherIconName,
         onPress: () => handleEditList(list),
+        showOption: true,
+      },
+      {
+        label: t("clone"),
+        iconName: "copy" as FeatherIconName,
+        onPress: () => handleDuplicateList(list),
         showOption: true,
       },
       {
@@ -104,7 +111,7 @@ export const ListsView = () => {
               }
               ref={flatListRef}
               data={currentUserLists.filter((list) =>
-                list.title.toLowerCase().includes(searchTerm.toLowerCase())
+                list.title.toLowerCase().includes(searchTerm.toLowerCase()),
               )}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
@@ -116,7 +123,7 @@ export const ListsView = () => {
                   listMenuOptions={listMenuOptions}
                   totalPriceText={`${t("updated_at")}: ${getFormattedDate(
                     item.updatedAt,
-                    i18n.language
+                    i18n.language,
                   )}`}
                   handleEditList={handleEditList}
                 />

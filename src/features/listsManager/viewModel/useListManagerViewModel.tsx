@@ -84,6 +84,38 @@ export const useListManagerViewModel = () => {
     }
   };
 
+  const handleDuplicateList = async (listData: ListEntityType) => {
+    if (currentUser?.user?.uid) {
+      try {
+        setLoading(true);
+        const { id: _originalId, ...listWithoutId } = listData;
+        const duplicatedListTitle = listData.title.includes("_")
+          ? listData.title.split("_")
+          : [listData.title, "1"];
+        const duplicatedList = {
+          ...listWithoutId,
+          title: `${duplicatedListTitle[0]}_${parseInt(duplicatedListTitle[1]) + 1}`,
+        };
+
+        await insertNewList(duplicatedList);
+        await logAnalyticsEvent("list_duplicated", {
+          is_anonymous: Boolean(currentUser.user.isAnonymous),
+          list_count_after: currentUserLists.length + 1,
+        });
+
+        if (currentUserLists.length + 1 >= 2) {
+          await handleStoreReview();
+        }
+      } catch (error) {
+        await logHandledError("duplicate_list", error);
+        Alert.alert("Oops!", `Não foi possível duplicar a lista: ${error}`);
+      } finally {
+        getUserLists();
+        setModalIsOpen(false);
+      }
+    }
+  };
+
   const removeList = async (listId: string) => {
     try {
       setLoading(true);
@@ -219,5 +251,6 @@ export const useListManagerViewModel = () => {
     handlePDFExport,
     handleEditList,
     handleShareListAccess,
+    handleDuplicateList,
   };
 };

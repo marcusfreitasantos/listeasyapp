@@ -69,6 +69,7 @@
   "quantity": "Quantity",
   "notes": "Notes",
   "edit": "Edit",
+  "clone": "Duplicate list",
   "new_item": "New item",
   "item": "item",
   "item_plural": "items",
