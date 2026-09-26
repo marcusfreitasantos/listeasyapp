@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useEffect, useState } from "react";
 import { Platform } from "react-native";
 import * as S from "./styles";
 import { useNavigation } from "expo-router";
@@ -20,6 +20,7 @@ export const Header = () => {
   const { currentUser } = useContext(GlobalUserContext);
   const { listsLength } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const [showAds, setShowAds] = useState(false);
   const admobPubId =
     Platform.OS === "android"
       ? "ca-app-pub-8430347978354434/3994109034"
@@ -35,9 +36,15 @@ export const Header = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
+  useEffect(() => {
+    if (!currentSubscription || currentSubscription.status !== "active") {
+      setShowAds(true);
+    }
+  }, [currentSubscription]);
+
   return (
     <S.HeaderWrapper>
-      {(!currentSubscription || currentSubscription.status !== "active") && (
+      {showAds && (
         <BannerAd
           ref={bannerRef}
           unitId={adUnitId}

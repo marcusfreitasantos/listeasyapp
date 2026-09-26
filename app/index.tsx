@@ -70,7 +70,7 @@ const SignIn = () => {
     );
     const subscriptions = await fetchCurrentUserSubscriptions();
 
-    if (subscriptions.length) setCurrentSubscription(subscriptions[0]);
+    if (subscriptions?.length) setCurrentSubscription(subscriptions[0]);
 
     if (invites?.length) {
       router.replace("/invitations");
@@ -89,7 +89,7 @@ const SignIn = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if (subscriptions.length) {
+    if (subscriptions?.length) {
       const fetchedProducts = subscriptions.map((sub) => {
         const subscriptionData = {
           productId: sub.id,
