@@ -22,8 +22,9 @@ const listsCollection = collection(getFirestore(), "Lists");
 export const insertNewList = async (listEntity: ListEntityType) => {
   return withPerformanceTrace("firestore_create_list", async () => {
     try {
+      const { id: _id, ...listWithoutId } = listEntity;
       const listObj = {
-        ...listEntity,
+        ...listWithoutId,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       };

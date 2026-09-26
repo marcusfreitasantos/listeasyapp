@@ -32,6 +32,7 @@ export const ListsView = () => {
     handleRemoveCurrentUserFromSharedList,
     handleEditList,
     handleShareListAccess,
+    handleDuplicateList,
     t,
     i18n,
   } = useListManagerViewModel();
@@ -51,7 +52,7 @@ export const ListsView = () => {
       {
         label: t("clone"),
         iconName: "copy" as FeatherIconName,
-        onPress: () => console.log("clone current list:", list),
+        onPress: () => handleDuplicateList(list),
         showOption: true,
       },
       {
