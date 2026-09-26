@@ -1,17 +1,18 @@
 import { useContext, useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
 import { GlobalUserContext } from "@/src/context/userContext";
-import {
-  addNotificationOpenedListener,
-  getLastNotificationResponse,
-  logNotificationOpened,
-  registerForPushNotifications,
-} from "@/src/services/notifications";
+import { useNotificationViewModel } from "@/src/features/notifications/viewModel/useNotificationViewModel";
 
 const NotificationManager = () => {
   const router = useRouter();
   const { currentUser } = useContext(GlobalUserContext);
   const handledNotificationIds = useRef<Set<string>>(new Set());
+  const {
+    registerForPushNotifications,
+    logNotificationOpened,
+    addNotificationOpenedListener,
+    getLastNotificationResponse,
+  } = useNotificationViewModel();
 
   useEffect(() => {
     const userUid = currentUser?.user.uid;

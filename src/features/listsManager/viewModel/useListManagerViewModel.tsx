@@ -11,23 +11,20 @@ import { Alert } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
-import { File, Directory, Paths } from "expo-file-system";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import { useTranslation } from "react-i18next";
 import { ListEntityType } from "../model/list";
-import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useBuildPDFTemplate } from "./useBuildPDFTemplate";
 import { router } from "expo-router";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
+import { useReviewAppViewModel } from "@/src/features/review/viewModel/useReviewAppViewModel";
 
 export const useListManagerViewModel = () => {
+  const { handleStoreReview } = useReviewAppViewModel();
   const { t, i18n } = useTranslation();
   const isFocused = useIsFocused();
   const { currentUser } = useContext(GlobalUserContext);
-  const { currentSubscription } = useContext(GlobalSubscriptionContext);
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { buildHtmlPDFTemplate } = useBuildPDFTemplate();
   const {
     currentUserLists,
@@ -73,6 +70,10 @@ export const useListManagerViewModel = () => {
           is_anonymous: Boolean(currentUser.user.isAnonymous),
           list_count_after: currentUserLists.length + 1,
         });
+
+        if (currentUserLists.length + 1 >= 2) {
+          await handleStoreReview();
+        }
       } catch (error) {
         await logHandledError("create_list", error);
         Alert.alert("Oops!", `Não foi possível criar a lista: ${error}`);

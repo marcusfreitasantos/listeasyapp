@@ -4,16 +4,14 @@ import { Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { loginUser, loginAnonymously } from "@/src/services/firebase/auth";
 import { useTranslation } from "react-i18next";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useSignInViewModel = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { setCurrentUser } = useContext(GlobalUserContext);
   const [loading, setLoading] = useState(false);
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
 
   const handleSignIn = async (email: string, password: string) => {
     setLoading(true);

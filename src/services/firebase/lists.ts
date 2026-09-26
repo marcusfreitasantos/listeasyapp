@@ -14,8 +14,9 @@ import {
   addDoc,
 } from "@react-native-firebase/firestore";
 import { ListEntityType } from "@/src/features/listsManager/model/list";
-import { withPerformanceTrace } from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
+const { withPerformanceTrace } = useObservabilityViewModel();
 const listsCollection = collection(getFirestore(), "Lists");
 
 export const insertNewList = async (listEntity: ListEntityType) => {

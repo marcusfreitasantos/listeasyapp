@@ -11,13 +11,11 @@ import { DynamicFormFiedls } from "@/src/components/dynamicForm";
 import { useResetPasswordViewModel } from "../../auth/viewModel/useResetPasswordViewModel";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { useLogoutCurrentUser } from "@/src/hooks/useLogoutCurrentUser";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useUpdateProfileViewModel = () => {
   const { handleLogoutUser } = useLogoutCurrentUser();
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { t } = useTranslation();
   const { currentUser, setCurrentUser } = useContext(GlobalUserContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);

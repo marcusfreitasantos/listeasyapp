@@ -11,7 +11,9 @@ import {
   EmailAuthProvider,
 } from "@react-native-firebase/auth";
 import { getApp } from "@react-native-firebase/app";
-import { withPerformanceTrace } from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
+
+const { withPerformanceTrace } = useObservabilityViewModel();
 
 const firebaseAuth = getAuth(getApp());
 

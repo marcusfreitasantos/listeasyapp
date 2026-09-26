@@ -11,12 +11,10 @@ import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import * as Crypto from "expo-crypto";
 import { reaisToCents, centsToReais } from "@/src/utils/convertCurrency";
 import { GlobalProductsContext } from "@/src/context/productsContext";
-import {
-  logAnalyticsEvent,
-  logHandledError,
-} from "@/src/services/observability";
+import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
 
 export const useListContentViewModel = () => {
+  const { logAnalyticsEvent, logHandledError } = useObservabilityViewModel();
   const { t } = useTranslation();
   const { currentList, setCurrentList } = useContext(GlobalListContext);
   const { currentSubscription } = useContext(GlobalSubscriptionContext);
