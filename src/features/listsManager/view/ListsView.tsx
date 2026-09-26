@@ -49,6 +49,12 @@ export const ListsView = () => {
         showOption: true,
       },
       {
+        label: t("clone"),
+        iconName: "copy" as FeatherIconName,
+        onPress: () => console.log("clone current list:", list),
+        showOption: true,
+      },
+      {
         label: t("share_access"),
         iconName: "share-2" as FeatherIconName,
         onPress: () => handleShareListAccess(list),
@@ -104,7 +110,7 @@ export const ListsView = () => {
               }
               ref={flatListRef}
               data={currentUserLists.filter((list) =>
-                list.title.toLowerCase().includes(searchTerm.toLowerCase())
+                list.title.toLowerCase().includes(searchTerm.toLowerCase()),
               )}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
@@ -116,7 +122,7 @@ export const ListsView = () => {
                   listMenuOptions={listMenuOptions}
                   totalPriceText={`${t("updated_at")}: ${getFormattedDate(
                     item.updatedAt,
-                    i18n.language
+                    i18n.language,
                   )}`}
                   handleEditList={handleEditList}
                 />
