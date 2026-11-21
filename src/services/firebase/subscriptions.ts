@@ -25,6 +25,7 @@ export const insertNewSubscription = async (
   purchaseId: string,
   purchaseToken: string,
   appAccountToken: string,
+  originalTransactionId?: string,
 ) => {
   try {
     const subscriberData: SubscriptionEntity = {
@@ -37,6 +38,7 @@ export const insertNewSubscription = async (
       purchaseId,
       purchaseToken,
       appAccountToken,
+      ...(originalTransactionId ? { originalTransactionId } : {}),
     };
 
     const subscriptionInserted = await addDoc(subsCollection, subscriberData);

@@ -137,6 +137,7 @@
   "month": "mês",
   "year": "ano",
   "renew_every_month": "Renova automaticamente todo mês.",
+  "renew_every": "Renova automaticamente a cada {{interval}}.",
   "optional_subscription": "Assinatura opcional para acessar recursos premium.",
   "cancel_anytime": "Cancele a qualquer momento pelo {{platform}}.",
   "payment_through_platform": "O pagamento será cobrado na sua conta do {{platform}}.",

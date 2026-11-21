@@ -11,6 +11,7 @@ type SubscriptionEntity = {
   purchaseId: string;
   purchaseToken: string;
   appAccountToken?: string;
+  originalTransactionId?: string;
 };
 
 type SubscriptionContextType = {

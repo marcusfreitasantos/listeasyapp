@@ -35,9 +35,29 @@ export const validatePurchaseTokenFromGooglePlay = async (
 const validatePurchaseUrlAppStore =
   "https://validatePurchaseFromAppStore-ttyxjwblsa-uc.a.run.app";
 
-export const validatePurchaseFromAppStore = async (purchaseToken: string) => {
+export type AppStoreDecodedTransaction = {
+  bundleId?: string;
+  productId?: string;
+  transactionId?: string;
+  originalTransactionId?: string;
+  appAccountToken?: string;
+  environment?: string;
+};
+
+export type AppStoreValidationResult = {
+  isValid: boolean;
+  validationSource?: string;
+  transactionId?: string;
+  decodedTransaction?: AppStoreDecodedTransaction;
+  purchaseData?: string;
+  message?: string;
+};
+
+export const validatePurchaseFromAppStore = async (
+  purchaseToken: string,
+): Promise<AppStoreValidationResult> => {
   try {
-    const validPurchase = await axios.post(
+    const validPurchase = await axios.post<AppStoreValidationResult>(
       validatePurchaseUrlAppStore,
       {
         purchaseToken,

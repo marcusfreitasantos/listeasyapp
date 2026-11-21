@@ -137,6 +137,7 @@
   "month": "month",
   "year": "year",
   "renew_every_month": "Auto renewal every month.",
+  "renew_every": "Renews automatically every {{interval}}.",
   "optional_subscription": "Optional subscription to access premium features.",
   "cancel_anytime": "Cancel anytime on {{platform}}.",
   "payment_through_platform": "Payment will be charged to your {{platform}} account.",

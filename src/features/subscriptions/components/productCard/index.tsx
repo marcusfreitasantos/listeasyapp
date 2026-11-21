@@ -63,7 +63,12 @@ export const ProductCard = ({
       </S.ProductPrice>
 
       <S.ProductPriceTopicsGroup>
-        <S.ProductDescription>- {t("renew_every_month")}</S.ProductDescription>
+        <S.ProductDescription>
+          -{" "}
+          {t("renew_every", {
+            interval: t(productData.interval),
+          })}
+        </S.ProductDescription>
 
         <S.ProductDescription>
           - {t("optional_subscription")}

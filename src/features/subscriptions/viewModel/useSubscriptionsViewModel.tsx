@@ -1,11 +1,10 @@
 import { Alert, Linking, Platform } from "react-native";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import {
   insertNewSubscription,
   switchSubscription,
-  getSubscriptionByPurchaseToken,
 } from "@/src/services/firebase/subscriptions";
 import { useIAP, ErrorCode, PurchaseAndroid, PurchaseIOS } from "expo-iap";
 import { GlobalUserContext } from "@/src/context/userContext";
@@ -13,6 +12,7 @@ import Constants from "expo-constants";
 import {
   validatePurchaseTokenFromGooglePlay,
   validatePurchaseFromAppStore,
+  AppStoreDecodedTransaction,
 } from "@/src/services/api/purchase";
 import { useTranslation } from "react-i18next";
 import * as Crypto from "expo-crypto";
@@ -21,6 +21,43 @@ import {
   shouldProcessPurchase,
 } from "./purchaseDeduplication";
 import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
+
+const firstFilledValue = (...values: Array<string | null | undefined>) =>
+  values.find((value) => !!value?.trim())?.trim() ?? "";
+
+const buildSubscriptionData = (
+  purchase: PurchaseAndroid | PurchaseIOS,
+  decodedTransaction?: AppStoreDecodedTransaction,
+  sentAppAccountToken?: string,
+) => {
+  if (Platform.OS === "android") {
+    return {
+      productId: purchase.productId,
+      purchaseId: purchase.id,
+      purchaseToken: purchase.purchaseToken || "",
+    };
+  }
+
+  const iosPurchase = purchase as PurchaseIOS;
+  const originalTransactionId = firstFilledValue(
+    decodedTransaction?.originalTransactionId,
+    iosPurchase.originalTransactionIdentifierIOS,
+    decodedTransaction?.transactionId,
+    iosPurchase.transactionId,
+  );
+
+  return {
+    productId: purchase.productId,
+    purchaseId: originalTransactionId,
+    purchaseToken: originalTransactionId,
+    originalTransactionId,
+    appAccountToken: firstFilledValue(
+      decodedTransaction?.appAccountToken,
+      iosPurchase.appAccountToken,
+      sentAppAccountToken,
+    ),
+  };
+};
 
 export const useSubscriptionsViewModel = () => {
   const { withPerformanceTrace, logAnalyticsEvent, logHandledError } =
@@ -33,6 +70,7 @@ export const useSubscriptionsViewModel = () => {
   );
   const [loading, setLoading] = useState(false);
   const [appAccountToken, setAppAccountToken] = useState<string>("");
+  const appAccountTokenRef = useRef("");
   const [processingPurchases] = useState(() => new Set<string>());
   const [processedPurchases] = useState(() => new Set<string>());
 
@@ -88,15 +126,35 @@ export const useSubscriptionsViewModel = () => {
     productId: string;
     purchaseId: string;
     purchaseToken: string;
+    appAccountToken?: string;
+    originalTransactionId?: string;
+  };
+
+  const rememberAppAccountToken = () => {
+    const existingToken = currentSubscription?.appAccountToken?.trim();
+    if (existingToken) {
+      appAccountTokenRef.current = existingToken;
+      setAppAccountToken(existingToken);
+      return existingToken;
+    }
+
+    const accountToken = Crypto.randomUUID();
+    appAccountTokenRef.current = accountToken;
+    setAppAccountToken(accountToken);
+    return accountToken;
   };
 
   const updateSubscriptionInFirebase = async ({
     productId,
     purchaseId,
     purchaseToken,
+    appAccountToken: nextAppAccountToken,
+    originalTransactionId,
   }: updateInsertSuscriptionParams) => {
     try {
-      if (!productId || !currentSubscription?.purchaseToken)
+      if (!productId || !currentSubscription?.id)
+        throw new Error(t("invalid_subscription"));
+      if (Platform.OS === "android" && !purchaseToken)
         throw new Error(t("invalid_subscription"));
       const newSubscription = {
         ...currentSubscription,
@@ -104,7 +162,12 @@ export const useSubscriptionsViewModel = () => {
         productId,
         purchaseId,
         purchaseToken,
-        appAccountToken,
+        appAccountToken:
+          nextAppAccountToken ||
+          appAccountTokenRef.current ||
+          appAccountToken ||
+          currentSubscription.appAccountToken,
+        ...(originalTransactionId ? { originalTransactionId } : {}),
       };
 
       await switchSubscription(newSubscription);
@@ -119,6 +182,7 @@ export const useSubscriptionsViewModel = () => {
       await logHandledError("switch_subscription", error, {
         platform: Platform.OS,
       });
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -128,7 +192,8 @@ export const useSubscriptionsViewModel = () => {
     try {
       setLoading(true);
 
-      if (!currentSubscription?.purchaseToken) {
+      const activePurchaseToken = currentSubscription?.purchaseToken;
+      if (Platform.OS === "android" && !activePurchaseToken) {
         throw new Error(t("no_active_subscriptions"));
       }
 
@@ -156,15 +221,14 @@ export const useSubscriptionsViewModel = () => {
             android: {
               skus: [newSubscriptionId],
               subscriptionOffers,
-              purchaseToken: currentSubscription.purchaseToken,
+              purchaseToken: activePurchaseToken || "",
               replacementMode: 1,
             },
           },
           type: "subs",
         });
       } else if (Platform.OS === "ios") {
-        const accountToken = Crypto.randomUUID();
-        setAppAccountToken(accountToken);
+        const accountToken = rememberAppAccountToken();
 
         await requestPurchase({
           request: {
@@ -186,10 +250,16 @@ export const useSubscriptionsViewModel = () => {
     productId,
     purchaseId,
     purchaseToken,
+    appAccountToken: nextAppAccountToken,
+    originalTransactionId,
   }: updateInsertSuscriptionParams) => {
     try {
       if (!productId || !currentUser?.user.email)
         throw new Error(t("invalid_subscription"));
+      const resolvedAppAccountToken =
+        nextAppAccountToken || appAccountTokenRef.current || appAccountToken;
+      if (Platform.OS === "ios" && !resolvedAppAccountToken)
+        throw new Error(t("invalid_purchase_token"));
       const newSubscription = {
         userId: currentUser.user.uid,
         productId,
@@ -199,7 +269,8 @@ export const useSubscriptionsViewModel = () => {
         platform: Platform.OS,
         purchaseId,
         purchaseToken,
-        appAccountToken,
+        appAccountToken: resolvedAppAccountToken,
+        ...(originalTransactionId ? { originalTransactionId } : {}),
       };
 
       const insertedSubscription = await insertNewSubscription(
@@ -212,6 +283,7 @@ export const useSubscriptionsViewModel = () => {
         newSubscription.purchaseId,
         newSubscription.purchaseToken,
         newSubscription.appAccountToken,
+        newSubscription.originalTransactionId,
       );
 
       setCurrentSubscription({ id: insertedSubscription, ...newSubscription });
@@ -226,6 +298,7 @@ export const useSubscriptionsViewModel = () => {
       await logHandledError("save_subscription", error, {
         platform: Platform.OS,
       });
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -274,26 +347,22 @@ export const useSubscriptionsViewModel = () => {
 
       const validationResult = await validatePurchaseBasedOnPlatform(purchase);
 
-      if (validationResult.isValid) {
-        await finishTransaction({
+      if (validationResult?.isValid) {
+        const subscriptionData = buildSubscriptionData(
           purchase,
-        });
+          validationResult.decodedTransaction,
+          appAccountTokenRef.current,
+        );
 
-        const subscriptionData = {
-          productId: purchase.productId,
-          purchaseId: Platform.OS === "android" ? purchase.id : "",
-          purchaseToken:
-            Platform.OS === "android" ? purchase.purchaseToken : "",
-        };
-
-        if (
-          currentSubscription &&
-          currentSubscription.productId !== purchase.productId
-        ) {
+        if (currentSubscription?.id) {
           await updateSubscriptionInFirebase(subscriptionData);
         } else {
           await insertSubscriptionInFirebase(subscriptionData);
         }
+
+        await finishTransaction({
+          purchase,
+        });
 
         processedPurchases.add(purchaseKey);
         showSuccessMessage(purchase.productId);
@@ -349,8 +418,7 @@ export const useSubscriptionsViewModel = () => {
         if (!subscription) throw new Error(t("subscription_not_found"));
 
         if (Platform.OS === "ios") {
-          const accountToken = Crypto.randomUUID();
-          setAppAccountToken(accountToken);
+          const accountToken = rememberAppAccountToken();
 
           await requestPurchase({
             request: {
