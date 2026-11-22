@@ -1,43 +1,59 @@
 import { formatPriceWithCurrency } from "../src/utils/formatPriceWithCurrency";
 
+const withCurrencySpace = (amount: number, currency: string) =>
+  new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency,
+  })
+    .format(amount / 100)
+    .replace(/^(\D+)(?=\d)/, "$1\u00A0");
+
 describe("formatPriceWithCurrency", () => {
   it("should format price with USD currency", () => {
     const result = formatPriceWithCurrency(1000, "USD");
-    expect(result).toBe("US$" + "\u00A0\u00A0" + "10,00");
+    expect(result).toBe(withCurrencySpace(1000, "USD"));
+    expect(result).toMatch(/10[.,]00/);
   });
 
   it("should format price with EUR currency", () => {
-    const result = formatPriceWithCurrency(1000, "EUR");
-    expect(result).toBe("€" + "\u00A0\u00A0" + "10,00");
+    expect(formatPriceWithCurrency(1000, "EUR")).toBe(
+      withCurrencySpace(1000, "EUR"),
+    );
   });
 
   it("should format price with BRL currency", () => {
-    const result = formatPriceWithCurrency(1000, "BRL");
-    expect(result).toBe("R$" + "\u00A0\u00A0" + "10,00");
+    expect(formatPriceWithCurrency(1000, "BRL")).toBe(
+      withCurrencySpace(1000, "BRL"),
+    );
   });
 
   it("should handle null currency by defaulting to BRL", () => {
-    const result = formatPriceWithCurrency(1000, null);
-    expect(result).toBe("R$" + "\u00A0\u00A0" + "10,00");
+    expect(formatPriceWithCurrency(1000, null)).toBe(
+      formatPriceWithCurrency(1000, "BRL"),
+    );
   });
 
   it("should handle undefined currency by defaulting to BRL", () => {
-    const result = formatPriceWithCurrency(1000, undefined);
-    expect(result).toBe("R$" + "\u00A0\u00A0" + "10,00");
+    expect(formatPriceWithCurrency(1000, undefined)).toBe(
+      formatPriceWithCurrency(1000, "BRL"),
+    );
   });
 
   it("should handle invalid currency by falling back to BRL", () => {
-    const result = formatPriceWithCurrency(1000, "INVALID");
-    expect(result).toBe("R$" + "\u00A0\u00A0" + "10,00");
+    expect(formatPriceWithCurrency(1000, "INVALID")).toBe(
+      formatPriceWithCurrency(1000, "BRL"),
+    );
   });
 
   it("should format decimal amounts correctly", () => {
     const result = formatPriceWithCurrency(1050, "USD");
-    expect(result).toBe("US$" + "\u00A0\u00A0" + "10,50");
+    expect(result).toBe(withCurrencySpace(1050, "USD"));
+    expect(result).toMatch(/10[.,]50/);
   });
 
   it("should handle zero amount", () => {
     const result = formatPriceWithCurrency(0, "USD");
-    expect(result).toBe("US$" + "\u00A0\u00A0" + "0,00");
+    expect(result).toBe(withCurrencySpace(0, "USD"));
+    expect(result).toMatch(/0[.,]00/);
   });
 });

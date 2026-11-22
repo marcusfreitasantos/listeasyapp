@@ -9,6 +9,7 @@ import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { Button } from "../button";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { AppVersion } from "../appVersion";
 
 type DrawerCustomContentProps = {
   items: {
@@ -115,6 +116,7 @@ export const DrawerCustomContent = ({ items }: DrawerCustomContentProps) => {
             />
           </>
         )}
+        <AppVersion />
       </S.DrawerContainer>
     </S.DrawerWrapper>
   );

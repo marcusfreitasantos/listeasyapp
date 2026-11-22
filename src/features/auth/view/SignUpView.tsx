@@ -13,6 +13,7 @@ import { FeatherIconName } from "@/@types/icons";
 import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { useTranslation } from "react-i18next";
+import { AppVersion } from "@/src/components/appVersion";
 
 export const SignUpView = () => {
   const { t } = useTranslation();
@@ -93,6 +94,7 @@ export const SignUpView = () => {
             <S.SecondaryContentText>{t("need_help")}</S.SecondaryContentText>
           </Pressable>
         </S.SecondaryContentRow>
+        <AppVersion />
       </S.Container>
     </KeyboardAvoidingView>
   );

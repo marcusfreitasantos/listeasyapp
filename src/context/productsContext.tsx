@@ -21,7 +21,7 @@ const ProductsContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [currency, setCurrency] = useState<string | null>("BRL");
 
   const productIds =
-    Platform.OS === "ios" ? ["plan_essencial_month"] : ["plan_essencial"];
+    Platform.OS === "ios" ? ["plan_essencial_monthly"] : ["plan_essencial"];
 
   return (
     <GlobalProductsContext.Provider

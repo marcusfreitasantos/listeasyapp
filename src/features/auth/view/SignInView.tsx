@@ -14,6 +14,7 @@ import { LoadingSpinner } from "@/src/components/loadingSpinner";
 import { sendSupportEmail } from "@/src/utils/sendSupportEmail";
 import { Button } from "@/src/components/button";
 import { useTranslation } from "react-i18next";
+import { AppVersion } from "@/src/components/appVersion";
 
 export const SignInView = () => {
   const { t } = useTranslation();
@@ -105,6 +106,7 @@ export const SignInView = () => {
             </S.SecondaryContentColumn>
           </>
         )}
+        <AppVersion />
       </S.Container>
     </KeyboardAvoidingView>
   );

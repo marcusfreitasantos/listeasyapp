@@ -10,6 +10,15 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
+jest.mock("@expo/vector-icons/Feather", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+
+  return ({ name, testID, onPress }: any) => (
+    <View testID={testID ?? name} onTouchEnd={onPress} />
+  );
+});
+
 describe("DynamicForm", () => {
   const baseFields: DynamicFormFiedls[] = [
     {
