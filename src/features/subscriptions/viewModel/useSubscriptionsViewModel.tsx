@@ -1,5 +1,5 @@
 import { Alert, Linking, Platform } from "react-native";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useMemo, useRef } from "react";
 import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import {
@@ -21,6 +21,7 @@ import {
   shouldProcessPurchase,
 } from "./purchaseDeduplication";
 import { useObservabilityViewModel } from "@/src/features/observability/viewModel/useObservabilityViewModel";
+import { mapStoreSubscriptions } from "../model/mapStoreSubscriptions";
 
 const firstFilledValue = (...values: Array<string | null | undefined>) =>
   values.find((value) => !!value?.trim())?.trim() ?? "";
@@ -63,12 +64,16 @@ export const useSubscriptionsViewModel = () => {
   const { withPerformanceTrace, logAnalyticsEvent, logHandledError } =
     useObservabilityViewModel();
   const { t } = useTranslation();
-  const { currentProducts, productIds } = useContext(GlobalProductsContext);
+  const { currentProducts, setCurrentProducts, productIds, setCurrency } =
+    useContext(GlobalProductsContext);
   const { currentUser } = useContext(GlobalUserContext);
   const { currentSubscription, setCurrentSubscription } = useContext(
     GlobalSubscriptionContext,
   );
   const [loading, setLoading] = useState(false);
+  const [productsLoading, setProductsLoading] = useState(
+    !currentProducts?.length,
+  );
   const [appAccountToken, setAppAccountToken] = useState<string>("");
   const appAccountTokenRef = useRef("");
   const [processingPurchases] = useState(() => new Set<string>());
@@ -482,23 +487,45 @@ export const useSubscriptionsViewModel = () => {
     });
   }, []);
 
+  const storeProducts = useMemo(
+    () => (subscriptions?.length ? mapStoreSubscriptions(subscriptions) : null),
+    [subscriptions],
+  );
+  const visibleProducts = storeProducts ?? currentProducts;
+
   useEffect(() => {
-    if (connected) {
-      void withPerformanceTrace(
-        "iap_fetch_products",
-        () =>
-          fetchProducts({
-            skus: productIds,
-            type: "subs",
-          }),
-        { source: "subscriptions" },
-      );
-    }
+    if (!storeProducts?.length) return;
+
+    setCurrentProducts(storeProducts);
+    if (storeProducts[0]?.currency) setCurrency(storeProducts[0].currency);
+  }, [storeProducts]);
+
+  useEffect(() => {
+    if (!connected) return;
+
+    let active = true;
+    if (!visibleProducts?.length) setProductsLoading(true);
+
+    void withPerformanceTrace(
+      "iap_fetch_products",
+      () =>
+        fetchProducts({
+          skus: productIds,
+          type: "subs",
+        }),
+      { source: "subscriptions" },
+    ).finally(() => {
+      if (active) setProductsLoading(false);
+    });
+
+    return () => {
+      active = false;
+    };
   }, [connected]);
 
   return {
-    currentProducts,
-    loading,
+    currentProducts: visibleProducts,
+    loading: loading || (productsLoading && !visibleProducts?.length),
     currentSubscription,
     handlePurchaseSubscription,
     handleAndroidSubscriptionSwitch,
