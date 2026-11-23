@@ -53,14 +53,19 @@ export type AppStoreValidationResult = {
   message?: string;
 };
 
-export const validatePurchaseFromAppStore = async (
-  purchaseToken: string,
-): Promise<AppStoreValidationResult> => {
+export const validatePurchaseFromAppStore = async ({
+  purchaseToken,
+  transactionId,
+}: {
+  purchaseToken?: string;
+  transactionId?: string;
+}): Promise<AppStoreValidationResult> => {
   try {
     const validPurchase = await axios.post<AppStoreValidationResult>(
       validatePurchaseUrlAppStore,
       {
-        purchaseToken,
+        ...(purchaseToken ? { purchaseToken } : {}),
+        ...(transactionId ? { transactionId } : {}),
       },
       {
         headers: {
@@ -71,6 +76,9 @@ export const validatePurchaseFromAppStore = async (
 
     return validPurchase.data;
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data) {
+      return error.response.data as AppStoreValidationResult;
+    }
     throw new Error(`Error validating transaction id: ${error}`);
   }
 };

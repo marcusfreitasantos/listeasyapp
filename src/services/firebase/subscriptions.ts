@@ -6,6 +6,7 @@ import {
   getDocs,
   FirebaseFirestoreTypes,
   addDoc,
+  deleteDoc,
   doc,
   updateDoc,
 } from "@react-native-firebase/firestore";
@@ -14,6 +15,105 @@ import { SubscriptionEntity } from "@/src/features/subscriptions/model/subscript
 import { PlatformOSType } from "react-native";
 
 const subsCollection = collection(getFirestore(), "Subscriptions");
+
+const definedFields = (data: Record<string, unknown>) =>
+  Object.fromEntries(
+    Object.entries(data).filter(([, value]) => value !== undefined),
+  );
+
+const findSubscriptionDocs = async (
+  field: string,
+  value?: string,
+): Promise<FirebaseFirestoreTypes.QueryDocumentSnapshot[]> => {
+  const normalized = value?.trim();
+  if (!normalized) return [];
+
+  const snapshot = await getDocs(
+    query(subsCollection, where(field, "==", normalized)),
+  );
+  return snapshot.docs;
+};
+
+const usesGeneratedDocumentId = (
+  documentId: string,
+  subscription: { appAccountToken?: string; originalTransactionId?: string },
+) =>
+  documentId !== subscription.appAccountToken?.trim() &&
+  documentId !== subscription.originalTransactionId?.trim();
+
+const saveIosSubscription = async (
+  subscription: SubscriptionEntity | Omit<SubscriptionEntity, "status" | "purchaseId" | "purchaseToken">,
+) => {
+  const matches = new Map<
+    string,
+    FirebaseFirestoreTypes.QueryDocumentSnapshot
+  >();
+  const lookups = [
+    ["appAccountToken", subscription.appAccountToken],
+    ["originalTransactionId", subscription.originalTransactionId],
+    ["purchaseId", subscription.originalTransactionId],
+  ] as const;
+
+  for (const [field, value] of lookups) {
+    const docs = await findSubscriptionDocs(field, value);
+    docs.forEach((matched) => matches.set(matched.id, matched));
+  }
+
+  const existingDocs = [...matches.values()];
+  const generatedDoc = existingDocs.find((matched) =>
+    usesGeneratedDocumentId(matched.id, subscription),
+  );
+  const payload = definedFields({ ...subscription });
+
+  if (generatedDoc) {
+    await updateDoc(generatedDoc.ref, payload);
+    await Promise.all(
+      existingDocs
+        .filter((matched) => matched.id !== generatedDoc.id)
+        .map((matched) => deleteDoc(matched.ref)),
+    );
+    return generatedDoc.id;
+  }
+
+  const created = await addDoc(subsCollection, payload);
+  await Promise.all(existingDocs.map((matched) => deleteDoc(matched.ref)));
+  return created.id;
+};
+
+export const reserveIosSubscription = async ({
+  appAccountToken,
+  userId,
+  userEmail,
+  userName,
+  productId,
+}: {
+  appAccountToken: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  productId: string;
+}) =>
+  saveIosSubscription({
+    userId,
+    userEmail,
+    userName,
+    productId,
+    platform: "ios",
+    appAccountToken,
+  });
+
+export const upsertIosSubscription = async (
+  subscription: SubscriptionEntity,
+) => {
+  if (
+    !subscription.appAccountToken?.trim() &&
+    !subscription.originalTransactionId?.trim()
+  ) {
+    throw new Error("Missing appAccountToken");
+  }
+
+  return saveIosSubscription(subscription);
+};
 
 export const insertNewSubscription = async (
   userId: string,

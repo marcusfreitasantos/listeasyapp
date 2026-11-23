@@ -4,9 +4,17 @@ import { GlobalSubscriptionContext } from "@/src/context/subscriptionContext";
 import { GlobalProductsContext } from "@/src/context/productsContext";
 import {
   insertNewSubscription,
+  reserveIosSubscription,
   switchSubscription,
+  upsertIosSubscription,
 } from "@/src/services/firebase/subscriptions";
-import { useIAP, ErrorCode, PurchaseAndroid, PurchaseIOS } from "expo-iap";
+import {
+  getTransactionJwsIOS,
+  useIAP,
+  ErrorCode,
+  PurchaseAndroid,
+  PurchaseIOS,
+} from "expo-iap";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
 import {
@@ -74,6 +82,7 @@ export const useSubscriptionsViewModel = () => {
   const [productsLoading, setProductsLoading] = useState(
     !currentProducts?.length,
   );
+  const restoredTransactions = useRef(new Set<string>());
   const [appAccountToken, setAppAccountToken] = useState<string>("");
   const appAccountTokenRef = useRef("");
   const [processingPurchases] = useState(() => new Set<string>());
@@ -97,6 +106,8 @@ export const useSubscriptionsViewModel = () => {
     requestPurchase,
     finishTransaction,
     fetchProducts,
+    getAvailablePurchases,
+    availablePurchases,
   } = useIAP({
     onPurchaseSuccess: async (purchase) => {
       await handlePurchaseUpdate(purchase);
@@ -147,6 +158,20 @@ export const useSubscriptionsViewModel = () => {
     appAccountTokenRef.current = accountToken;
     setAppAccountToken(accountToken);
     return accountToken;
+  };
+
+  const reserveAccountLink = async (productId: string, accountToken: string) => {
+    if (!currentUser?.user.uid || !currentUser.user.email) {
+      throw new Error(t("invalid_subscription"));
+    }
+
+    await reserveIosSubscription({
+      appAccountToken: accountToken,
+      userId: currentUser.user.uid,
+      userEmail: currentUser.user.email,
+      userName: currentUser.user.displayName ?? currentUser.user.email,
+      productId,
+    });
   };
 
   const updateSubscriptionInFirebase = async ({
@@ -234,6 +259,7 @@ export const useSubscriptionsViewModel = () => {
         });
       } else if (Platform.OS === "ios") {
         const accountToken = rememberAppAccountToken();
+        await reserveAccountLink(newSubscriptionId, accountToken);
 
         await requestPurchase({
           request: {
@@ -278,18 +304,20 @@ export const useSubscriptionsViewModel = () => {
         ...(originalTransactionId ? { originalTransactionId } : {}),
       };
 
-      const insertedSubscription = await insertNewSubscription(
-        newSubscription.userId,
-        newSubscription.productId,
-        newSubscription.userName,
-        newSubscription.userEmail,
-        newSubscription.status,
-        newSubscription.platform,
-        newSubscription.purchaseId,
-        newSubscription.purchaseToken,
-        newSubscription.appAccountToken,
-        newSubscription.originalTransactionId,
-      );
+      const insertedSubscription = Platform.OS === "ios"
+        ? await upsertIosSubscription(newSubscription)
+        : await insertNewSubscription(
+            newSubscription.userId,
+            newSubscription.productId,
+            newSubscription.userName,
+            newSubscription.userEmail,
+            newSubscription.status,
+            newSubscription.platform,
+            newSubscription.purchaseId,
+            newSubscription.purchaseToken,
+            newSubscription.appAccountToken,
+            newSubscription.originalTransactionId,
+          );
 
       setCurrentSubscription({ id: insertedSubscription, ...newSubscription });
       await logAnalyticsEvent("purchase", {
@@ -311,15 +339,36 @@ export const useSubscriptionsViewModel = () => {
 
   const validatePurchaseBasedOnPlatform = async (
     purchase: PurchaseAndroid | PurchaseIOS,
+    transactionId?: string,
   ) => {
-    if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
-
     if (Platform.OS === "android") {
+      if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
       return await validatePurchaseTokenFromGooglePlay(purchase.purchaseToken);
-    } else if (Platform.OS === "ios") {
-      return await validatePurchaseFromAppStore(purchase.purchaseToken);
-    } else {
-      return null;
+    }
+
+    if (Platform.OS === "ios") {
+      return await validatePurchaseFromAppStore({
+        purchaseToken: purchase.purchaseToken || undefined,
+        transactionId,
+      });
+    }
+
+    return null;
+  };
+
+  const resolveIosPurchaseToken = async (
+    purchase: PurchaseIOS,
+  ): Promise<string> => {
+    if (purchase.purchaseToken) return purchase.purchaseToken;
+    if (!purchase.productId) return "";
+
+    try {
+      return (await getTransactionJwsIOS(purchase.productId)) ?? "";
+    } catch (error) {
+      await logHandledError("fetch_ios_transaction_jws", error, {
+        platform: Platform.OS,
+      });
+      return "";
     }
   };
 
@@ -348,14 +397,39 @@ export const useSubscriptionsViewModel = () => {
     try {
       setLoading(true);
 
-      if (!purchase.purchaseToken) throw new Error(t("invalid_purchase_token"));
+      const iosPurchase = purchase as PurchaseIOS;
+      const transactionId =
+        Platform.OS === "ios"
+          ? firstFilledValue(
+              iosPurchase.transactionId,
+              iosPurchase.originalTransactionIdentifierIOS,
+            )
+          : "";
+      if (Platform.OS === "ios" && !purchase.purchaseToken) {
+        purchase.purchaseToken = await resolveIosPurchaseToken(iosPurchase);
+      }
 
-      const validationResult = await validatePurchaseBasedOnPlatform(purchase);
+      if (!purchase.purchaseToken && !transactionId) {
+        throw new Error(t("invalid_purchase_token"));
+      }
 
-      if (validationResult?.isValid) {
+      let validationResult = null;
+      try {
+        validationResult = await validatePurchaseBasedOnPlatform(
+          purchase,
+          transactionId,
+        );
+      } catch (error) {
+        if (Platform.OS !== "ios" || !transactionId) throw error;
+        await logHandledError("validate_ios_purchase", error, {
+          platform: Platform.OS,
+        });
+      }
+
+      if (validationResult?.isValid || (Platform.OS === "ios" && transactionId)) {
         const subscriptionData = buildSubscriptionData(
           purchase,
-          validationResult.decodedTransaction,
+          validationResult?.decodedTransaction,
           appAccountTokenRef.current,
         );
 
@@ -424,6 +498,7 @@ export const useSubscriptionsViewModel = () => {
 
         if (Platform.OS === "ios") {
           const accountToken = rememberAppAccountToken();
+          await reserveAccountLink(subscriptionId, accountToken);
 
           await requestPurchase({
             request: {
@@ -486,6 +561,84 @@ export const useSubscriptionsViewModel = () => {
       has_active_subscription: currentSubscription?.status === "active",
     });
   }, []);
+
+  useEffect(() => {
+    if (Platform.OS !== "ios" || !connected) return;
+    void getAvailablePurchases();
+  }, [connected]);
+
+  useEffect(() => {
+    if (
+      Platform.OS !== "ios" ||
+      !currentUser?.user.uid ||
+      !currentUser.user.email
+    ) {
+      return;
+    }
+
+    const purchasesToRestore = (availablePurchases ?? []).filter((purchase) => {
+      const iosPurchase = purchase as PurchaseIOS;
+      const transactionId = firstFilledValue(
+        iosPurchase.transactionId,
+        iosPurchase.originalTransactionIdentifierIOS,
+      );
+      return (
+        !!transactionId && !restoredTransactions.current.has(transactionId)
+      );
+    });
+
+    if (!purchasesToRestore.length) return;
+
+    void (async () => {
+      for (const purchase of purchasesToRestore) {
+        const iosPurchase = purchase as PurchaseIOS;
+        const transactionId = firstFilledValue(
+          iosPurchase.transactionId,
+          iosPurchase.originalTransactionIdentifierIOS,
+        );
+        const accountToken = firstFilledValue(iosPurchase.appAccountToken);
+        if (!transactionId || !currentUser.user.email) continue;
+
+        restoredTransactions.current.add(transactionId);
+        const originalTransactionId = firstFilledValue(
+          iosPurchase.originalTransactionIdentifierIOS,
+          transactionId,
+        );
+        const subscription = {
+          userId: currentUser.user.uid,
+          productId: purchase.productId,
+          userName: currentUser.user.displayName ?? currentUser.user.email,
+          userEmail: currentUser.user.email,
+          status: "active" as const,
+          platform: Platform.OS,
+          purchaseId: originalTransactionId,
+          purchaseToken: originalTransactionId,
+          ...(accountToken ? { appAccountToken: accountToken } : {}),
+          originalTransactionId,
+        };
+
+        try {
+          if (accountToken) {
+            await reserveIosSubscription({
+              appAccountToken: accountToken,
+              userId: currentUser.user.uid,
+              userEmail: currentUser.user.email,
+              userName: subscription.userName,
+              productId: purchase.productId,
+            });
+          }
+
+          const subscriptionId = await upsertIosSubscription(subscription);
+          setCurrentSubscription({ id: subscriptionId, ...subscription });
+        } catch (error) {
+          restoredTransactions.current.delete(transactionId);
+          await logHandledError("restore_ios_subscription", error, {
+            platform: Platform.OS,
+          });
+        }
+      }
+    })();
+  }, [availablePurchases, currentUser]);
 
   const storeProducts = useMemo(
     () => (subscriptions?.length ? mapStoreSubscriptions(subscriptions) : null),
