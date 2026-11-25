@@ -68,6 +68,20 @@ export const ProductPriceTopicsGroup = styled.View`
   flex-direction: column;
 `;
 
+export const LegalLinks = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: ${({ theme }) => theme.defaultSizes.small};
+`;
+
+export const LegalLink = styled.Text`
+  font-family: ${({ theme }) => theme.defaultFontFamily};
+  font-size: ${({ theme }) => theme.defaultSizes.small};
+  color: ${({ theme }) => theme.primaryColor};
+  text-decoration-line: underline;
+`;
+
 export const ProductPriceTopics = styled.Text`
   font-family: ${({ theme }) => theme.defaultFontFamily};
   font-size: ${({ theme }) => theme.defaultSizes.small};

@@ -6,7 +6,11 @@ import { Button } from "@/src/components/button";
 import { SubscriptionEntity } from "../../model/subscription";
 import { useTranslation } from "react-i18next";
 import { formatPriceWithCurrency } from "@/src/utils/formatPriceWithCurrency";
-import { Platform } from "react-native";
+import { Linking, Platform } from "react-native";
+import {
+  APPLE_STANDARD_EULA_URL,
+  PRIVACY_POLICY_URL,
+} from "../../model/legalLinks";
 
 type ProductCardProps = {
   productData: ProductEntity;
@@ -92,6 +96,27 @@ export const ProductCard = ({
           platform: setCurrentPlatform(),
         })}
       </S.ProductDescription>
+
+      <S.LegalLinks>
+        {Platform.OS === "ios" ? (
+          <S.LegalLink
+            accessibilityRole="link"
+            onPress={() => {
+              void Linking.openURL(APPLE_STANDARD_EULA_URL);
+            }}
+          >
+            {t("terms_of_use")}
+          </S.LegalLink>
+        ) : null}
+        <S.LegalLink
+          accessibilityRole="link"
+          onPress={() => {
+            void Linking.openURL(PRIVACY_POLICY_URL);
+          }}
+        >
+          {t("privacy_policy")}
+        </S.LegalLink>
+      </S.LegalLinks>
     </S.ProductCard>
   );
 };
