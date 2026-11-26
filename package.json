@@ -52,7 +52,7 @@
     "expo-store-review": "~55.0.18",
     "expo-system-ui": "~55.0.13",
     "expo-updates": "~55.0.18",
-    "i18next": "^25.7.3",
+    "i18next": "^27.2.7",
     "lottie-react-native": "~7.3.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
