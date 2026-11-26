@@ -5,3 +5,7 @@ export const SubscriptionsViewContainer = styled.View`
   flex: 1;
   padding: ${({ theme }) => theme.defaultContainerSpacing};
 `;
+
+export const RestorePurchasesContainer = styled.View`
+  margin-top: ${({ theme }) => theme.defaultSizes.small};
+`;

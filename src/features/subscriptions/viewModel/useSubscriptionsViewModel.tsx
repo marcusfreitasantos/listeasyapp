@@ -14,6 +14,7 @@ import {
   ErrorCode,
   PurchaseAndroid,
   PurchaseIOS,
+  getAvailablePurchases as fetchAvailablePurchases,
 } from "expo-iap";
 import { GlobalUserContext } from "@/src/context/userContext";
 import Constants from "expo-constants";
@@ -106,8 +107,7 @@ export const useSubscriptionsViewModel = () => {
     requestPurchase,
     finishTransaction,
     fetchProducts,
-    getAvailablePurchases,
-    availablePurchases,
+    restorePurchases,
   } = useIAP({
     onPurchaseSuccess: async (purchase) => {
       await handlePurchaseUpdate(purchase);
@@ -555,90 +555,125 @@ export const useSubscriptionsViewModel = () => {
     Linking.openURL(url);
   };
 
+  const persistRestoredIosPurchases = async (
+    purchases: Array<PurchaseAndroid | PurchaseIOS>,
+  ) => {
+    if (!currentUser?.user.uid || !currentUser.user.email) {
+      throw new Error(t("invalid_user"));
+    }
+
+    let restoredCount = 0;
+    let failedCount = 0;
+
+    for (const purchase of purchases) {
+      const iosPurchase = purchase as PurchaseIOS;
+      const transactionId = firstFilledValue(
+        iosPurchase.transactionId,
+        iosPurchase.originalTransactionIdentifierIOS,
+      );
+      if (!transactionId || restoredTransactions.current.has(transactionId)) {
+        continue;
+      }
+
+      const accountToken = firstFilledValue(iosPurchase.appAccountToken);
+      restoredTransactions.current.add(transactionId);
+      const originalTransactionId = firstFilledValue(
+        iosPurchase.originalTransactionIdentifierIOS,
+        transactionId,
+      );
+      const subscription = {
+        userId: currentUser.user.uid,
+        productId: purchase.productId,
+        userName: currentUser.user.displayName ?? currentUser.user.email,
+        userEmail: currentUser.user.email,
+        status: "active" as const,
+        platform: Platform.OS,
+        purchaseId: originalTransactionId,
+        purchaseToken: originalTransactionId,
+        ...(accountToken ? { appAccountToken: accountToken } : {}),
+        originalTransactionId,
+      };
+
+      try {
+        if (accountToken) {
+          await reserveIosSubscription({
+            appAccountToken: accountToken,
+            userId: currentUser.user.uid,
+            userEmail: currentUser.user.email,
+            userName: subscription.userName,
+            productId: purchase.productId,
+          });
+        }
+
+        const subscriptionId = await upsertIosSubscription(subscription);
+        setCurrentSubscription({ id: subscriptionId, ...subscription });
+        restoredCount += 1;
+      } catch (error) {
+        restoredTransactions.current.delete(transactionId);
+        failedCount += 1;
+        await logHandledError("restore_ios_subscription", error, {
+          platform: Platform.OS,
+        });
+      }
+    }
+
+    return { restoredCount, failedCount };
+  };
+
+  const handleRestorePurchases = async () => {
+    if (Platform.OS !== "ios") return;
+
+    if (!connected) {
+      Alert.alert(t("no_store_connection"), t("no_store_connection_msg"));
+      return;
+    }
+
+    if (!currentUser?.user.uid || !currentUser.user.email) {
+      Alert.alert(t("something_wrong"), t("invalid_user"));
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await logAnalyticsEvent("restore_purchases", {
+        platform: Platform.OS,
+      });
+
+      await restorePurchases({ onlyIncludeActiveItemsIOS: true });
+      const purchases = await fetchAvailablePurchases({
+        onlyIncludeActiveItemsIOS: true,
+      });
+      const { restoredCount, failedCount } =
+        await persistRestoredIosPurchases(purchases);
+
+      if (purchases.length === 0) {
+        Alert.alert(t("restore_purchases"), t("no_purchases_to_restore"));
+        return;
+      }
+
+      if (restoredCount === 0 && failedCount > 0) {
+        Alert.alert(t("something_wrong"), t("restore_purchases_failed"));
+        return;
+      }
+
+      Alert.alert(t("great"), t("purchases_restored"));
+    } catch (error) {
+      await logHandledError("restore_purchases", error, {
+        platform: Platform.OS,
+      });
+      Alert.alert(t("something_wrong"), t("restore_purchases_failed"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     void logAnalyticsEvent("subscription_viewed", {
       platform: Platform.OS,
       has_active_subscription: currentSubscription?.status === "active",
     });
   }, []);
-
-  useEffect(() => {
-    if (Platform.OS !== "ios" || !connected) return;
-    void getAvailablePurchases();
-  }, [connected]);
-
-  useEffect(() => {
-    if (
-      Platform.OS !== "ios" ||
-      !currentUser?.user.uid ||
-      !currentUser.user.email
-    ) {
-      return;
-    }
-
-    const purchasesToRestore = (availablePurchases ?? []).filter((purchase) => {
-      const iosPurchase = purchase as PurchaseIOS;
-      const transactionId = firstFilledValue(
-        iosPurchase.transactionId,
-        iosPurchase.originalTransactionIdentifierIOS,
-      );
-      return (
-        !!transactionId && !restoredTransactions.current.has(transactionId)
-      );
-    });
-
-    if (!purchasesToRestore.length) return;
-
-    void (async () => {
-      for (const purchase of purchasesToRestore) {
-        const iosPurchase = purchase as PurchaseIOS;
-        const transactionId = firstFilledValue(
-          iosPurchase.transactionId,
-          iosPurchase.originalTransactionIdentifierIOS,
-        );
-        const accountToken = firstFilledValue(iosPurchase.appAccountToken);
-        if (!transactionId || !currentUser.user.email) continue;
-
-        restoredTransactions.current.add(transactionId);
-        const originalTransactionId = firstFilledValue(
-          iosPurchase.originalTransactionIdentifierIOS,
-          transactionId,
-        );
-        const subscription = {
-          userId: currentUser.user.uid,
-          productId: purchase.productId,
-          userName: currentUser.user.displayName ?? currentUser.user.email,
-          userEmail: currentUser.user.email,
-          status: "active" as const,
-          platform: Platform.OS,
-          purchaseId: originalTransactionId,
-          purchaseToken: originalTransactionId,
-          ...(accountToken ? { appAccountToken: accountToken } : {}),
-          originalTransactionId,
-        };
-
-        try {
-          if (accountToken) {
-            await reserveIosSubscription({
-              appAccountToken: accountToken,
-              userId: currentUser.user.uid,
-              userEmail: currentUser.user.email,
-              userName: subscription.userName,
-              productId: purchase.productId,
-            });
-          }
-
-          const subscriptionId = await upsertIosSubscription(subscription);
-          setCurrentSubscription({ id: subscriptionId, ...subscription });
-        } catch (error) {
-          restoredTransactions.current.delete(transactionId);
-          await logHandledError("restore_ios_subscription", error, {
-            platform: Platform.OS,
-          });
-        }
-      }
-    })();
-  }, [availablePurchases, currentUser]);
 
   const storeProducts = useMemo(
     () => (subscriptions?.length ? mapStoreSubscriptions(subscriptions) : null),
@@ -682,6 +717,7 @@ export const useSubscriptionsViewModel = () => {
     currentSubscription,
     handlePurchaseSubscription,
     handleAndroidSubscriptionSwitch,
+    handleRestorePurchases,
     subscriptionManageWarning,
   };
 };
